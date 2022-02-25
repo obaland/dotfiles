@@ -1,0 +1,37 @@
+// install_config.json
+
+{
+  "common": {
+    "linkFiles": [
+      {
+        "target": "vimrc",
+        "link": [
+          ".vim", "nvim"
+        ]
+      },
+      {
+        "target": "vimrc/vimrc",
+        "link": [
+          ".vimrc"
+        ]
+      },
+      {
+        "target": "configs/zshrc",
+        "link": [
+          ".zshrc"
+        ]
+      }
+    ]
+  },
+
+  "windows": {
+    "linkFiles": [
+      {
+        "target": "configs/settings.json",
+        "link": [
+          "AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+*.DS_Store
+vimrc/lplugins/*
+
+__pycache__/
+.ropeproject/
+.vim/
