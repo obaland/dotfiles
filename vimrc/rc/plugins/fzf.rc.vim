@@ -44,12 +44,6 @@ endfunction
 " Libraries
 "---------------------------------------------------------------------------
 
-function! s:warning(message) abort
-  echohl WarningMsg
-  echom a:message
-  echohl None
-endfunction
-
 function! s:get_git_root() abort
   let l:root = split(system('git rev-parse --show-toplevel'), '\n')[0]
   return v:shell_error ? '' : l:root
@@ -93,7 +87,7 @@ function! s:grep(pattern, dir) abort
           \ '--exclude-dir=__pycache__',
           \ ]
   else
-    call s:warning('Not found "grep" comand.')
+    call util#warning('Not found "grep" comand.')
     return
   endif
   let l:command = printf(
@@ -158,7 +152,7 @@ endif
 
 function! s:command_grep(pattern, ...) abort
   if s:grep_func == ''
-    call s:warning('[fzf.rc]: Need to install the search tool. ("rg" or "ag")')
+    call util#warning('[fzf.rc]: Need to install the search tool. ("rg" or "ag")')
     return
   endif
 
@@ -199,8 +193,9 @@ nnoremap <silent><nowait> <Leader>fb :call fzf#files(expand('%:p:h'))<CR>
 nnoremap <silent><nowait> <Leader>mf :call fzf#history()<CR>
 
 " Grep
-nnoremap <silent><nowait> <Leader>gg
-      \ :call <SID>command_grep('')<CR>
+"nnoremap <silent><nowait> <Leader>gg
+"      \ :call <SID>command_grep('')<CR>
+nnoremap <silent><nowait> <Leader>gg :call fzf#grep()<CR>
 nnoremap <silent><nowait> <Leader>gw
       \ :call <SID>command_grep(expand('<cword>'))<CR>
 nnoremap <silent><nowait> <Leader>gb

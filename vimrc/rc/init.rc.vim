@@ -2,14 +2,6 @@
 " Initialize
 "----------------------------------------------------------------------------
 
-function! ErrorMessage(message) abort
-  echohl ErrorMsg | echom 'ERROR: ' . a:message | echohl None
-endfunction
-
-function! WarningMessage(message) abort
-  echohl WarningMsg | echom 'WARNING: ' . a:message | echohl None
-endfunction
-
 " Build encodings.
 set encoding=utf-8
 set fileformat=unix
@@ -19,7 +11,7 @@ let &fileencodings = join([
 let &fileformats = join(['unix', 'dos', 'mac'], ',')
 
 " Setting of terminal encoding.
-if !has('gui_running') && IsWindows()
+if !has('gui_running') && util#is_windows()
   " For system.
   set termencoding=cp932
 endif
@@ -41,19 +33,19 @@ nnoremap <ESC><ESC> :nohlsearch<CR>:match<CR>
 let $BIN = substitute(expand('<sfile>:p:h:h'), '\\', '/', 'g') . '/bin'
 
 let $CONFIG = expand('~/.config')
-call MakeDirectory($CONFIG)
+call util#make_directory($CONFIG)
 
 let $TMPFILES = expand('~/vimfiles/tmp')
-call MakeDirectory($TMPFILES)
+call util#make_directory($TMPFILES)
 
 let $UNDOFILES = expand('~/vimfiles/undo')
-call MakeDirectory($UNDOFILES)
+call util#make_directory($UNDOFILES)
 
 let $LOGFILES = expand('~/vimfiles/log')
-call MakeDirectory($LOGFILES)
+call util#make_directory($LOGFILES)
 
 let $SESSIONFILES = expand('~/vimfiles/sessions')
-call MakeDirectory($SESSIONFILES)
+call util#make_directory($SESSIONFILES)
 
 " Envronment value
 let $MYVIMRC = expand('$HOME/.vimrc')

@@ -6,10 +6,10 @@
 " Options
 "---------------------------------------------------------------------------
 
-let s:preview_path = $BIN . '/fzf_preview/'
-if IsWindows()
+let s:preview_path = $BIN . '/fzf/'
+if util#is_windows()
   let s:preview_path .= 'preview.bat'
-  let s:preview = s:preview_path
+  let s:preview = 'cmd /c ' . s:preview_path
 else
   let s:preview_path .= 'preview.sh'
   let s:preview = 'bash ' . s:preview_path
@@ -143,6 +143,11 @@ function! s:action_for(key, ...)
   return type(l:command) == v:t_string ? l:command : l:default
 endfunction
 
+function! s:escape(path)
+  let l:path = fnameescape(a:path)
+  return s:is_win ? escape(l:path, '$') : l:path
+endfunction
+
 function! s:strip(str)
   return substitute(a:str, '^\s*\|\s*$', '', 'g')
 endfunction
@@ -187,6 +192,25 @@ function! s:bufopen(lines)
   execute 'buffer' l:bufnr
 endfunction
 
+function! s:open(cmd, target)
+  if stridx('edit', a:cmd) == 0 && fnamemodify(a:target, ':p') ==# expand('%:p')
+    normal! m'
+    return
+  endif
+  execute a:cmd s:escape(a:target)
+endfunction
+
+function! s:fill_quickfix(list, ...)
+  if len(a:list) > 1
+    call setqflist(a:list)
+    copen
+    wincmd p
+    if a:0
+      execute a:1
+    endif
+  endif
+endfunction
+
 function! s:wrap(name, args, options)
   let l:args = deepcopy(a:args)
   let l:placeholder = has_key(l:args, 'placeholder') ?
@@ -202,7 +226,6 @@ function! s:wrap(name, args, options)
     let l:args.options = l:options
     let l:wrapped = fzf#wrap(a:name, l:args)
   endif
-  echom l:wrapped
   return l:wrapped
 endfunction
 
@@ -306,3 +329,119 @@ function! fzf#registers() abort
         \ }
   call fzf#run(s:wrap('registers', l:args, l:options))
 endfunction
+
+"---------------------------------------------------------------------------
+" Grep
+"---------------------------------------------------------------------------
+
+function! s:grep_to_qf(line, has_column) abort
+  let l:parts = matchlist(a:line, '\(.\{-}\)\s*:\s*\(\d\+\)\%(\s*:\s*\(\d\+\)\)\?\%(\s*:\(.*\)\)\?')
+  let l:dict = {
+        \ 'filename': &acd ? fnamemodify(l:parts[1], ':p') : l:parts[1],
+        \ 'lnum': l:parts[2],
+        \ 'text': l:parts[4],
+        \ }
+  if a:has_column
+    let l:dict.col = l:parts[3]
+  endif
+  return l:dict
+endfunction
+
+function! s:grep_handler(has_column, lines) abort
+  if len(a:lines) < 2
+    return
+  endif
+
+  let l:cmd = s:action_for(a:lines[0], 'e')
+  let l:list = map(filter(a:lines[1:], 'len(v:val)'), 's:ag_to_qf(v:val, a:has_column)')
+  if empty(l:list)
+    return
+  endif
+
+  let l:first = l:list[0]
+  try
+    call s:open(l:cmd, l:first.filename)
+    execute l:first.lnum
+    if a:has_column
+      call cursor(0, l:first.col)
+    endif
+    normal! zvzz
+  catch
+  endtry
+
+  call s:fill_quickfix(list)
+endfunction
+
+function! s:grep(name, command, options, args) abort
+  let l:options = {
+        \ 'ansi': v:true,
+        \ 'multi': v:true,
+        \ 'prompt': s:prompt(toupper(a:name[0]) . a:name[1:]),
+        \ 'bind': 'alt-a:select-all,alt-d:deselect-all',
+        \ 'delimiter': ':',
+        \ 'preview-window': 'right,border-left',
+        \ }
+  let l:has_column = get(a:args, 'column', v:false)
+  let l:args = copy(a:args)
+  let l:args.sink = function('s:grep_handler', [l:has_column])
+  let l:command = a:command . ' ' . join(a:options, ' ')
+
+  try
+    let l:prev_command = $FZF_DEFAULT_COMMAND
+    let $FZF_DEFAULT_COMMAND = l:command
+    return fzf#run(s:wrap(a:name, l:args, l:options))
+  finally
+    let $FZF_DEFAULT_COMMAND = l:prev_command
+  endtry
+endfunction
+
+function! fzf#grep(...) abort
+  let l:dir = get(a:000, 0, getcwd())
+  let l:options = [
+        \ '--recursive',
+        \ '--ignore-case',
+        \ '--line-number',
+        \ ]
+  let l:excludes = ['.git', '.npm', '.vs', '__pycache__']
+  for l:exclude in l:excludes
+    call add(l:options, '--exclude-dir=' . l:exclude)
+  endfor
+  return s:grep('grep', 'grep', l:options, {
+        \ 'dir': l:dir,
+        \ 'column': v:false,
+        \ })
+endfunction
+
+  "if len(s:get_git_root())
+  "  let l:has_column = 1
+  "  let l:name = 'git grep'
+  "  let l:options = [
+  "        \ '--ignore-case',
+  "        \ '--line-number',
+  "        \ '--column',
+  "        \ ]
+  "elseif executable('grep')
+  "  let l:has_column = 0
+  "  let l:name = 'grep'
+  "  let l:options = [
+  "        \ '--recursive',
+  "        \ '--ignore-case',
+  "        \ '--line-number',
+  "        \ '--exclude-dir=.git',
+  "        \ '--exclude-dir=.npm',
+  "        \ '--exclude-dir=.vs',
+  "        \ '--exclude-dir=__pycache__',
+  "        \ ]
+  "else
+  "  call s:warning('Not found "grep" comand.')
+  "  return
+  "endif
+  "let l:command = printf(
+  "      \ '%s %s -- %s',
+  "      \ l:name, join(l:options, ' '), shellescape(a:pattern)
+  "      \ )
+  "let l:preview = fzf#vim#with_preview({
+  "      \ 'dir': a:dir,
+  "      \ 'options': s:default_opts
+  "      \ })
+  "call fzf#vim#grep(l:command, l:has_column, l:preview)

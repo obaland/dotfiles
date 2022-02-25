@@ -15,7 +15,7 @@ function InstallMarkdownPreview(info)
     return
   endif
   let l:cmd = 'cd app && '
-  let l:cmd .= IsWindows() ? 'install.cmd' : 'bash install.sh' 
+  let l:cmd .= util#is_windows() ? 'install.cmd' : 'bash install.sh' 
   execute '!' . l:cmd
 endfunction
 
@@ -65,7 +65,7 @@ if has('nvim')
   Plug 'tami5/lspsaga.nvim'
   Plug 'williamboman/nvim-lsp-installer'
 
-  if IsWindows()
+  if util#is_windows()
     Plug 'tzachar/cmp-tabnine', {'do': 'powershell ./install.ps1'}
   else
     Plug 'tzachar/cmp-tabnine', {'do': './install.sh'}
@@ -105,7 +105,7 @@ endif
 
 " for open-browser
 if plugin#installed('open-browser.vim')
-  if IsWindows()
+  if util#is_windows()
     " Note: need to set the directory path of 'chrome.exe' in PATH environment variable.
     let g:openbrowser_browser_commands = [
           \ {'name': 'chrome.exe',  'args': ['{browser}', '{uri}']}

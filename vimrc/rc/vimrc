@@ -12,25 +12,6 @@ if &compatible
   set nocompatible
 endif
 
-let s:is_windows = has('win32') || has('win64')
-
-function! IsWindows() abort
-  return s:is_windows
-endfunction
-
-function! IsMac() abort
-  return !s:is_windows && !has('win32unix')
-      \ && (has('mac') || has('macunix') || has('gui_macvim')
-      \     || (!executable('xdg-open') && system('uname') =~? '^darwin'))
-endfunction
-
-function! MakeDirectory(path) abort
-  let l:expanded_path = expand(a:path)
-  if !isdirectory(l:expanded_path)
-    call mkdir(l:expanded_path, 'p')
-  endif
-endfunction
-
 function! s:source_rc(path) abort
   let l:abspath = resolve(expand('~/.vim/rc/' . a:path))
   execute 'source' fnameescape(l:abspath)
@@ -109,7 +90,7 @@ if has('gui_runing')
   call add(s:vimrcs, 'gui.rc.vim')
 endif
 
-if IsWindows()
+if util#is_windows()
   call add(s:vimrcs, 'windows.rc.vim')
 else
   call add(s:vimrcs, 'unix.rc.vim')

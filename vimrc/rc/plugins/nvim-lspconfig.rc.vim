@@ -3,8 +3,8 @@
 "-----------------------------------------------------------------------------
 lua<<EOF
 
-local is_mac = vim.fn['IsMac']() == 1
-local is_windows = vim.fn['IsWindows']() == 1
+local is_mac = vim.fn['util#is_mac']() == 1
+local is_windows = vim.fn['util#is_windows']() == 1
 
 local servers = {
   'bashls',                -- Bash
