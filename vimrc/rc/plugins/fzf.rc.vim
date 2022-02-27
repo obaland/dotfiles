@@ -195,7 +195,8 @@ nnoremap <silent><nowait> <Leader>mf :call fzf#history()<CR>
 " Grep
 "nnoremap <silent><nowait> <Leader>gg
 "      \ :call <SID>command_grep('')<CR>
-nnoremap <silent><nowait> <Leader>gg :call fzf#grep()<CR>
+"nnoremap <silent><nowait> <Leader>gg :call fzf#grep()<CR>
+nnoremap <silent><nowait> <Leader>gg :call fzf#gitgrep()<CR>
 nnoremap <silent><nowait> <Leader>gw
       \ :call <SID>command_grep(expand('<cword>'))<CR>
 nnoremap <silent><nowait> <Leader>gb

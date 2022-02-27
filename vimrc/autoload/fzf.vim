@@ -353,7 +353,7 @@ function! s:grep_handler(has_column, lines) abort
   endif
 
   let l:cmd = s:action_for(a:lines[0], 'e')
-  let l:list = map(filter(a:lines[1:], 'len(v:val)'), 's:ag_to_qf(v:val, a:has_column)')
+  let l:list = map(filter(a:lines[1:], 'len(v:val)'), 's:grep_to_qf(v:val, a:has_column)')
   if empty(l:list)
     return
   endif
@@ -372,29 +372,29 @@ function! s:grep_handler(has_column, lines) abort
   call s:fill_quickfix(list)
 endfunction
 
-function! s:grep(name, command, options, args) abort
+function! s:grep(name, command, cmdopts, args) abort
+  let l:dir = util#normalize_path(a:args.dir)
+  let l:prompt = toupper(a:name[0]) . a:name[1:] . ': ' . l:dir
   let l:options = {
         \ 'ansi': v:true,
         \ 'multi': v:true,
-        \ 'prompt': s:prompt(toupper(a:name[0]) . a:name[1:]),
+        \ 'prompt': s:prompt(l:prompt),
         \ 'bind': 'alt-a:select-all,alt-d:deselect-all',
         \ 'delimiter': ':',
-        \ 'preview-window': 'right,border-left',
+        \ 'preview-window': '+{2}-/2,right,border-left',
         \ }
   let l:has_column = get(a:args, 'column', v:false)
-  let l:args = copy(a:args)
-  let l:args.sink = function('s:grep_handler', [l:has_column])
-  let l:command = a:command . ' ' . join(a:options, ' ')
-
-  try
-    let l:prev_command = $FZF_DEFAULT_COMMAND
-    let $FZF_DEFAULT_COMMAND = l:command
-    return fzf#run(s:wrap(a:name, l:args, l:options))
-  finally
-    let $FZF_DEFAULT_COMMAND = l:prev_command
-  endtry
+  let l:args = {
+        \ 'source': a:command . ' ' . join(a:cmdopts, ' '),
+        \ 'column': l:has_column,
+        \ 'dir': l:dir,
+        \ 'sink': function('<SID>grep_handler', [l:has_column]),
+        \ }
+  return fzf#run(s:wrap(a:name, l:args, l:options))
 endfunction
 
+" 0: pattern
+" 1: working path
 function! fzf#grep(...) abort
   let l:dir = get(a:000, 0, getcwd())
   let l:options = [
@@ -409,6 +409,27 @@ function! fzf#grep(...) abort
   return s:grep('grep', 'grep', l:options, {
         \ 'dir': l:dir,
         \ 'column': v:false,
+        \ })
+endfunction
+
+" 0: pattern
+" 1: working path
+function! fzf#gitgrep(...) abort
+  let l:pattern = get(a:000, 0, '.*')
+  let l:dir = get(a:000, 0, s:get_git_root())
+  let l:root = s:get_git_root()
+  let l:cmdopts = [
+        \ '--column',
+        \ '--color=auto',
+        \ '--ignore-case',
+        \ '--line-number',
+        \ '--recursive',
+        \ '--',
+        \ l:pattern,
+        \ ]
+  return s:grep('git-grep', 'git grep', l:cmdopts, {
+        \ 'dir': l:dir,
+        \ 'column': v:true,
         \ })
 endfunction
 
