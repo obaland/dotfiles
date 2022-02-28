@@ -145,7 +145,7 @@ endfunction
 
 function! s:escape(path)
   let l:path = fnameescape(a:path)
-  return s:is_win ? escape(l:path, '$') : l:path
+  return util#is_windows() ? escape(l:path, '$') : l:path
 endfunction
 
 function! s:strip(str)
@@ -373,22 +373,26 @@ function! s:grep_handler(has_column, lines) abort
 endfunction
 
 function! s:grep(name, command, cmdopts, args) abort
+  let l:cmdprefix = a:command . ' ' . join(a:cmdopts, ' ') . ' -- %s || true'
+  let l:pattern = a:args.pattern
   let l:dir = util#normalize_path(a:args.dir)
-  let l:prompt = toupper(a:name[0]) . a:name[1:] . ': ' . l:dir
+  let l:prompt = toupper(a:name[0]) . a:name[1:]
+  let l:reload = 'change:reload:' . printf(l:cmdprefix, '{q}')
   let l:options = {
         \ 'ansi': v:true,
         \ 'multi': v:true,
         \ 'prompt': s:prompt(l:prompt),
-        \ 'bind': 'alt-a:select-all,alt-d:deselect-all',
+        \ 'bind': 'alt-a:select-all,alt-d:deselect-all' . ',' . l:reload,
         \ 'delimiter': ':',
+        \ 'nth': '-1',
         \ 'preview-window': '+{2}-/2,right,border-left',
         \ }
   let l:has_column = get(a:args, 'column', v:false)
   let l:args = {
-        \ 'source': a:command . ' ' . join(a:cmdopts, ' '),
+        \ 'source': printf(l:cmdprefix, l:pattern),
         \ 'column': l:has_column,
         \ 'dir': l:dir,
-        \ 'sink': function('<SID>grep_handler', [l:has_column]),
+        \ 'sink*': function('<SID>grep_handler', [l:has_column]),
         \ }
   return fzf#run(s:wrap(a:name, l:args, l:options))
 endfunction
@@ -416,53 +420,42 @@ endfunction
 " 1: working path
 function! fzf#gitgrep(...) abort
   let l:pattern = get(a:000, 0, '.*')
-  let l:dir = get(a:000, 0, s:get_git_root())
-  let l:root = s:get_git_root()
+  let l:dir = get(a:000, 1, s:get_git_root())
   let l:cmdopts = [
         \ '--column',
         \ '--color=auto',
         \ '--ignore-case',
         \ '--line-number',
+        \ '--no-heading',
         \ '--recursive',
-        \ '--',
-        \ l:pattern,
+        \ '--untracked',
         \ ]
   return s:grep('git-grep', 'git grep', l:cmdopts, {
         \ 'dir': l:dir,
         \ 'column': v:true,
+        \ 'pattern': l:pattern,
         \ })
 endfunction
 
-  "if len(s:get_git_root())
-  "  let l:has_column = 1
-  "  let l:name = 'git grep'
-  "  let l:options = [
-  "        \ '--ignore-case',
-  "        \ '--line-number',
-  "        \ '--column',
-  "        \ ]
-  "elseif executable('grep')
-  "  let l:has_column = 0
-  "  let l:name = 'grep'
-  "  let l:options = [
-  "        \ '--recursive',
-  "        \ '--ignore-case',
-  "        \ '--line-number',
-  "        \ '--exclude-dir=.git',
-  "        \ '--exclude-dir=.npm',
-  "        \ '--exclude-dir=.vs',
-  "        \ '--exclude-dir=__pycache__',
-  "        \ ]
-  "else
-  "  call s:warning('Not found "grep" comand.')
-  "  return
-  "endif
-  "let l:command = printf(
-  "      \ '%s %s -- %s',
-  "      \ l:name, join(l:options, ' '), shellescape(a:pattern)
-  "      \ )
-  "let l:preview = fzf#vim#with_preview({
-  "      \ 'dir': a:dir,
-  "      \ 'options': s:default_opts
-  "      \ })
-  "call fzf#vim#grep(l:command, l:has_column, l:preview)
+" 0: pattern
+" 1: working path
+function! fzf#ripgrep(query) abort
+  " TODO:
+  "let l:pattern = get(a:000, 0, '.*')
+  "let l:dir = get(a:000, 1, getcwd())
+  let l:pattern = shellescape(a:query)
+  echom l:pattern
+  let l:dir = getcwd()
+  let l:cmdopts = [
+        \ '--column',
+        \ '--line-number',
+        \ '--no-heading',
+        \ '--color=always',
+        \ '--smart-case',
+        \ ]
+  return s:grep('ripgrep', 'rg', l:cmdopts, {
+        \ 'dir': l:dir,
+        \ 'column': v:true,
+        \ 'pattern': l:pattern,
+        \ })
+endfunction

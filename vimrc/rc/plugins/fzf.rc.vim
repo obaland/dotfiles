@@ -149,6 +149,7 @@ elseif executable('ag')
 elseif executable('grep')
   let s:grep_func = function('s:grep')
 endif
+let s:grep_func = function('s:grep')
 
 function! s:command_grep(pattern, ...) abort
   if s:grep_func == ''
@@ -184,6 +185,8 @@ endfunction
 " Key mappings
 "
 
+command! -nargs=* RG call fzf#ripgrep(<q-args>)
+
 " Buffers
 nnoremap <silent><nowait> <Leader>b :call fzf#buffers()<CR>
 
@@ -194,9 +197,10 @@ nnoremap <silent><nowait> <Leader>mf :call fzf#history()<CR>
 
 " Grep
 "nnoremap <silent><nowait> <Leader>gg
-"      \ :call <SID>command_grep('')<CR>
+      \ :call <SID>command_grep('')<CR>
 "nnoremap <silent><nowait> <Leader>gg :call fzf#grep()<CR>
-nnoremap <silent><nowait> <Leader>gg :call fzf#gitgrep()<CR>
+"nnoremap <silent><nowait> <Leader>gg :call fzf#gitgrep()<CR>
+nnoremap <silent><nowait> <Leader>gg :RG<CR>
 nnoremap <silent><nowait> <Leader>gw
       \ :call <SID>command_grep(expand('<cword>'))<CR>
 nnoremap <silent><nowait> <Leader>gb
