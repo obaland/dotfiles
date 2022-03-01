@@ -10,7 +10,7 @@ function! s:install(path, command)
   endif
 
   let l:dir = fnamemodify(a:path, ':h')
-  call util#make_directory(l:dir)
+  call MakeDirectory(l:dir)
 
   try
     echohl WarningMsg
@@ -22,7 +22,7 @@ function! s:install(path, command)
   endtry
 endfunction
 
-if util#is_windows()
+if IsWindows()
   " For Windows
   function! s:command(url, path)
     return printf(

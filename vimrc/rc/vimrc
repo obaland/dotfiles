@@ -90,7 +90,7 @@ if has('gui_runing')
   call add(s:vimrcs, 'gui.rc.vim')
 endif
 
-if util#is_windows()
+if IsWindows()
   call add(s:vimrcs, 'windows.rc.vim')
 else
   call add(s:vimrcs, 'unix.rc.vim')

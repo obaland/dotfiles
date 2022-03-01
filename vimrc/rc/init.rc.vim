@@ -2,6 +2,40 @@
 " Initialize
 "----------------------------------------------------------------------------
 
+"---------------------------------------------------------------------------
+" Global functions
+
+let s:is_windows = has('win32') || has('win64')
+
+function! IsWindows() abort
+  return s:is_windows
+endfunction
+
+function! IsMac() abort
+  return !s:is_windows && !has('win32unix')
+      \ && (has('mac') || has('macunix') || has('gui_macvim')
+      \     || (!executable('xdg-open') && system('uname') =~? '^darwin'))
+endfunction
+
+function! Warning(message) abort
+  echohl WarningMsg
+  echom 'WARNING: ' . a:message
+  echohl None
+endfunction
+
+function! Error(message) abort
+  echohl ErrorMsg
+  echom 'ERROR: ' . a:message
+  echohl None
+endfunction
+
+function! MakeDirectory(path) abort
+  let l:expanded_path = expand(a:path)
+  if !isdirectory(l:expanded_path)
+    call mkdir(l:expanded_path, 'p')
+  endif
+endfunction
+
 " Build encodings.
 set encoding=utf-8
 set fileformat=unix
@@ -11,7 +45,7 @@ let &fileencodings = join([
 let &fileformats = join(['unix', 'dos', 'mac'], ',')
 
 " Setting of terminal encoding.
-if !has('gui_running') && util#is_windows()
+if !has('gui_running') && IsWindows()
   " For system.
   set termencoding=cp932
 endif
@@ -33,19 +67,19 @@ nnoremap <ESC><ESC> :nohlsearch<CR>:match<CR>
 let $BIN = substitute(expand('<sfile>:p:h:h'), '\\', '/', 'g') . '/bin'
 
 let $CONFIG = expand('~/.config')
-call util#make_directory($CONFIG)
+call MakeDirectory($CONFIG)
 
 let $TMPFILES = expand('~/vimfiles/tmp')
-call util#make_directory($TMPFILES)
+call MakeDirectory($TMPFILES)
 
 let $UNDOFILES = expand('~/vimfiles/undo')
-call util#make_directory($UNDOFILES)
+call MakeDirectory($UNDOFILES)
 
 let $LOGFILES = expand('~/vimfiles/log')
-call util#make_directory($LOGFILES)
+call MakeDirectory($LOGFILES)
 
 let $SESSIONFILES = expand('~/vimfiles/sessions')
-call util#make_directory($SESSIONFILES)
+call MakeDirectory($SESSIONFILES)
 
 " Envronment value
 let $MYVIMRC = expand('$HOME/.vimrc')

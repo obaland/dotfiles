@@ -23,21 +23,57 @@ let g:fzf_layout = {'down': '~40%'}
 " Options
 "---------------------------------------------------------------------------
 
-let s:default_opts = ['--layout=reverse', '--cycle']
+let s:preview_path = $BIN . '/fzf/'
+if IsWindows()
+  let s:preview_path .= 'preview.bat'
+  let s:preview = 'cmd /c ' . s:preview_path
+else
+  let s:preview_path .= 'preview.sh'
+  let s:preview = 'bash ' . s:preview_path
+end
 
-function! s:to_options(dict)
-  let l:opts = []
-  for l:key in keys(a:dict)
-    let l:v = a:dict[l:key]
+let s:default_options = {
+      \ 'layout': 'reverse',
+      \ 'cycle': v:true,
+      \ 'preview': s:preview,
+      \ 'preview-window': 'right,border-left',
+      \ }
+
+function! s:wrap(...) abort
+  let l:spec = get(a:000, 0, {})
+  let l:optdict = deepcopy(s:default_options)
+  if has_key(l:spec, 'options')
+    for l:key in keys(l:spec.options)
+      let l:optdict[l:key]  = l:spec.options[l:key]
+    endfor
+  endif
+
+  if has_key(l:optdict, 'no-preview') && l:optdict['no-preview']
+    " disable preivew
+    call remove(l:optdict, 'preview')
+    call remove(l:optdict, 'no-preview')
+  endif
+
+  let l:placeholder = get(l:spec, 'placeholder', '{}')
+  let l:options = []
+  for l:key in keys(l:optdict)
+    let l:v = l:optdict[l:key]
+    if l:key == 'preview' && !empty(l:v)
+      let l:v .= ' ' . l:placeholder
+    endif
+
     if type(l:v) == v:t_bool
       if l:v == v:true
-        call add(l:opts, '--' . l:key)
+        call add(l:options, '--' . l:key)
       endif
     else
-      call add(l:opts, '--' . l:key . '=' . l:v)
+      call add(l:options, '--' . l:key)
+      call add(l:options, l:v)
     endif
   endfor
-  return { 'options': l:opts }
+  return {
+        \'options': l:options
+        \ }
 endfunction
 
 "---------------------------------------------------------------------------
@@ -62,168 +98,162 @@ augroup MyFzfCmd
 augroup END
 
 "---------------------------------------------------------------------------
-" Command Grep
-"
+" Files
+"---------------------------------------------------------------------------
 
-function! s:grep(pattern, dir) abort
-  if len(s:get_git_root())
-    let l:has_column = 1
-    let l:name = 'git grep'
-    let l:options = [
-          \ '--ignore-case',
-          \ '--line-number',
-          \ '--column',
-          \ ]
-  elseif executable('grep')
-    let l:has_column = 0
-    let l:name = 'grep'
-    let l:options = [
-          \ '--recursive',
-          \ '--ignore-case',
-          \ '--line-number',
-          \ '--exclude-dir=.git',
-          \ '--exclude-dir=.npm',
-          \ '--exclude-dir=.vs',
-          \ '--exclude-dir=__pycache__',
-          \ ]
-  else
-    call util#warning('Not found "grep" comand.')
-    return
-  endif
-  let l:command = printf(
-        \ '%s %s -- %s',
-        \ l:name, join(l:options, ' '), shellescape(a:pattern)
-        \ )
-  let l:preview = fzf#vim#with_preview({
-        \ 'dir': a:dir,
-        \ 'options': s:default_opts
-        \ })
-  call fzf#vim#grep(l:command, l:has_column, l:preview)
+function! s:buffers() abort
+  let l:spec = {'placeholder': '{1}'}
+  return fzf#vim#buffers('', s:wrap(l:spec))
 endfunction
 
-function! s:rg(pattern, dir) abort
-  let l:options = [
+"---------------------------------------------------------------------------
+" Files
+"---------------------------------------------------------------------------
+
+function! s:files(dir) abort
+  return fzf#vim#files(a:dir, s:wrap())
+endfunction
+
+function! s:gitfiles() abort
+  return fzf#vim#gitfiles('', s:wrap())
+endfunction
+
+function! s:smart_files() abort
+  let l:gitroot = s:get_git_root()
+  if len(l:gitroot)
+    return s:gitfiles()
+  endif
+  return s:files('')
+endfunction
+
+function! s:history() abort
+  return fzf#vim#history(s:wrap())
+endfunction
+
+"---------------------------------------------------------------------------
+" Command Grep
+"---------------------------------------------------------------------------
+
+function! s:grep_command(command, options) abort
+  return a:command . ' ' . join(a:options, ' ')
+endfunction
+
+function! s:gitgrep(pattern) abort
+  let l:dir = s:get_git_root()
+  let l:cmdopts = [
         \ '--column',
+        \ '--color=auto',
+        \ '--ignore-case',
         \ '--line-number',
         \ '--no-heading',
+        \ '--recursive',
+        \ '--untracked',
+        \ ]
+  let l:cmdformat = s:grep_command('git grep', l:cmdopts) . ' -- %s'
+  let l:spec = {
+        \ 'dir': l:dir,
+        \ 'options': {
+          \ 'bind': 'change:reload:' . printf(l:cmdformat, '{q}'),
+        \ }
+        \ }
+  if !empty(a:pattern)
+    let l:spec.options['query'] = a:pattern
+  endif
+  return fzf#vim#grep(
+        \ printf(l:cmdformat, shellescape(a:pattern)),
+        \ v:true,
+        \ s:wrap(l:spec)
+        \ )
+endfunction
+
+function! s:ripgrep(pattern, ...) abort
+  let l:pattern = shellescape(a:pattern)
+  let l:dir = get(a:000, 0, getcwd())
+  let l:cmdopts = [
+        \ '--column',
         \ '--color=always',
-        \ '--smart-case'
+        \ '--smart-case',
+        \ '--line-number',
+        \ '--no-heading',
+        \ '--fixed-strings',
         \ ]
-  let l:command_format = 'rg ' . join(l:options) . ' -- %s || true'
-  let l:initial_command = printf(
-        \ l:command_format, shellescape(a:pattern)
+  let l:cmdformat = s:grep_command('rg', l:cmdopts) . ' -- %s || true'
+  let l:spec = {
+        \ 'dir': l:dir,
+        \ 'options': {
+          \ 'bind': 'change:reload:' . printf(l:cmdformat, '{q}'),
+        \ }
+        \ }
+  if !empty(a:pattern)
+    let l:spec.options['query'] = a:pattern
+  endif
+  return fzf#vim#grep(
+        \ printf(l:cmdformat, l:pattern),
+        \ v:true,
+        \ s:wrap(l:spec)
         \ )
-  let l:reload_command = printf(
-        \ l:command_format, '{q}'
-        \ )
-  let l:spec = [
-        \ '--phony',
-        \ '--query', a:pattern,
-        \ '--bind', 
-        \ 'change:reload:' . l:reload_command
-        \ ]
-  let l:preview = fzf#vim#with_preview({
-        \ 'dir': a:dir,
-        \ 'options': s:default_opts + l:spec
-        \ })
-  call fzf#vim#grep(l:initial_command, 1, l:preview)
 endfunction
 
-function! s:ag(pattern, dir) abort
-  let l:preview = fzf#vim#with_preview({
-        \ 'dir': a:dir,
-        \ 'options': s:default_opts
-        \ })
-  let l:options = [
-        \ '--ignore-dir={.git}'
-        \ ]
-  call fzf#vim#ag(a:pattern, join(l:options, ' '), l:preview)
-endfunction
-
-" Select search command
-let s:grep_func = ''
-if executable('rg')
-  let s:grep_func = function('s:rg')
-elseif executable('ag')
-  let s:grep_func = function('s:ag')
-elseif executable('grep')
-  let s:grep_func = function('s:grep')
-endif
-let s:grep_func = function('s:grep')
-
-function! s:command_grep(pattern, ...) abort
-  if s:grep_func == ''
-    call util#warning('[fzf.rc]: Need to install the search tool. ("rg" or "ag")')
-    return
-  endif
-
-  if a:pattern == ''
-    let l:pattern = input('Pattern?: ')
-    redraw
-    if l:pattern == ''
-      return
-    endif
-  endif
-
-  let l:dir = get(a:000, 0, s:get_git_root())
-  if l:dir == ''
+function! s:grep(pattern, ...) abort
+  let l:gitroot = s:get_git_root()
+  let l:dir = get(a:000, 0, l:gitroot)
+  if empty(l:dir)
     let l:dir = getcwd()
   endif
-  call s:grep_func(l:pattern, l:dir)
+  if executable('rg')
+    return s:ripgrep(a:pattern, l:dir)
+  elseif !empty(l:gitroot)
+    return s:gitgrep(a:pattern)
+  end
+  call Warning('Unable to run grep.')
 endfunction
 
 "---------------------------------------------------------------------------
 " Mappings
-"
+"---------------------------------------------------------------------------
 
-function! s:command_mappings(mode) abort
-  call fzf#vim#maps(a:mode, {'options': s:default_opts})
-  "call call('fzf#vim#maps', [a:mode] + s:default_opts)
+function! s:mappings(mode) abort
+  let l:options = {
+        \ 'preview': '',
+        \ }
+  return fzf#vim#maps(a:mode, s:wrap({'options': l:options}))
 endfunction
 
 "---------------------------------------------------------------------------
 " Key mappings
-"
-
-command! -nargs=* RG call fzf#ripgrep(<q-args>)
+"---------------------------------------------------------------------------
 
 " Buffers
-nnoremap <silent><nowait> <Leader>b :call fzf#buffers()<CR>
+nnoremap <silent><nowait> <Leader>b :call <SID>buffers()<CR>
 
 " Files
-nnoremap <silent><nowait> <Leader>ff :call fzf#gitfiles()<CR>
-nnoremap <silent><nowait> <Leader>fb :call fzf#files(expand('%:p:h'))<CR>
-nnoremap <silent><nowait> <Leader>mf :call fzf#history()<CR>
+nnoremap <silent><nowait> <Leader>ff :call <SID>smart_files()<CR>
+nnoremap <silent><nowait> <Leader>fb :call <SID>files(expand('%:p:h'))<CR>
+nnoremap <silent><nowait> <Leader>fm :call <SID>history()<CR>
 
 " Grep
-"nnoremap <silent><nowait> <Leader>gg
-      \ :call <SID>command_grep('')<CR>
-"nnoremap <silent><nowait> <Leader>gg :call fzf#grep()<CR>
-"nnoremap <silent><nowait> <Leader>gg :call fzf#gitgrep()<CR>
-nnoremap <silent><nowait> <Leader>gg :RG<CR>
-nnoremap <silent><nowait> <Leader>gw
-      \ :call <SID>command_grep(expand('<cword>'))<CR>
-nnoremap <silent><nowait> <Leader>gb
-      \ :call <SID>command_grep(expand('', expand('%:p:h')))<CR>
+nnoremap <silent><nowait> <Leader>gg :call <SID>grep('')<CR>
+nnoremap <silent><nowait> <Leader>gw :call <SID>grep(expand('<cword>'))<CR>
+nnoremap <silent><nowait> <Leader>gb :call <SID>grep(expand('', expand('%:p:h')))<CR>
 
 " Registers
 nnoremap <silent><nowait> <Leader>r :call fzf#registers()<CR>
 
 " Mapping selecting mappings
-nmap <Leader><tab> :call <SID>command_mappings('n')<CR>
-xmap <Leader><tab> :call <SID>command_mappings('x')<CR>
-omap <Leader><tab> :call <SID>command_mappings('o')<CR>
-imap <Leader><tab> :call <SID>command_mappings('i')<CR>
+nmap <Leader><tab> :call <SID>mappings('n')<CR>
+xmap <Leader><tab> :call <SID>mappings('x')<CR>
+omap <Leader><tab> :call <SID>mappings('o')<CR>
+imap <Leader><tab> :call <SID>mappings('i')<CR>
 
 " Coc sources
-let g:coc_fzf_opts = copy(s:default_opts)
-
-nnoremap <silent><nowait> <Leader><space> :<C-u>CocFzfList<CR>
-nnoremap <silent><nowait> <Leader>dd      :<C-u>CocFzfList diagnostics<CR>
-nnoremap <silent><nowait> <Leader>db      :<C-u>CocFzfList diagnostics --current-buf<CR>
-nnoremap <silent><nowait> <Leader>c       :<C-u>CocFzfList commands<CR>
-nnoremap <silent><nowait> <Leader>e       :<C-u>CocFzfList extensions<CR>
-nnoremap <silent><nowait> <Leader>l       :<C-u>CocFzfList location<CR>
-nnoremap <silent><nowait> <Leader>o       :<C-u>CocFzfList outline<CR>
-nnoremap <silent><nowait> <Leader>s       :<C-u>CocFzfList symbols<CR>
-nnoremap <silent><nowait> <Leader>p       :<C-u>CocFzfListResume<CR>
+"let g:coc_fzf_opts = copy(s:default_opts)
+"
+"nnoremap <silent><nowait> <Leader><space> :<C-u>CocFzfList<CR>
+"nnoremap <silent><nowait> <Leader>dd      :<C-u>CocFzfList diagnostics<CR>
+"nnoremap <silent><nowait> <Leader>db      :<C-u>CocFzfList diagnostics --current-buf<CR>
+"nnoremap <silent><nowait> <Leader>c       :<C-u>CocFzfList commands<CR>
+"nnoremap <silent><nowait> <Leader>e       :<C-u>CocFzfList extensions<CR>
+"nnoremap <silent><nowait> <Leader>l       :<C-u>CocFzfList location<CR>
+"nnoremap <silent><nowait> <Leader>o       :<C-u>CocFzfList outline<CR>
+"nnoremap <silent><nowait> <Leader>s       :<C-u>CocFzfList symbols<CR>
+"nnoremap <silent><nowait> <Leader>p       :<C-u>CocFzfListResume<CR>

@@ -19,7 +19,7 @@ let g:coc_global_extensions = [
       \ ]
 
 " for Platform extensions
-if util#is_windows()
+if IsWindows()
   call extend(g:coc_global_extensions, [
         \ 'coc-omnisharp',
         \ 'coc-powershell'

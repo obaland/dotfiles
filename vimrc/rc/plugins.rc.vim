@@ -2,6 +2,12 @@
 " plugins.vim
 "-----------------------------------------------------------------------------
 
+let s:plugin_dir = expand('$CONFIG/plugins')
+
+function! s:installed(name) abort
+  return isdirectory(s:plugin_dir . '/' . a:name)
+endfunction
+
 "-----------------------------------------------------------------------------
 " Install functions for each plugins
 
@@ -15,7 +21,7 @@ function InstallMarkdownPreview(info)
     return
   endif
   let l:cmd = 'cd app && '
-  let l:cmd .= util#is_windows() ? 'install.cmd' : 'bash install.sh' 
+  let l:cmd .= IsWindows() ? 'install.cmd' : 'bash install.sh' 
   execute '!' . l:cmd
 endfunction
 
@@ -23,7 +29,7 @@ endfunction
 " Plugin section
 "
 
-call plug#begin(plugin#dirpath())
+call plug#begin(s:plugin_dir)
 
 Plug 'airblade/vim-gitgutter'
 Plug 'guns/xterm-color-table.vim'
@@ -65,7 +71,7 @@ if has('nvim')
   Plug 'tami5/lspsaga.nvim'
   Plug 'williamboman/nvim-lsp-installer'
 
-  if util#is_windows()
+  if IsWindows()
     Plug 'tzachar/cmp-tabnine', {'do': 'powershell ./install.ps1'}
   else
     Plug 'tzachar/cmp-tabnine', {'do': './install.sh'}
@@ -88,24 +94,24 @@ function s:source(name) abort
 endfunction
 
 " for fzf.vim
-if plugin#installed('fzf.vim')
+if s:installed('fzf.vim')
   call s:source('fzf.rc.vim')
 endif
 
 " for lightline.vim
-if plugin#installed('lightline.vim')
+if s:installed('lightline.vim')
   call s:source('lightline.rc.vim')
 endif
 
 " for markdown-preview.nvim
-if plugin#installed('markdown-preview.nvim')
+if s:installed('markdown-preview.nvim')
   let g:mkdp_command_for_global = 1
   "let g:mkdp_browserfunc = 'OpenBrowser'
 endif
 
 " for open-browser
-if plugin#installed('open-browser.vim')
-  if util#is_windows()
+if s:installed('open-browser.vim')
+  if IsWindows()
     " Note: need to set the directory path of 'chrome.exe' in PATH environment variable.
     let g:openbrowser_browser_commands = [
           \ {'name': 'chrome.exe',  'args': ['{browser}', '{uri}']}
@@ -114,25 +120,25 @@ if plugin#installed('open-browser.vim')
 endif
 
 " for vfiler.vim
-if plugin#installed('vfiler.vim')
+if s:installed('vfiler.vim')
   call s:source('vfiler.rc.vim')
 endif
 
 " for vim-operator-surround
-if plugin#installed('vim-operator-surround')
+if s:installed('vim-operator-surround')
   map <silent>sa <Plug>(operator-surround-append)
   map <silent>sd <Plug>(operator-surround-delete)
   map <silent>sr <Plug>(operator-surround-replace)
 endif
 
 " for vim-operator-user
-if plugin#installed('vim-operator-user')
+if s:installed('vim-operator-user')
   let g:plantuml_executable_script = 'java -jar ' . 
         \ fnamemodify('~/.vim/tools/plantuml.jar', ':p')
 endif
 
 " for vista.vim
-if plugin#installed('vista.vim')
+if s:installed('vista.vim')
   if has('nvim')
     nnoremap <silent><nowait> <Leader>v :<C-u>Vista nvim_lsp<CR>
   else
@@ -143,25 +149,25 @@ endif
 if has('nvim')
   " for Neovim
   " for treesitter
-  if plugin#installed('nvim-treesitter')
+  if s:installed('nvim-treesitter')
     call s:source('nvim-treesitter.rc.vim')
   endif
   " for nvim-cmp
-  if plugin#installed('nvim-cmp')
+  if s:installed('nvim-cmp')
     call s:source('nvim-cmp.rc.vim')
   endif
   " for LSP
-  if plugin#installed('nvim-lspconfig') && plugin#installed('nvim-lsp-installer')
+  if s:installed('nvim-lspconfig') && s:installed('nvim-lsp-installer')
     call s:source('nvim-lspconfig.rc.vim')
   endif
   " for lspsage
-  if plugin#installed('lspsaga.nvim')
+  if s:installed('lspsaga.nvim')
     call s:source('lspsaga.rc.vim')
   endif
 else
   " for Vim
   " for coc.nvim
-  if plugin#installed('coc.nvim')
+  if s:installed('coc.nvim')
     call s:source('coc.rc.vim')
   endif
 endif

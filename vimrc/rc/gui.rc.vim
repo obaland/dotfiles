@@ -7,7 +7,7 @@ scriptencoding utf-8
 "---------------------------------------------------------------------------
 " Fonts:
 "
-if util#is_windows()
+if IsWindows()
   set encoding=utf8
   set guifont=Source_Code_Pro:h10
   set guifontwide=MS_Gothic:h10

@@ -11,9 +11,13 @@ if not exist %FILE% (
   exit 1
 )
 
+if "%CENTER%" == "" (
+  set CENTER=0
+)
+
 cmd /c where /q bat
 if ERRORLEVEL 1 (
   cmd /c type %FILE%
 ) else (
-  cmd /c bat --style=numbers,changes --color=always --pager=never --highlight-line=%CENTER% --theme="Solarized (dark)" -- %FILE%
+  cmd /c bat --style=numbers,changes --color=always --pager=never --highlight-line=%CENTER% -- %FILE%
 )
