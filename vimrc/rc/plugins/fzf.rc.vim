@@ -25,11 +25,9 @@ let g:fzf_layout = {'down': '~40%'}
 
 let s:preview_path = $BIN . '/fzf/'
 if IsWindows()
-  let s:preview_path .= 'preview.bat'
-  let s:preview = 'cmd /c ' . s:preview_path
+  let s:preview = 'cmd /c ' . s:preview_path . 'preview.bat'
 else
-  let s:preview_path .= 'preview.sh'
-  let s:preview = 'bash ' . s:preview_path
+  let s:preview = 'bash ' . s:preview_path . 'preview.sh'
 end
 
 let s:default_options = {
@@ -48,7 +46,7 @@ function! s:merge_options(options, ...) abort
   if has_key(l:optdict, 'no-preview')
     " disable preivew
     call remove(l:optdict, 'preview')
-    call remove(l:optdict, 'no-preview')
+    call remove(l:optdict, 'preview-window')
   endif
 
   let l:placeholder = get(a:000, 0, '{}')
@@ -69,43 +67,6 @@ function! s:merge_options(options, ...) abort
     endif
   endfor
   return l:options
-endfunction
-
-function! s:wrap(...) abort
-  let l:spec = get(a:000, 0, {})
-  let l:optdict = deepcopy(s:default_options)
-  if has_key(l:spec, 'options')
-    for l:key in keys(l:spec.options)
-      let l:optdict[l:key]  = l:spec.options[l:key]
-    endfor
-  endif
-
-  if has_key(l:optdict, 'no-preview') && l:optdict['no-preview']
-    " disable preivew
-    call remove(l:optdict, 'preview')
-    call remove(l:optdict, 'no-preview')
-  endif
-
-  let l:placeholder = get(l:spec, 'placeholder', '{}')
-  let l:options = []
-  for l:key in keys(l:optdict)
-    let l:v = l:optdict[l:key]
-    if l:key == 'preview' && !empty(l:v)
-      let l:v .= ' ' . l:placeholder
-    endif
-
-    if type(l:v) == v:t_bool
-      if l:v == v:true
-        call add(l:options, '--' . l:key)
-      endif
-    else
-      call add(l:options, '--' . l:key)
-      call add(l:options, l:v)
-    endif
-  endfor
-  return {
-        \'options': l:options
-        \ }
 endfunction
 
 "---------------------------------------------------------------------------
@@ -355,7 +316,7 @@ endfunction
 nnoremap <silent><nowait> <Leader>a :call <SID>autocmds()<CR>
 
 " Buffers
-nnoremap <silent><nowait> <Leader>bb:call <SID>buffers()<CR>
+nnoremap <silent><nowait> <Leader>bb :call <SID>buffers()<CR>
 nnoremap <silent><nowait> <Leader>bl :call <SID>buffer_lines()<CR>
 
 " Files
