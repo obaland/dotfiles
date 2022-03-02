@@ -137,6 +137,10 @@ function! s:buffers() abort
   return fzf#vim#buffers('', {'options': s:merge_options({}, '{1}')})
 endfunction
 
+function! s:buffer_lines() abort
+  return fzf#vim#buffer_lines('', {'options': s:merge_options({})})
+endfunction
+
 "---------------------------------------------------------------------------
 " Files
 "---------------------------------------------------------------------------
@@ -283,18 +287,61 @@ endfunction
 " autocmd list
 "---------------------------------------------------------------------------
 
-" TODO:
+function! s:get_autocmds() abort
+  let l:autocmds = []
+  let l:grouplen = 0
+  let l:eventlen = 0
+  let l:aupatlen = 0
+  let l:cmdwords = []
+  for l:line in split(execute(':autocmd'), "\n")[1:]
+    let l:matches = matchlist(l:line, '^\(\w\+\)\s\+\(\w\+\)')
+    if !empty(l:matches)
+      let l:group = l:matches[1]
+      let l:event = l:matches[2]
+      let l:cmdwords = []
+      continue
+    endif
+
+    let l:words = split(l:line)
+    if match(l:line, '^ \{4}\S\+') >= 0 && len(l:words) == 1
+      call add(l:cmdwords, l:words[0])
+    else
+      let l:cmdwords += l:words
+      let l:first = remove(l:cmdwords, 0)
+      let l:autocmd = {
+            \ 'group': l:group,
+            \ 'event': l:event . (l:event ==# 'User' ? ' ' . l:first : ''),
+            \ 'aupat': l:event ==# 'User' ? '' : l:first,
+            \ 'cmd': join(l:cmdwords, ' '),
+            \ }
+      call add(l:autocmds, l:autocmd)
+      let l:grouplen = max([l:grouplen, strwidth(l:autocmd.group)])
+      let l:eventlen = max([l:eventlen, strwidth(l:autocmd.event)])
+      let l:aupatlen = max([l:aupatlen, min([strwidth(l:autocmd.aupat), 32])])
+      let l:cmdwords = []
+    endif
+  endfor
+  let l:linefmt = printf("%%-%ds %%-%ds %%-%ds %%s", l:grouplen, l:eventlen, l:aupatlen)
+  call map(l:autocmds, 'printf(l:linefmt, v:val.group, v:val.event, v:val.aupat, v:val.cmd)')
+  " insert header line
+  return insert(l:autocmds, printf(l:linefmt, 'Group', 'Event', 'Pattern', 'Command'))
+endfunction
+
+function! s:nop(_) abort
+endfunction
+
 function! s:autocmds() abort
-  let l:autocmds = split(execute(':autocmd'), "\n")
+  let l:autocmds = s:get_autocmds()
   let l:options = {
         \ 'ansi': v:true,
         \ 'no-multi': v:true,
         \ 'no-preview': v:true,
         \ 'prompt': 'Autocmds> ',
+        \ 'header-lines': 1,
         \ }
   let l:spec = {
         \ 'source': l:autocmds,
-        \ 'sink': '',
+        \ 'sink': function('<SID>nop'),
         \ 'options': s:merge_options(l:options),
         \ }
   call fzf#run(fzf#wrap('autocmds', l:spec, 0))
@@ -308,7 +355,8 @@ endfunction
 nnoremap <silent><nowait> <Leader>a :call <SID>autocmds()<CR>
 
 " Buffers
-nnoremap <silent><nowait> <Leader>b :call <SID>buffers()<CR>
+nnoremap <silent><nowait> <Leader>bb:call <SID>buffers()<CR>
+nnoremap <silent><nowait> <Leader>bl :call <SID>buffer_lines()<CR>
 
 " Files
 nnoremap <silent><nowait> <Leader>ff :call <SID>smart_files()<CR>
