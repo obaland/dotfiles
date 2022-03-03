@@ -83,8 +83,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <Leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
-xmap <Leader>f <Plug>(coc-format-selected)
-nmap <Leader>f <Plug>(coc-format-selected)
+"xmap <Leader>f <Plug>(coc-format-selected)
+"nmap <Leader>f <Plug>(coc-format-selected)
 
 augroup CocGroup
   autocmd!
@@ -96,8 +96,8 @@ augroup END
 
 " Applying codeAction to the selected region.
 " Example: `<Leader>aap` for current paragraph
-xmap <Leader>a <Plug>(coc-codeaction-selected)
-nmap <Leader>a <Plug>(coc-codeaction-selected)
+"xmap <Leader>a <Plug>(coc-codeaction-selected)
+"nmap <Leader>a <Plug>(coc-codeaction-selected)
 
 " Remap keys for applying codeAction to the current buffer.
 nmap <Leader>ca <Plug>(coc-codeaction)

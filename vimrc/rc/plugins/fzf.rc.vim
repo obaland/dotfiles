@@ -78,6 +78,10 @@ function! s:get_git_root() abort
   return v:shell_error ? '' : l:root
 endfunction
 
+function! s:nop(_) abort
+  " Nothing to do
+endfunction
+
 "---------------------------------------------------------------------------
 " autocmd
 "---------------------------------------------------------------------------
@@ -288,11 +292,7 @@ function! s:get_autocmds() abort
   return insert(l:autocmds, printf(l:linefmt, 'Group', 'Event', 'Pattern', 'Command'))
 endfunction
 
-function! s:nop(_) abort
-endfunction
-
 function! s:autocmds() abort
-  let l:autocmds = s:get_autocmds()
   let l:options = {
         \ 'ansi': v:true,
         \ 'no-multi': v:true,
@@ -301,11 +301,56 @@ function! s:autocmds() abort
         \ 'header-lines': 1,
         \ }
   let l:spec = {
-        \ 'source': l:autocmds,
+        \ 'source': s:get_autocmds(),
         \ 'sink': function('<SID>nop'),
         \ 'options': s:merge_options(l:options),
         \ }
   call fzf#run(fzf#wrap('autocmds', l:spec, 0))
+endfunction
+
+"---------------------------------------------------------------------------
+" Highlights
+"---------------------------------------------------------------------------
+
+function! s:get_highlights() abort
+  let l:highlights = []
+  let l:grouplen = 0
+  for l:line in split(execute(':highlight'), "\n")
+    let l:words = split(l:line)
+    if match(l:line, '^\w\+') >= 0
+      let l:group = l:words[0]
+      let l:grouplen = max([l:grouplen, strwidth(l:group)])
+      let l:contents = join(l:words[2:], ' ')
+    else
+      let l:contents = join(l:words, ' ')
+    endif
+    call add(l:highlights, {
+          \ 'group': l:group,
+          \ 'contents': l:contents,
+          \ })
+  endfor
+  let l:linefmt = printf("%%-%ds %%s", l:grouplen)
+  call map(sort(l:highlights, {a, b -> a.group > b.group ? 1 : -1}),
+        \ 'printf(l:linefmt, v:val.group, v:val.contents)'
+        \ )
+  " insert header line
+  return insert(l:highlights, printf(l:linefmt, 'Group', 'Contents'))
+endfunction
+
+function! s:highlights() abort
+  let l:options = {
+        \ 'ansi': v:true,
+        \ 'no-multi': v:true,
+        \ 'no-preview': v:true,
+        \ 'prompt': 'Highlights> ',
+        \ 'header-lines': 1,
+        \ }
+  let l:spec = {
+        \ 'source': s:get_highlights(),
+        \ 'sink': function('<SID>nop'),
+        \ 'options': s:merge_options(l:options),
+        \ }
+  call fzf#run(fzf#wrap('highlights', l:spec, 0))
 endfunction
 
 "---------------------------------------------------------------------------
@@ -331,6 +376,9 @@ nnoremap <silent><nowait> <Leader>gb :call <SID>grep(expand('', expand('%:p:h'))
 
 " Registers
 nnoremap <silent><nowait> <Leader>r :call <SID>registers()<CR>
+
+" Highlights
+nnoremap <silent><nowait> <Leader>hl :call <SID>highlights()<CR>
 
 " Mapping selecting mappings
 nmap <Leader><tab> :call <SID>mappings('n')<CR>
