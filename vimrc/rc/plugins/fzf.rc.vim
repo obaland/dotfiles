@@ -216,7 +216,7 @@ function! s:mappings(mode) abort
   let l:options = {
         \ 'no-preview': v:true,
         \ }
-  return fzf#vim#maps(a:mode, {'options': l:options})
+  return fzf#vim#maps(a:mode, {'options': s:merge_options(l:options)})
 endfunction
 
 "---------------------------------------------------------------------------
@@ -381,10 +381,10 @@ nnoremap <silent><nowait> <Leader>r :call <SID>registers()<CR>
 nnoremap <silent><nowait> <Leader>hl :call <SID>highlights()<CR>
 
 " Mapping selecting mappings
-nmap <Leader><tab> :call <SID>mappings('n')<CR>
-xmap <Leader><tab> :call <SID>mappings('x')<CR>
-omap <Leader><tab> :call <SID>mappings('o')<CR>
-imap <Leader><tab> :call <SID>mappings('i')<CR>
+nnoremap <silent><nowait> <Leader>mn :call <SID>mappings('n')<CR>
+nnoremap <silent><nowait> <Leader>mx :call <SID>mappings('x')<CR>
+nnoremap <silent><nowait> <Leader>mo :call <SID>mappings('o')<CR>
+nnoremap <silent><nowait> <Leader>mi :call <SID>mappings('i')<CR>
 
 " Coc sources
 "let g:coc_fzf_opts = copy(s:default_opts)
