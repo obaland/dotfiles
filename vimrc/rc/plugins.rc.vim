@@ -52,6 +52,7 @@ Plug 'tyru/open-browser.vim'
 Plug 'vim-denops/denops.vim'
 Plug 'vim-jp/vimdoc-ja'
 Plug 'rhysd/vim-operator-surround'
+Plug 'ryanoasis/vim-devicons'
 
 if has('nvim')
   " for Neovim

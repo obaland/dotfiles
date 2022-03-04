@@ -68,8 +68,8 @@ require'vfiler/fzf/config'.setup {
 }
 
 require'vfiler/status'.setup {
-  separator = '',
-  subseparator = '',
+  separator = '',
+  subseparator = ':',
 }
 
 local fzf_action = require 'vfiler/fzf/action'
