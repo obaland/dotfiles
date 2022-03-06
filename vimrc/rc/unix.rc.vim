@@ -45,3 +45,5 @@ endif
 
 " Disable the mouse.
 set mouse=
+
+" vim: foldmethod=marker

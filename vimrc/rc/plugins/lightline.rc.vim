@@ -126,8 +126,7 @@ function! LightLineFugitive() abort
   if !s:is_visible()
     return ''
   endif
-  " autoload 配置の関数は一度コールしないと exists が常に0を返すので
-  " try ~ catch で対応する
+  " autoload may not be loaded, use try~catch.
   try
     let head = fugitive#head()
     return head == '' ? '' : s:icons.gitbranch . ' ' . head

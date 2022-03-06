@@ -1,3 +1,4 @@
+@rem Script for FZF preview
 @echo off
 
 set TARGET=%1

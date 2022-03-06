@@ -1,5 +1,5 @@
 " RTpro syntax file
-" Language:	Yamaha ルーターシリーズ 設定ファイル
+" Language: Configuration file for YAMAHA router series.
 
 " Quit when a syntax file was already loaded
 if exists('b:current_syntax')

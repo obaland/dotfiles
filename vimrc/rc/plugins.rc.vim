@@ -172,3 +172,5 @@ else
     call s:source('coc.rc.vim')
   endif
 endif
+
+" vim: foldmethod=marker

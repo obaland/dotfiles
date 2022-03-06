@@ -100,9 +100,6 @@ for rc in s:vimrcs
 endfor
 
 " Required
-" 重要:以下の設定を後半に記述する (特に dein の処理後)
-"   前半だとsyntaxが効かない
-"   autocmd 等での遅延設定だと lightline の NORMAL の色が無くなってしまう
 filetype plugin indent on
 syntax enable
 filetype detect
@@ -111,12 +108,12 @@ filetype detect
 if exists('+termguicolors')
   set termguicolors
 
-  " Vim で NeoSolarized を使うと色がつかないため、コメントアウト
+  " Comment out NeoSolarized in Vim because it is not colorable.
   "let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
   "let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 endif
 
-" 共通として 'NeoSolarized' を使用する
+" Use NeoSolarized for compatibility.
 set background=dark
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 let g:neosolarized_italic = 0

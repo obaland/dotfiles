@@ -87,9 +87,8 @@ require'vfiler/config'.setup {
 
 EOF
 
-" VFiler を活用したエクスプローラー表示
-"command! -nargs=0 E call VFilerForExplorer()
+" Explorer view by vfiler.vim.
 noremap <silent><Leader>e :call <SID>start_exprolorer()<CR>
 
-" VFiler を活用したフローティングウィンドウ表示
+" Floating view by vfiler.vim.
 noremap <silent><Leader>E <Cmd>VFiler -layout=floating<CR>

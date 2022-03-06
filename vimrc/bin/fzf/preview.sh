@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Script for FZF preview
 
 REVERSE="\x1b[7m"
 RESET="\x1b[m"

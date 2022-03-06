@@ -1,8 +1,6 @@
 " For GUI:
 "=============================================================================
 
-scriptencoding utf-8
-
 "-----------------------------------------------------------------------------
 " Fonts:
 "-----------------------------------------------------------------------------
@@ -12,10 +10,10 @@ if IsWindows()
   set guifontwide=MS_Gothic:h10
   set ambiwidth=double
 
-  "行間隔の設定
+  " Number of pixel lines inserted between characters.
   set linespace=1
 
-  "一部のUSC文字の幅を自動計測して決める
+  " Automatically measure and determine the width of some USC characters.
   if has('kaoriya')
     set ambiwidth=auto
   endif
@@ -25,36 +23,26 @@ endif
 " Mouse:
 "---------------------------------------------------------------------------
 
-" 解説:
-" mousefocusは幾つか問題(一例:ウィンドウを分割しているラインにカーソルがあっ
-" ている時の挙動)があるのでデフォルトでは設定しない。Windowsではmousehide
-" が、マウスカーソルをVimのタイトルバーに置き日本語を入力するとチラチラする
-" という問題を引き起す。
-"
-" どのモードでもマウスを使えるようにする
+" Enables mouse support. (a: Normal/Visual/Insert/Command-line modes, and help
+" file)
 set mouse=a
-" マウスの移動でフォーカスを自動的に切替えない (mousefocus:切替る)
+" The window that the mouse pointer is on is automatically activated.
+" (nomousefocus: off)
 set nomousefocus
-" 入力時にマウスポインタを隠す (nomousehide:隠さない)
+" When on, the mouse pointer is hidden when characters are typed. (nomousehide:
+" off)
 set mousehide
 
 "-----------------------------------------------------------------------------
 " Options:
 "-----------------------------------------------------------------------------
 
-"日本語入力に関する設定:
+" Settings for Japanese input.
 if has('multi_byte_ime') || has('xim')
-  " IME ON時のカーソルの色を設定(設定例:紫)
+  " Set cursor color when IME is ON. (Purple)
   highlight CursorIM guibg=Purple guifg=NONE
-  " 挿入モード・検索モードでのデフォルトのIME状態設定
+  " Default IME state setting in insert and search mode.
   set iminsert=0 imsearch=0
-  if has('xim') && has('GUI_GTK')
-    " XIMの入力開始キーを設定:
-    " 下記の s-space はShift+Spaceの意味でkinput2+canna用設定
-    "set imactivatekey=s-space
-  endif
-    " 挿入モードでのIME状態を記憶させない場合、次行のコメントを解除
-    "inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 endif
 
 " vim: foldmethod=marker

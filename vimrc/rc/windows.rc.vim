@@ -8,3 +8,5 @@ let g:python3_host_prog = $VIM_PYTHON3_PROG_ROOT . '\python.exe'
 "if executable('pwsh.exe')
 "  set shell=pwsh.exe
 "endif
+
+" vim: foldmethod=marker

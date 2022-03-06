@@ -63,3 +63,5 @@ for path in paths
   let command = s:command(s:url, path)
   call s:install(path, command)
 endfor
+
+" vim: foldmethod=marker

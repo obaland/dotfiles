@@ -130,3 +130,5 @@ set updatetime=300
 " noselect: メニューからマッチを自動では選択せず、ユーザーに自分で選ぶことを
 "           強制する
 set completeopt=menuone,noselect
+
+" vim: foldmethod=marker
