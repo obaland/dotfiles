@@ -1,8 +1,8 @@
 {
-  "title": "<Vim/Neovim用>ESCあるいは^[で日本語入力を英数に切替",
+  "title": "<for Vim/Neovim>ESC or ^[ to switch Japanese input to alphanumeric.",
   "rules": [
     {
-      "description": "ESCあるいは^[で日本語入力を英数に切替",
+      "description": "ESC or ^[ to switch Japanese input to alphanumeric.",
       "manipulators": [
         {
           "type": "basic",

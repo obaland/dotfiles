@@ -38,7 +38,7 @@ case ${os_type} in
     ;;
   'mac')
     export EDITOR=nvim
-    # macOSの場合, vim等をbrewでのインストール先を優先させる
+    # For macOS, the brew installation location is preferred.
     export PATH=/usr/local/bin:$PATH
     ;;
   *)

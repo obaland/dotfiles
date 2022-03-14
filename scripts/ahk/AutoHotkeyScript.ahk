@@ -1,14 +1,13 @@
 ﻿/*
   AutoHotkeyScript
-  以下のキーを設定する
-  1. Vim/Neovim のノーマルモード移行時にIMEを無効にする
+  1. In Vim/Neovim, disable IME when transitioning to normal mode.
 */
 
 ;-----------------------------------------------------------
-; IMEの状態の取得
-;    対象： AHK v1.0.34以降
-;   WinTitle : 対象Window (省略時:アクティブウィンドウ)
-;   戻り値  1:ON 0:OFF
+; Obtain IME status.
+;   Target: AHK v1.0.34+
+;   WinTitle : Target window (default: active window)
+;   Return 1:ON 0:OFF
 ;-----------------------------------------------------------
 IME_GET(WinTitle="")
 {
@@ -25,10 +24,10 @@ IME_GET(WinTitle="")
 }
 
 ;-----------------------------------------------------------
-; IMEの状態をセット
+; Set IME status.
 ;   SetSts          1:ON / 0:OFF
-;   WinTitle="A"    対象Window
-;   戻り値          0:成功 / 0以外:失敗
+;   WinTitle="A"    Target Window
+;   戻り値          0:Successed / other:Failed
 ;-----------------------------------------------------------
 IME_SET(SetSts, WinTitle="A")
 {
@@ -49,13 +48,13 @@ IME_SET(SetSts, WinTitle="A")
 }
 
 ;---------------------------------------------------------------------
-; Vim/Neovim のノーマルモード移行時にIMEを無効にする
+; Disable IME when entering normal mode in Vim/Neovim.
 
 ; Application Group
 GroupAdd VimEditor, ahk_exe WindowsTerminal.exe
 GroupAdd VimEditor, ahk_exe nvim-qt.exe
 
-; EscでIMEを制御する
+; ESC to control IME.
 #IfWinActive, ahk_group VimEditor
 Esc::
 ^[::
