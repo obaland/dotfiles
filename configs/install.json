@@ -1,5 +1,3 @@
-// install_config.json
-
 {
   "common": {
     "linkFiles": [
@@ -19,6 +17,12 @@
         "target": "configs/zshrc",
         "link": [
           ".zshrc"
+        ]
+      },
+      {
+        "target": "configs/tmux.conf",
+        "link": [
+          ".tmux.conf"
         ]
       }
     ]
