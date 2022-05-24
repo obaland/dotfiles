@@ -128,7 +128,7 @@ function! LightLineFugitive() abort
   endif
   " autoload may not be loaded, use try~catch.
   try
-    let head = fugitive#head()
+    let head = FugitiveHead()
     return head == '' ? '' : s:icons.gitbranch . ' ' . head
   catch /E117.*/
     return ''
