@@ -70,8 +70,10 @@ endif
 
 " Plugins
 call s:source_rc('vimplug.rc.vim')
+
 " Load local plugins
-call s:load_local_plugins('~/.vim/lplugins')
+let s:local_plugin_dir = '~/.vim/lplugins'
+call s:load_local_plugins(s:local_plugin_dir)
 
 call s:source_rc('plugins.rc.vim')
 
@@ -98,6 +100,12 @@ endif
 for rc in s:vimrcs
   call s:source_rc(rc)
 endfor
+
+" Load the configuration file for local plugins, if any.
+let s:local_plugin_rc = expand(s:local_plugin_dir . '/plugins.rc.vim')
+if filereadable(s:local_plugin_rc)
+  execute 'source' s:local_plugin_rc
+endif
 
 " Required
 filetype plugin indent on
