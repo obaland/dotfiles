@@ -11,6 +11,7 @@ local configs = {
   options = {
     auto_cd = true,
     auto_resize = true,
+    find_file = true,
     keep = true,
     name = 'exp',
     layout = 'left',
@@ -24,7 +25,10 @@ local configs = {
   },
 
   mappings = {
-    ['O'] = action.open_tree_recursive,
+    ['<C-j>'] = action.move_cursor_bottom_sibling,
+    ['<C-k>'] = action.move_cursor_top_sibling,
+    ['J'] = action.loop_cursor_down_sibling,
+    ['K'] = action.loop_cursor_up_sibling,
   },
 }
 
