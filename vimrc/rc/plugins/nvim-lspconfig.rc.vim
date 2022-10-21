@@ -40,11 +40,11 @@ end
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require'cmp_nvim_lsp'.update_capabilities(capabilities)
+capabilities = require'cmp_nvim_lsp'.default_capabilities(capabilities)
 
 local function on_attach(client, bufnr)
   -- disable formatting
-  client.resolved_capabilities.document_formatting = false
+  client.server_capabilities.document_formatting = false
 
   -- key mappings
   local mappings = {
@@ -114,7 +114,6 @@ end
 installer.on_server_ready(function(server)
   local options = {
     on_attach = on_attach,
-    --capabilities = setup_capabilities(),
     capabilities = capabilities,
     root_dir = vim.loop.cwd,
   }
