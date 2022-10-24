@@ -1,4 +1,2 @@
-" Key mappings
+" telescope.rc.vim
 "=============================================================================
-
-" vim: foldmethod=marker

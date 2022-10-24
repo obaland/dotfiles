@@ -40,8 +40,6 @@ Plug 'iamcco/markdown-preview.nvim',
       \ }
 Plug 'icymind/NeoSolarized'
 Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
-Plug 'junegunn/fzf.vim'
 Plug 'kana/vim-operator-user'
 Plug 'liuchengxu/vista.vim'
 Plug 'obaland/vfiler.vim'
@@ -58,6 +56,7 @@ if has('nvim')
   Plug 'obaland/panvimdoc'
   Plug 'obaland/plenary.nvim'
   Plug 'neovim/nvim-lspconfig'
+  Plug 'nvim-telescope/telescope.nvim', {'branch': '0.1.x' }
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-cmdline'
@@ -79,6 +78,8 @@ if has('nvim')
 else
   " for Vim
   Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
+  Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
+  Plug 'junegunn/fzf.vim'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
 
@@ -93,15 +94,13 @@ function s:source(name) abort
   execute 'source' fnameescape(l:path)
 endfunction
 
-" for fzf.vim
-if s:installed('fzf.vim')
-  call s:source('fzf.rc.vim')
-endif
-
-" for lightline.vim
-if s:installed('lightline.vim')
-  call s:source('lightline.rc.vim')
-endif
+function s:load_settings(settings) abort
+  for setting in a:settings
+    if s:installed(setting.name)
+      call s:source(setting.rc)
+    endif
+  endfor
+endfunction
 
 " for markdown-preview.nvim
 if s:installed('markdown-preview.nvim')
@@ -117,11 +116,6 @@ if s:installed('open-browser.vim')
           \ {'name': 'chrome.exe',  'args': ['{browser}', '{uri}']}
           \ ]
   endif
-endif
-
-" for vfiler.vim
-if s:installed('vfiler.vim')
-  call s:source('vfiler.rc.vim')
 endif
 
 " for vim-operator-surround
@@ -146,30 +140,30 @@ if s:installed('vista.vim')
   endif
 endif
 
+let s:settings = [
+      \ {'name': 'lightline.vim', 'rc': 'lightline.rc.vim'},
+      \ {'name': 'vfiler.vim', 'rc': 'vfiler.rc.vim'},
+      \ ]
+
+let s:nvim_settings = [
+      \ {'name': 'nvim-treesitter', 'rc': 'nvim-treesitter.rc.vim'},
+      \ {'name': 'nvim-cmp', 'rc': 'nvim-cmp.rc.vim'},
+      \ {'name': 'nvim-lspconfig', 'rc': 'nvim-lspconfig.rc.vim'},
+      \ {'name': 'telescope.nvim', 'rc': 'telescope.rc.vim'},
+      \ {'name': 'lspsage.nvim', 'rc': 'lspsage.rc.vim'},
+      \ ]
+
+let s:vim_settings = [
+      \ {'name': 'coc.nvim', 'rc': 'coc.rc.vim'},
+      \ {'name': 'fzf.vim', 'rc': 'fzf.rc.vim'},
+      \ ]
+
+call s:load_settings(s:settings)
+
 if has('nvim')
-  " for Neovim
-  " for treesitter
-  if s:installed('nvim-treesitter')
-    call s:source('nvim-treesitter.rc.vim')
-  endif
-  " for nvim-cmp
-  if s:installed('nvim-cmp')
-    call s:source('nvim-cmp.rc.vim')
-  endif
-  " for LSP
-  if s:installed('nvim-lspconfig') && s:installed('nvim-lsp-installer')
-    call s:source('nvim-lspconfig.rc.vim')
-  endif
-  " for lspsage
-  if s:installed('lspsaga.nvim')
-    call s:source('lspsaga.rc.vim')
-  endif
+  call s:load_settings(s:nvim_settings)
 else
-  " for Vim
-  " for coc.nvim
-  if s:installed('coc.nvim')
-    call s:source('coc.rc.vim')
-  endif
+  call s:load_settings(s:vim_settings)
 endif
 
 " vim: foldmethod=marker

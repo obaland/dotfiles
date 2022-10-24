@@ -9,7 +9,7 @@ local servers = {
   'bashls',                -- Bash
   'cmake',                 -- CMake
   'clangd',                -- C/C++
-  'csharp_ls',             -- C#
+  'omnisharp',             -- C#
   'cssls',                 -- CSS
   'dockerls',              -- Docker
   'html',                  -- HTML
