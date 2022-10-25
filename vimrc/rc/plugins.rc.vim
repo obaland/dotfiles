@@ -1,12 +1,5 @@
 " plugins.vim
 "=============================================================================
-
-let s:plugin_dir = expand('$CONFIG/plugins')
-
-function! s:installed(name) abort
-  return isdirectory(s:plugin_dir . '/' . a:name)
-endfunction
-
 "-----------------------------------------------------------------------------
 " Install functions for each plugins
 "-----------------------------------------------------------------------------
@@ -29,7 +22,7 @@ endfunction
 " Plugin section
 "-----------------------------------------------------------------------------
 
-call plug#begin(s:plugin_dir)
+call plug#begin($PLUGINSDIR)
 
 Plug 'airblade/vim-gitgutter'
 Plug 'guns/xterm-color-table.vim'
@@ -96,20 +89,20 @@ endfunction
 
 function s:load_settings(settings) abort
   for setting in a:settings
-    if s:installed(setting.name)
+    if InstalledPlugin(setting.name)
       call s:source(setting.rc)
     endif
   endfor
 endfunction
 
 " for markdown-preview.nvim
-if s:installed('markdown-preview.nvim')
+if InstalledPlugin('markdown-preview.nvim')
   let g:mkdp_command_for_global = 1
   "let g:mkdp_browserfunc = 'OpenBrowser'
 endif
 
 " for open-browser
-if s:installed('open-browser.vim')
+if InstalledPlugin('open-browser.vim')
   if IsWindows()
     " Note: need to set the directory path of 'chrome.exe' in PATH environment variable.
     let g:openbrowser_browser_commands = [
@@ -119,20 +112,20 @@ if s:installed('open-browser.vim')
 endif
 
 " for vim-operator-surround
-if s:installed('vim-operator-surround')
+if InstalledPlugin('vim-operator-surround')
   map <silent>sa <Plug>(operator-surround-append)
   map <silent>sd <Plug>(operator-surround-delete)
   map <silent>sr <Plug>(operator-surround-replace)
 endif
 
 " for vim-operator-user
-if s:installed('vim-operator-user')
+if InstalledPlugin('vim-operator-user')
   let g:plantuml_executable_script = 'java -jar ' . 
         \ fnamemodify('~/.vim/tools/plantuml.jar', ':p')
 endif
 
 " for vista.vim
-if s:installed('vista.vim')
+if InstalledPlugin('vista.vim')
   if has('nvim')
     nnoremap <silent><nowait> <Leader>v :<C-u>Vista nvim_lsp<CR>
   else

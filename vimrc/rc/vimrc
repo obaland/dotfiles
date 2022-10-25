@@ -25,7 +25,9 @@ function! s:on_VimEnter() abort
   if !s:is_no_argument()
     return
   endif
-  VFiler -auto-cd
+  if InstalledPlugin('vfiler.vim')
+    VFiler -auto-cd
+  endif
 endfunction
 
 function! s:load_local_plugins(path) abort
@@ -126,7 +128,9 @@ set background=dark
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 let g:neosolarized_italic = 0
 
-colorscheme NeoSolarized
+if InstalledPlugin('NeoSolarized')
+  colorscheme NeoSolarized
+endif
 
 set secure
 
