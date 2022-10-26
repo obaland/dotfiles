@@ -37,7 +37,6 @@ Plug 'kana/vim-operator-user'
 Plug 'liuchengxu/vista.vim'
 Plug 'obaland/vfiler.vim'
 Plug 'obaland/vfiler-column-devicons'
-Plug 'obaland/vfiler-fzf'
 Plug 'tpope/vim-fugitive'
 Plug 'tyru/open-browser.vim'
 Plug 'vim-jp/vimdoc-ja'
@@ -73,6 +72,7 @@ else
   Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
   Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
   Plug 'junegunn/fzf.vim'
+  Plug 'obaland/vfiler-fzf'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
 

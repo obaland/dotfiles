@@ -5,7 +5,7 @@ lua <<EOF
 
 local builtin = require('telescope.builtin')
 
-function get_git_root()
+local function get_git_root()
   local path = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
   if (not path or #path == 0) or path:match('^fatal') then
     return nil
@@ -13,7 +13,7 @@ function get_git_root()
   return path
 end
 
-function get_workdir()
+local function get_workdir()
   local path = get_git_root()
   if path then
     return path
@@ -21,31 +21,30 @@ function get_workdir()
   return vim.fn.getcwd()
 end
 
-function find_files(cwd)
+local function find_files(cwd)
   builtin.find_files({cwd = cwd})
 end
 
-function grep(cwd)
+local function grep(cwd)
   builtin.live_grep({cwd = cwd})
 end
 
-function grep_string(cwd)
+local function grep_string(cwd)
   builtin.grep_string({cwd = cwd})
 end
 
 -- Setup
 local actions = require('telescope.actions')
-
 require('telescope').setup {
   defaults = {
     vimgrep_arguments = {
       'rg',
+      '--column',
       '--color=never',
+      '--smart-case',
+      '--line-number',
       '--no-heading',
       '--with-filename',
-      '--line-number',
-      '--column',
-      '--smart-case'
     },
 
     mappings = {

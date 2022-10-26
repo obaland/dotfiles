@@ -4,9 +4,8 @@
 function! s:start_exprolorer() abort
 
 lua <<EOF
-local action = require 'vfiler/action'
-local fzf_action = require 'vfiler/fzf/action'
 
+local action = require 'vfiler/action'
 local configs = {
   options = {
     auto_cd = true,
@@ -39,6 +38,7 @@ end
 path = vim.fn.fnamemodify(path, ':p:h')
 
 require'vfiler'.start(path, configs)
+
 EOF
 
 endfunction
@@ -49,26 +49,9 @@ endfunction
 
 lua<<EOF
 
----- column settings
+-- column settings
 require'vfiler/columns/indent'.setup { 
   icon = '',
-}
-
--- vfiler fzf setting
-local sink = require 'vfiler/fzf/sink'
-require'vfiler/fzf/config'.setup {
-  action = {
-    default = sink.open_by_choose,
-  },
-
-  options = {
-    '--layout=reverse',
-    '--cycle',
-  },
-
-  layout = {
-    down = '~40%',
-  },
 }
 
 require'vfiler/status'.setup {
@@ -76,18 +59,39 @@ require'vfiler/status'.setup {
   subseparator = ':',
 }
 
-local fzf_action = require 'vfiler/fzf/action'
 require'vfiler/config'.setup {
   options = {
     columns = 'indent,devicons,name,mode,size,time',
     session = 'share',
-  },
-
-  mappings = {
-    ['f'] = fzf_action.files,
-    ['<C-g>'] = fzf_action.rg,
-  },
+  }
 }
+
+if not vim.fn.has('nvim') then
+  -- Vim only
+  local sink = require 'vfiler/fzf/sink'
+  require'vfiler/fzf/config'.setup {
+    action = {
+      default = sink.open_by_choose,
+    },
+
+    options = {
+      '--layout=reverse',
+      '--cycle',
+    },
+
+    layout = {
+      down = '~40%',
+    },
+  }
+
+  local fzf_action = require 'vfiler/fzf/action'
+  require'vfiler/config'.setup {
+    mappings = {
+      ['f'] = fzf_action.files,
+      ['<C-g>'] = fzf_action.rg,
+    }
+  }
+end
 
 EOF
 
