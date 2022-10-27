@@ -60,7 +60,7 @@ local function on_attach(client, bufnr)
         ['gD'] = [[<Cmd>lua vim.lsp.buf.declaration()<CR>]],
         ['gd'] = [[<Cmd>Lspsaga preview_definition<CR>]],
         ['gi'] = [[<Cmd>lua vim.lsp.buf.implementation()<CR>]],
-        ['gq'] = [[<Cmd>lua vim.diagnostic.set_loclist()<CR>]],
+        ['gq'] = [[<Cmd>lua vim.diagnostic.setloclist()<CR>]],
         ['gr'] = [[<Cmd>Lspsage lsp_finder<CR>]],
         ['gs'] = [[<Cmd>Lspsaga signature_help<CR>]],
         ['gy'] = [[<Cmd>lua vim.lsp.buf.type_definition()<CR>]],

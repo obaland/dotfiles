@@ -34,19 +34,35 @@ local function grep_string(cwd)
 end
 
 -- Setup
+local grep_arguments
+if vim.fn.executable('rg') == 1 then
+  grep_arguments = {
+    'rg',
+    '--column',
+    '--color=never',
+    '--smart-case',
+    '--line-number',
+    '--no-heading',
+    '--with-filename',
+  }
+else
+  grep_arguments = {
+    'git',
+    'grep',
+    '--column',
+    '--color=auto',
+    '--ignore-case',
+    '--line-number',
+    '--no-heading',
+    '--recursive',
+    '--untracked',
+  }
+end
+
 local actions = require('telescope.actions')
 require('telescope').setup {
   defaults = {
-    vimgrep_arguments = {
-      'rg',
-      '--column',
-      '--color=never',
-      '--smart-case',
-      '--line-number',
-      '--no-heading',
-      '--with-filename',
-    },
-
+    vimgrep_arguments = grep_arguments,
     mappings = {
       n = {
         ['q'] = actions.close
