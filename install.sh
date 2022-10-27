@@ -31,6 +31,12 @@ readonly HOMEDIR=$(cd ~ && pwd)
 echo "Start [Install environment] ..."
 
 ###########################################################
+# Install packages
+###########################################################
+sudo apt install python3-venv -y
+sudo apt install ripgrep -y
+
+###########################################################
 # Vim or Neovim
 ###########################################################
 if [ $TYPE = "all" ] || [ $TYPE = "vim" ]; then

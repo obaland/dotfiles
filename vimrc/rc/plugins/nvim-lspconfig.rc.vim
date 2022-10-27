@@ -18,7 +18,6 @@ local servers = {
   'sumneko_lua',           -- Lua
   'remark_ls',             -- Markdown
   'intelephense',          -- PHP
-  'powershell_es',         -- PowerShell
   'jedi_language_server',  -- Python
   'sqlls',                 -- SQL
   'taplo',                 -- TOML
@@ -32,10 +31,12 @@ if is_mac then
   table.insert(servers, 'sourcekit')
 end
 
-if not is_windows then
+if is_windows then
+  table.insert(servers, 'powershell_es') -- PowerShell
+else
   -- Ruby
   -- NOTE: On Windows, MSYS2 is required, so exclude it on Windows.
-  table.insert(servers, 'solargraph')
+  table.insert(servers, 'solargraph') -- Ruby
 end
 
 -- Add additional capabilities supported by nvim-cmp
