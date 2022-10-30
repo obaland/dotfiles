@@ -27,14 +27,23 @@ fi
 
 readonly ROOTDIR=$(cd $(dirname $0) && pwd)
 readonly HOMEDIR=$(cd ~ && pwd)
+readonly CONFIGDIR="$ROOTDIR/configs"
 
 echo "Start [Install environment] ..."
 
 ###########################################################
 # Install packages
 ###########################################################
-sudo apt install python3-venv -y
-sudo apt install ripgrep -y
+readonly PACKAGES=$CONFIGDIR/packages.list
+PACKAGECOMMAND="apt -y install"
+if [ "$(uname)" = "Darwin" ]; then
+  # for macOS
+  PACKAGECOMMAND="brew install"
+fi
+cat $PACKAGES | while read package
+do
+  $PACKAGECOMMAND $package
+done
 
 ###########################################################
 # Vim or Neovim
@@ -62,8 +71,6 @@ fi
 # Shell
 ###########################################################
 if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
-  readonly CONFIGDIR="$ROOTDIR/configs"
-
   readonly ZSHRC="$CONFIGDIR/zshrc"
   readonly LINKZSHRC="$HOMEDIR/.zshrc"
   create_link $ZSHRC $LINKZSHRC
