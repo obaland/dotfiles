@@ -34,7 +34,7 @@ function! s:check_required() abort
 endfunction
 
 function! s:check_configuration() abort
-  let l:configs = {} 
+  let l:configs = {}
 
   if has('nvim') && s:is_windows
     let l:configs['$VIM_PYTHON_PROG_ROOT'] = 'the Root direcotry path of python2 executable program.'

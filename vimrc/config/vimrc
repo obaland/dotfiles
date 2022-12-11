@@ -1,0 +1,104 @@
+" OBARA Taihe's vimrc
+" Copyright (C) 2017 OBARA Taihei
+"=============================================================================
+
+" Vim directories
+let $VIM_PATH = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
+let $VIM_CONFIG_PATH = $VIM_PATH . '/config'
+let $CONFIG_PATH = expand('~/.config')
+let $VIM_FILES = expand('~/vimfiles')
+let $VIM_BACKUP = $VIM_FILES . '/backup'
+let $VIM_SESSIONS = $VIM_FILES . '/sessions'
+let $VIM_SWAP = $VIM_FILES . '/swap'
+let $VIM_UNDO = $VIM_FILES . '/swap'
+
+function! s:source(path) abort
+  let l:abspath = resolve($VIM_CONFIG_PATH . '/'. a:path)
+  execute 'source' fnameescape(l:abspath)
+endfunction
+
+function! s:is_no_argument()
+  let byte = line2byte(line('$') + 1)
+  return (byte < 0) && (@% == '')
+endfunction
+
+function! s:on_VimEnter() abort
+  if !s:is_no_argument()
+    return
+  endif
+  if dein#tap('vfiler.vim')
+    VFiler -auto-cd
+  endif
+endfunction
+
+function! s:load_local_plugins(path) abort
+  let l:plugins_path = fnamemodify(a:path, ':p')
+  if !isdirectory(l:plugins_path)
+    return
+  endif
+
+  let l:paths = split(glob(l:plugins_path . '*'), '\n')
+  if empty(l:paths)
+    return
+  endif
+
+  for l:path in l:paths
+    let l:name = fnamemodify(l:path, ':t')
+    if l:name == 'nvim'
+      if has('nvim')
+        call s:load_local_plugins(l:path)
+      endif
+    elseif l:name == 'vim'
+      if !has('nvim')
+        call s:load_local_plugins(l:path)
+      endif
+    else
+      if isdirectory(l:path)
+        execute 'set runtimepath+=' . l:path
+      endif
+    endif
+  endfor
+endfunction
+
+" Set augroup.
+augroup MyAutoCmd
+  autocmd!
+  autocmd VimEnter * ++nested call s:on_VimEnter()
+  autocmd BufNewFile,BufRead *.xaml setf xml
+augroup END
+
+if has('vim_starting')
+  call s:source('init.vim')
+endif
+
+" Load local plugins
+let s:local_plugin_dir = $VIM_PATH . '/lplugins'
+call s:load_local_plugins(s:local_plugin_dir)
+
+call s:source('options.vim')
+call s:source('commands.vim')
+call s:source('mappings.vim')
+
+if has('gui_running')
+  call s:source('gui.vim')
+endif
+
+if IsWindows()
+  call s:source('windows.vim')
+endif
+
+if has('nvim')
+  call luaeval('require("tabline").setup()')
+endif
+
+" Required
+filetype plugin indent on
+syntax enable
+filetype detect
+
+set background=dark
+colorscheme solarized
+
+set secure
+
+" vim:set ft=vim sw=2 sts=2 et:
