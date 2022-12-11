@@ -7,29 +7,39 @@ local M = {}
 local vsnip_available = vim.fn['vsnip#available']
 local vsnip_jumpable = vim.fn['vsnip#jumpable']
 
+-- cmp sources
+local cmp_sources = {
+  buffer = {name = 'buffer'},
+  cmdline = {
+    name = 'cmdline',
+    max_item_count = 30,
+  },
+  nvim_lsp = {name = 'nvim_lsp'},
+  nvim_lua = {name = 'nvim_lua'},
+  path = {name = 'path'},
+  emoji = {name = 'emoji'},
+  vsnip = {name = 'vsnip'},
+  tabnine = {name = 'cmp_tabnine'},
+  tmux = {
+    name = 'tmux',
+    option = {all_panes = true},
+  },
+  latex = {name = 'latex_symbols'},
+}
+
 -- Source setup. Helper function for cmp source presets.
-function _G.cmp_get_sources(arr)
-  local config = {
-    buffer = {name = 'buffer'},
-    cmdline = {
-      name = 'cmdline',
-      max_item_count = 30,
-    },
-    nvim_lsp = {name = 'nvim_lsp'},
-    nvim_lua = {name = 'nvim_lua'},
-    path = {name = 'path'},
-    emoji = {name = 'emoji'},
-    vsnip = {name = 'vsnip'},
-    tabnine = {name = 'cmp_tabnine'},
-    tmux = {
-      name = 'tmux',
-      option = {all_panes = true},
-    },
-    latex = {name = 'latex_symbols'},
-  }
+local function cmp_get_sources(arr)
   local sources = {}
   for _, name in ipairs(arr) do
-    sources[#sources + 1] = config[name]
+    local index = #sources + 1
+    if name == 'tabnine' then
+      local ok, _ = pcall(require, 'cmp-tabnine')
+      if ok then
+        sources[index] = cmp_sources[name]
+      end
+    else
+      sources[index] = cmp_sources[name]
+    end
   end
   return sources
 end
