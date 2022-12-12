@@ -240,6 +240,12 @@ hook_source = '''
   let g:user_emmet_complete_tag = 0
 '''
 
+[[plugins]]
+repo = 'folke/which-key.nvim'
+if = 'has("nvim-0.5.0")'
+on_cmd = ['WhichKey']
+hook_post_source = 'lua require("plugins/which-key")'
+
 # Filer
 # =====
 [[plugins]]

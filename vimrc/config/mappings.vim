@@ -141,6 +141,15 @@ if dein#tap('dsf.vim')
   nmap <leader>csf <Plug>DsfChange
 endif
 
+" which-key.nvim
+" --------------
+if dein#tap('which-key.nvim')
+  nnoremap <leader>ww <cmd>WhichKey<CR>
+  nnoremap <leader>wn <cmd>WhichKey '' n<CR>
+  nnoremap <leader>wi <cmd>WhichKey '' i<CR>
+  nnoremap <leader>wv <cmd>WhichKey '' v<CR>
+endif
+
 " vfiler.vim
 " ----------
 if dein#tap('vfiler.vim')
