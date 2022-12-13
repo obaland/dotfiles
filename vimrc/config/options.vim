@@ -67,6 +67,7 @@ set softtabstop=2 " 連続した空白に対してタブキーやバックスペ
 " Timing
 " ------
 set updatetime=200 " スワップ書き込みと CursorHold のトリガーとなるアイドルタイム
+set timeoutlen=500 " キーコードやマッピングされたキー列が完了するのを待つ時間 (default 1000)
 
 " Searching
 " ---------

@@ -23,7 +23,7 @@ whichkey.setup({
   },
 
   layout = {
-    spacing = 6,
+    spacing = 4,
   },
 
   hidden = {

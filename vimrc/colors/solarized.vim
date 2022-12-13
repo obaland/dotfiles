@@ -960,6 +960,9 @@ highlight! link NavicIconsTypeParameter CmpItemKindTypeParameter
 highlight! link NavicText               Normal
 "highlight! link NavicSeparator
 
+" which-key
+" ---------
+highlight! link WhichKeyFloat Normal
 
 " License
 " -------
