@@ -5,7 +5,7 @@ local M = {}
 
 function M.setup()
   -- column settings
-  require'vfiler/columns/indent'.setup { 
+  require'vfiler/columns/indent'.setup {
     icon = '',
   }
 

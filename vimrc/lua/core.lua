@@ -21,6 +21,10 @@ augroup END
 
 local M = {}
 
+-- Vim script functions
+local is_win = vim.fn['IsWindows']
+local is_mac = vim.fn['IsMac']
+
 local function find(name, dir, comp)
   local names = vim.split(
     M.normalize_path(dir), '/', {plain = true, trimempty = true}
@@ -68,11 +72,11 @@ local function project_root(bufnr, cwd)
 end
 
 function M.is_mac()
-  return vim.fn['IsMac'] == 1
+  return is_mac() == 1
 end
 
 function M.is_win()
-  return vim.fn['IsWindows'] == 1
+  return is_win() == 1
 end
 
 function M.normalize_path(path)
