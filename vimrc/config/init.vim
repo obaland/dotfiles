@@ -50,6 +50,18 @@ let g:loaded_netrwPlugin = 1
 let g:loaded_netrwSettings = 1
 let g:loaded_netrwFileHandlers = 1
 
+let g:loaded_remote_plugins = 1
+let g:loaded_shada_plugins = 1
+let g:loaded_spellfile_plugins = 1
+let g:loaded_tutor_mode_plugins = 1
+
+" Intentionally skip loading
+let g:did_install_default_menus = 1
+let g:did_install_syntax_menu = 1
+let g:did_indent_on = 1
+let g:did_load_filetypes = 1
+let g:skip_loading_mswin = 1
+
 " Set vimfiles directory
 
 "-----------------------------------------------------------------------------
@@ -143,7 +155,8 @@ function! s:use_package_manager(data_path)
     endif
 
     let g:dein#auto_recache = v:true
-    let g:dein#install_progress_type = 'echo'
+    "let g:dein#install_progress_type = 'echo'
+    let g:dein#install_progress_type = 'floating'
     let g:dein#install_message_type = 'echo'
     let g:dein#install_max_process = 10
   endif
