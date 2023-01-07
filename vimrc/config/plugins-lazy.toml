@@ -198,7 +198,7 @@ hook_post_source = 'lua require("nvim-autopairs").setup()'
 
 [[plugins]]
 repo = 'folke/todo-comments.nvim'
-if = 'has("nvim-0.5")'
+if = 'has("nvim-0.8")'
 depends = ['plenary.nvim']
 on_source = ['telescope.nvim', 'nvim-lspconfig']
 hook_post_source = 'lua require("plugins/todo-comments").setup()'
