@@ -4,7 +4,7 @@
 local M = {}
 
 function M.setup()
-  require('lspsaga').init_lsp_saga({
+  require('lspsaga').setup({
     max_preview_lines = 10,
     border_style = 'rounded',
     finder_action_keys = {
