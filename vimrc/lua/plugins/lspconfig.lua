@@ -20,7 +20,7 @@ local ensure_installed = {
   'html',                  -- HTML
   'jsonls',                -- JSON
   'tsserver',              -- JavaScript/TypeScript
-  'sumneko_lua',           -- Lua
+  'lua_ls',                -- Lua
   'remark_ls',             -- Markdown
   'intelephense',          -- PHP
   'jedi_language_server',  -- Python
@@ -41,22 +41,34 @@ if is_mac then
 end
 ]]
 
--- Combine base config for each server and merge user-defined settings.
-local function make_config(server_name)
+local function setup(server_name)
   -- Setup base config for each server.
-  local c = {}
-  c.on_attach = M.on_attach
+  local opts = {}
+  opts.on_attach = M.on_attach
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  c.capabilities = capabilities
+  opts.capabilities = capabilities
 
-  local exists, module = pcall(require, 'lsp.' .. server_name)
-  if exists then
-    local user_config = module.setup(c)
-    for k, v in pairs(user_config) do
-      c[k] = v
-    end
+  -- The configurations for each server are described here.
+  if server_name == 'lua_ls' then
+    opts.settings = {
+      Lua = {
+        runtime = {
+          version = 'LuaJIT',
+        },
+        diagnostic = {
+          globals = { 'vim' }
+        },
+        workspace = {
+          library = vim.api.nvim_get_runtime_file('', true)
+        },
+        telemetry = {
+          enable = false
+        }
+      }
+    }
   end
-  return c
+
+  require('lspconfig')[server_name].setup(opts)
 end
 
 -- Buffer attached
@@ -169,17 +181,10 @@ function M.setup()
     },
   })
   local mason_lspconfig = require('mason-lspconfig')
+  mason_lspconfig.setup_handlers({ setup })
   mason_lspconfig.setup({
     ensure_installed = ensure_installed,
   })
-  local packages = mason_lspconfig.get_installed_servers()
-
-  -- Setup language servers using nvim-lspconfig
-  local lspconfig = require('lspconfig')
-  for _, package in pairs(packages) do
-    local opts = make_config(package)
-    lspconfig[package].setup(opts)
-  end
 
   -- Reload if files were supplied in command-line arguments
   if vim.fn.argc() > 0 and vim.fn.has('vim_starting') and not vim.o.modified then
@@ -193,8 +198,8 @@ function M.setup()
     vim.api.nvim_set_keymap('n', lhs, rhs, args)
   end
 
-  nmap('<C-k>', '<cmd>lua require("lspsaga/diagnostic").goto_prev()<CR>')
-  nmap('<C-j>', '<cmd>lua require("lspsaga/diagnostic").goto_next()<CR>')
+  nmap('<C-k>', '<cmd>lua require("lspsaga/diagnostic"):goto_prev()<CR>')
+  nmap('<C-j>', '<cmd>lua require("lspsaga/diagnostic"):goto_next()<CR>')
 
   -- See https://github.com/kosayoda/nvim-lightbulb
   require('nvim-lightbulb').setup({ignore = {'null-ls'}})
