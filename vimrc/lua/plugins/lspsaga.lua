@@ -20,6 +20,9 @@ function M.setup()
       exec = '<CR>',
     },
     rename_action_quit = {'<C-c>', '<Esc>'},
+    symbol_in_winbar = {
+      enable = false,
+    },
   })
 end
 

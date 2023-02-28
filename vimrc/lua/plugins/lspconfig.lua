@@ -45,8 +45,11 @@ local function setup(server_name)
   -- Setup base config for each server.
   local opts = {}
   opts.on_attach = M.on_attach
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  opts.capabilities = capabilities
+
+  local exists, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+  if exists then
+    opts.capabilities = cmp_nvim_lsp.default_capabilities()
+  end
 
   -- The configurations for each server are described here.
   if server_name == 'lua_ls' then
@@ -114,8 +117,11 @@ function M.on_attach(client, bufnr)
   client.server_capabilities.document_formatting = false
 
   -- For nvim-navic to work, it needs attach to the lsp server.
-  if client.server_capabilities.documentSymbolProvider then
-    require('nvim-navic').attach(client, bufnr)
+  local exists, navic = pcall(require, 'nvim-navic')
+  if exists then
+    if client.server_capabilities.documentSymbolProvider then
+      navic.attach(client, bufnr)
+    end
   end
 
   if client.config.flags then
@@ -168,23 +174,29 @@ function M.setup()
 
   -- Configuration Plugins
 
-  require('neodev').setup({})
+  local neodev_ok, neodev = pcall(require, 'neodev')
+  if neodev_ok then
+    neodev.setup({})
+  end
 
   -- Setup language servers using mason and mason-lspconfig
-  require('mason').setup({
-    ui = {
-      icons = {
-        package_installed = '',
-        package_pending = '',
-        package_uninstalled = '',
+  local mason_ok, mason = pcall(require, 'mason')
+  if mason_ok then
+    mason.setup({
+      ui = {
+        icons = {
+          package_installed = '',
+          package_pending = '',
+          package_uninstalled = '',
+        },
       },
-    },
-  })
-  local mason_lspconfig = require('mason-lspconfig')
-  mason_lspconfig.setup_handlers({ setup })
-  mason_lspconfig.setup({
-    ensure_installed = ensure_installed,
-  })
+    })
+    local mason_lspconfig = require('mason-lspconfig')
+    mason_lspconfig.setup_handlers({ setup })
+    mason_lspconfig.setup({
+      ensure_installed = ensure_installed,
+    })
+  end
 
   -- Reload if files were supplied in command-line arguments
   if vim.fn.argc() > 0 and vim.fn.has('vim_starting') and not vim.o.modified then
@@ -202,22 +214,24 @@ function M.setup()
   nmap('<C-j>', '<cmd>lua require("lspsaga/diagnostic"):goto_next()<CR>')
 
   -- See https://github.com/kosayoda/nvim-lightbulb
-  require('nvim-lightbulb').setup({ignore = {'null-ls'}})
+  local lightbulb_ok, lightbulb = pcall(require, 'nvim-lightbulb')
+  if lightbulb_ok then
+    lightbulb.setup({ignore = {'null-ls'}})
+    vim.api.nvim_exec([[
+      augroup user_lspconfig
+        autocmd!
 
-	vim.api.nvim_exec([[
-    augroup user_lspconfig
-      autocmd!
+        " See https://github.com/kosayoda/nvim-lightbulb
+        autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
 
-      " See https://github.com/kosayoda/nvim-lightbulb
-      autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+        " Update loclist with diagnostics for the current file
+        autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
 
-      " Update loclist with diagnostics for the current file
-      autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
-
-      " Automatic diagnostic hover
-      " autocmd CursorHold * lua require("user").diagnostic.open_float({focusable = false})
-    augroup END
-  ]], false)
+        " Automatic diagnostic hover
+        " autocmd CursorHold * lua require("user").diagnostic.open_float({focusable = false})
+      augroup END
+    ]], false)
+  end
 end
 
 return M

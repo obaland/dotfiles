@@ -76,7 +76,6 @@ function M.filepath(bufnr, max_dirs, dir_max_chars)
   if not vim.tbl_contains(badge_caches, cache_key) then
     table.insert(badge_caches, cache_key)
   end
-  print(path, max_dirs)
   return path
 end
 
