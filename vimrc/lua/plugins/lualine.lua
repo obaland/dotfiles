@@ -176,9 +176,11 @@ local extension_line_count = {
 
 function M.setup()
   local navic = require('nvim-navic')
+  navic.setup {
+    highlight = false,
+  }
 
-  vim.g.qf_disable_statusline = true
-  require('lualine').setup {
+  local config = {
     options = {
       theme = theme,
       always_divide_middle = false,
@@ -385,6 +387,9 @@ function M.setup()
       }
     }
   }
+
+  vim.g.qf_disable_statusline = true
+  require('lualine').setup(config)
 end
 
 return M
