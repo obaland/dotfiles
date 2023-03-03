@@ -1,4 +1,5 @@
 *.DS_Store
+.luarc.json
 vimrc/lplugins/*
 
 __pycache__/

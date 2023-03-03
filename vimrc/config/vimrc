@@ -88,7 +88,7 @@ if IsWindows()
 endif
 
 if has('nvim')
-  call luaeval('require("tabline").setup()')
+  call v:lua.require('tabline').setup()
 endif
 
 " Required

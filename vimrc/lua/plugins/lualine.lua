@@ -2,6 +2,7 @@
 -- see: https://github.com/nvim-lualine/lualine.nvim
 
 local badge = require('badge')
+local core = require('core')
 local vfiler = require('vfiler')
 
 -- Maximum number of directories in filepath
@@ -13,24 +14,8 @@ local badge_statusline_dir_max_chars = 5
 local M = {}
 
 -- Color table for highlights
-local colors = {
-  base03  = '#002b36',
-  base02  = '#073642',
-  base01  = '#586e75',
-  base00  = '#657b83',
-  base0   = '#839496',
-  base1   = '#93a1a1',
-  base2   = '#eee8d5',
-  base3   = '#fdf6e3',
-  yellow  = '#b58900',
-  orange  = '#cb4b16',
-  red     = '#dc322f',
-  magenta = '#d33682',
-  violet  = '#6c71c4',
-  blue    = '#268bd2',
-  cyan    = '#2aa198',
-  green   = '#859900',
-
+local colors = core.get_colors()
+local special_colors = {
 	active = {
 		paste = '#98be65',
 		filepath = '#D7D7BC',
@@ -70,6 +55,11 @@ local conditions = {
     local filepath = vim.fn.expand('%:p:h')
     local gitdir = vim.fn.finddir('.git', filepath .. ';')
     return gitdir and #gitdir > 0 and #gitdir < #filepath
+  end,
+  enabled_lsp = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_active_clients({bufnr = bufnr})
+    return #clients ~= 0 and clients[1].name ~= 'null-ls'
   end
 }
 
@@ -174,18 +164,29 @@ local extension_line_count = {
   filetypes = {'Trouble', 'DiffviewFiles', 'NeogitStatus', 'Outline'},
 }
 
+-- Border section
+local border = {
+  function () return '│' end,
+  color = {fg = colors.base01},
+}
+
+local border_with_padding = {
+  function () return '│' end,
+  color = {fg = colors.base01},
+  padding = 1,
+}
+
 function M.setup()
-  local navic = require('nvim-navic')
-  navic.setup {
-    highlight = false,
-  }
+  -- Dependency: nvim-navic
+  local navic = require('plugins/navic')
+  navic.setup()
 
   local config = {
     options = {
       theme = theme,
       always_divide_middle = false,
       component_separators = '',
-      section_separators = {left = '', right = ''},
+      section_separators = '│',
     },
 
     extensions = {
@@ -194,7 +195,7 @@ function M.setup()
       extension_line_count,
     },
 
-    -- ACTIVE STATE --
+    ---- ACTIVE STATE --
     sections = {
       lualine_a = {
         {
@@ -210,7 +211,7 @@ function M.setup()
             return vim.go.paste and '=' or ''
           end,
           padding = 0,
-          color = {fg = colors.active.paste},
+          color = {fg = special_colors.active.paste},
         },
         -- Readonly or zoomed
         {
@@ -218,7 +219,7 @@ function M.setup()
             return badge.filemode('#', '🔒', '🔎')
           end,
           padding = 0,
-          color = {fg = colors.filemode.readonly},
+          color = {fg = special_colors.filemode.readonly},
         },
         -- Buffer number
         {
@@ -231,7 +232,7 @@ function M.setup()
             return badge.modified('+')
           end,
           padding = 0,
-          color = {fg = colors.filemode.modified},
+          color = {fg = special_colors.filemode.modified},
         },
         -- File icon
         {
@@ -239,14 +240,14 @@ function M.setup()
             local data = badge.icon_data(0)
             return data.icon
           end,
-          cond = conditions.buffer_not_empty,
-          padding = {left = 1},
           color = function()
             local data = badge.icon_data(0)
             return {fg = data.color}
           end,
+          cond = conditions.buffer_not_empty,
+          padding = {left = 1},
         },
-        -- File path
+        -- File name
         {
           function()
             return badge.filepath(
@@ -257,36 +258,17 @@ function M.setup()
           end,
           cond = conditions.buffer_not_empty,
           padding = {left = 1},
-          color = {fg = colors.active.filepath},
+          color = {fg = special_colors.active.filepath},
         },
-        -- Border
-        {
-          function () return '' end,
-          padding = {left = 1, right = 0},
-        },
+        border_with_padding,
       },
       lualine_c = {
-        -- Lsp server name
-        {
-          badge.lsp_server,
-          icon = ' LSP:',
-        },
         -- Diagnostics
         {
           'diagnostics',
           sources = {'nvim_diagnostic'},
           symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
-          padding = 0,
-        },
-        -- Start truncating here
-        {
-          function() return '%<' end,
-          padding = {left = 0, right = 0}
-        },
-        -- LSP to show your current context.
-        {
-          navic.get_location,
-          cond = navic.is_available,
+          padding = {left = 1, right = 0},
         },
         -- Whitespace trails
         {
@@ -300,8 +282,12 @@ function M.setup()
         -- Git branch
         {
           'branch',
-          icon = '',
-          cond = conditions.check_git_workspace,
+          icon = {
+            '',
+            color = {
+              fg = colors.green,
+            }
+          },
           padding = {left = 1, right = 0},
         },
         -- Git status
@@ -317,41 +303,32 @@ function M.setup()
         },
       },
       lualine_y = {
-        -- Border
-        {
-          function () return '' end,
-          cond = conditions.hide_in_width(60),
-          padding = 1,
-        },
+        border_with_padding,
         -- Encoding
         {
           'encoding',
           fmt = string.upper,
-          cond = conditions.hide_in_width(60),
-          separator = '│',
-          padding = {left = 0, right = 1},
+          padding = 0,
         },
+        border,
         -- File format
         {
           'fileformat',
           fmt = string.upper,
           icons_enabled = false,
-          cond = conditions.hide_in_width(60),
-          separator = '│',
-          padding = 1,
+          padding = 0,
         },
+        border,
         -- File type
         {
           function() return vim.bo.filetype end,
-          cond = conditions.hide_in_width(60),
-          padding = 1,
+          padding = {left = 0, right = 1},
         },
       },
       lualine_z = {
         {
           badge.progress,
           separator = {left = '', right = ''},
-          padding = 0,
         },
       },
     },
@@ -383,6 +360,40 @@ function M.setup()
         {
           function() return vim.bo.filetype end,
           padding = 1,
+        },
+      }
+    },
+
+    -- WINBAR --
+    winbar = {
+      lualine_c = {
+        -- Lsp server name
+        {
+          function()
+            local components = {
+              badge.lsp_server(),
+              '%#Comment#',
+              ' │ ',
+            }
+            if navic.is_available() then
+              table.insert(components, navic.get_location())
+            end
+            return table.concat(components)
+          end,
+          icon = ' ',
+          color = 'WinbarLspClientName',
+          cond = conditions.enabled_lsp,
+        },
+      }
+    },
+    inactive_winbar = {
+      lualine_c = {
+        -- Lsp server name
+        {
+          badge.lsp_server,
+          icon = ' ',
+          color = 'Comment',
+          cond = conditions.enabled_lsp,
         },
       }
     }

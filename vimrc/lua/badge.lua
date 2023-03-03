@@ -141,23 +141,22 @@ function M.trails(symbol)
 end
 
 function M.lsp_server()
-  local lsp = '[No Active Lsp]'
-  local filetype = vim.bo.filetype
-  local clients = vim.lsp.get_active_clients()
-  if next(clients) == nil then
-    return lsp
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_active_clients({bufnr = bufnr})
+  if #clients == 0 then
+    return '[No Active Lsp]'
   end
-  for _, client in ipairs(clients) do
-    local filetypes = client.config.filetypes
-    if filetypes and vim.fn.index(filetypes, filetype) ~= -1 then
-      return client.name
-    end
-  end
-  return lsp
+  return clients[1].name
 end
 
 function M.progress()
-  return ' %l  %2c│%3p%%/%L'
+  local lcount = vim.api.nvim_buf_line_count(0)
+  local digit = 0
+  repeat
+    digit = digit + 1
+    lcount = math.floor(lcount / 10)
+  until lcount <= 0
+  return (' %%%dl  %%2c│%%3p%%%%'):format(digit)
 end
 
 -- Try to guess the project's name

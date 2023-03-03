@@ -929,40 +929,13 @@ execute 'highlight! TelescopeSelectionCaret'  .s:fmt_none .s:fg_cyan .s:bg_none
 " separate them from the border a little, but not make them pop
 highlight! link TelescopeTint Normal
 
-" nvim-navic
-" ----------
-"highlight! link NavicIconsFile
-highlight! link NavicIconsModule        CmpItemKindModule
-highlight! link NavicIconsNamespace     Identifier
-highlight! link NavicIconsPackage       CmpItemKindModule
-highlight! link NavicIconsClass         CmpItemKindClass
-highlight! link NavicIconsMethod        CmpItemKindMethod
-highlight! link NavicIconsProperty      CmpItemKindProperty
-highlight! link NavicIconsField         CmpItemKindField
-highlight! link NavicIconsConstructor   CmpItemKindConstructor
-highlight! link NavicIconsEnum          CmpItemKindEnum
-highlight! link NavicIconsInterface     CmpItemKindInterface
-highlight! link NavicIconsFunction      CmpItemKindFunction
-highlight! link NavicIconsVariable      CmpItemKindVariable
-highlight! link NavicIconsConstant      CmpItemKindConstant
-highlight! link NavicIconsString        String
-highlight! link NavicIconsNumber        Number
-highlight! link NavicIconsBoolean       Boolean
-highlight! link NavicIconsArray         CmpItemKindVariable
-highlight! link NavicIconsObject        CmpItemKindVariable
-highlight! link NavicIconsKey           Keyword
-highlight! link NavicIconsNull          Comment
-highlight! link NavicIconsEnumMember    CmpItemKindEnumMember
-highlight! link NavicIconsStruct        CmpItemKindStruct
-highlight! link NavicIconsEvent         CmpItemKindEvent
-highlight! link NavicIconsOperator      CmpItemKindOperator
-highlight! link NavicIconsTypeParameter CmpItemKindTypeParameter
-highlight! link NavicText               Normal
-"highlight! link NavicSeparator
-
 " which-key
 " ---------
 highlight! link WhichKeyFloat Normal
+
+" Original highlights
+" -------------------
+execute 'highlight! WinbarLspClientName' .s:fmt_none .' guifg=#d7d7bc' .s:bg_none
 
 " License
 " -------
