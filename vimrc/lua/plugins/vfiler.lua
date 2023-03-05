@@ -9,11 +9,6 @@ function M.setup()
     icon = '',
   }
 
-  require'vfiler/status'.setup {
-    separator = '',
-    subseparator = ':',
-  }
-
   require'vfiler/config'.setup {
     options = {
       columns = 'indent,devicons,name,mode,size,time',

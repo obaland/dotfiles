@@ -929,6 +929,37 @@ execute 'highlight! TelescopeSelectionCaret'  .s:fmt_none .s:fg_cyan .s:bg_none
 " separate them from the border a little, but not make them pop
 highlight! link TelescopeTint Normal
 
+" nvim-navic
+" ----------
+highlight! link NavicIconsFile          Tag
+highlight! link NavicIconsModule        Exception
+highlight! link NavicIconsNamespace     Include
+highlight! link NavicIconsPackage       Label
+highlight! link NavicIconsClass         Include
+highlight! link NavicIconsMethod        Function
+highlight! link NavicIconsProperty      @property
+highlight! link NavicIconsField         @field
+highlight! link NavicIconsConstructor   @constructor
+highlight! link NavicIconsEnum          @number
+highlight! link NavicIconsInterface     Type
+highlight! link NavicIconsFunction      Function
+highlight! link NavicIconsVariable      @variable
+highlight! link NavicIconsConstant      Constant
+highlight! link NavicIconsString        String
+highlight! link NavicIconsNumber        Number
+highlight! link NavicIconsBoolean       Boolean
+highlight! link NavicIconsArray         Type
+highlight! link NavicIconsObject        Type
+highlight! link NavicIconsKey           Normal
+highlight! link NavicIconsNull          Constant
+highlight! link NavicIconsEnumMember    @number
+highlight! link NavicIconsStruct        Type
+highlight! link NavicIconsEvent         Constant
+highlight! link NavicIconsOperator      Operator
+highlight! link NavicIconsTypeParameter @parameter
+highlight! link NavicText               Normal
+execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_violet  .s:bg_back
+
 " which-key
 " ---------
 highlight! link WhichKeyFloat Normal

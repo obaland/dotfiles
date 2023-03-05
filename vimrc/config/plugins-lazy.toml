@@ -67,27 +67,6 @@ hook_post_source = 'lua require("plugins/goto-preview").setup()'
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
 if = 'has("nvim-0.7")'
-on_ft = [
-  'c',
-  'cpp',
-  'cs',
-  'css',
-  'go',
-  'html',
-  'java',
-  'javascript',
-  'json',
-  'lua',
-  'make',
-  'markdown',
-  'php',
-  'python',
-  'ruby',
-  'toml',
-  'vim',
-  'xml',
-  'yaml'
-]
 hook_post_source = 'lua require("plugins/lspconfig").setup()'
 
 [[plugins]]

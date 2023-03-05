@@ -9,69 +9,27 @@ local core = require('core')
 
 local M = {}
 
--- https://github.com/williamboman/mason-lspconfig.nvim
-local ensure_installed = {
-  'bashls',                -- Bash
-  'cmake',                 -- CMake
-  'clangd',                -- C/C++
-  'omnisharp',             -- C#
-  'cssls',                 -- CSS
-  'dockerls',              -- Docker
-  'html',                  -- HTML
-  'jsonls',                -- JSON
-  'tsserver',              -- JavaScript/TypeScript
-  'lua_ls',                -- Lua
-  'remark_ls',             -- Markdown
-  'intelephense',          -- PHP
-  'jedi_language_server',  -- Python
-  'sqlls',                 -- SQL
-  'taplo',                 -- TOML
-  'vimls',                 -- VimL
-  'lemminx',               -- XML
-  'yamlls',                -- YAML
-}
-
-if core.is_win() then
-  table.insert(ensure_installed, 'powershell_es')
-end
-
---[[
-if is_mac then
-  table.insert(ensure_installed, 'sourcekit-lsp')
-end
-]]
-
-local function setup(server_name)
+-- Combine base config for each server
+local function make_config(server)
+  print(server)
   -- Setup base config for each server.
-  local opts = {}
-  opts.on_attach = M.on_attach
+  local options = {}
+  options.on_attach = M.on_attach
 
-  local exists, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+  local exists, module = pcall(require, 'cmp_nvim_lsp')
   if exists then
-    opts.capabilities = cmp_nvim_lsp.default_capabilities()
+    options.capabilities = module.default_capabilities()
   end
 
-  -- The configurations for each server are described here.
-  if server_name == 'lua_ls' then
-    opts.settings = {
-      Lua = {
-        runtime = {
-          version = 'LuaJIT',
-        },
-        diagnostic = {
-          globals = { 'vim' }
-        },
-        workspace = {
-          library = vim.api.nvim_get_runtime_file('', true)
-        },
-        telemetry = {
-          enable = false
-        }
-      }
-    }
+  -- Merge user-defined lsp settings.
+  exists, module = pcall(require, 'lsp/' .. server)
+  if exists then
+    local user_config = module.config(options)
+    for key, value in pairs(user_config) do
+      options[key] = value
+    end
   end
-
-  require('lspconfig')[server_name].setup(opts)
+  return options
 end
 
 -- Buffer attached
@@ -192,10 +150,16 @@ function M.setup()
       },
     })
     local mason_lspconfig = require('mason-lspconfig')
-    mason_lspconfig.setup_handlers({ setup })
-    mason_lspconfig.setup({
-      ensure_installed = ensure_installed,
-    })
+    mason_lspconfig.setup()
+
+    local packages = mason_lspconfig.get_installed_servers()
+
+    -- Setup language servers using nvim-lspconfig
+    local lspconfig = require('lspconfig')
+    for _, server in pairs(packages) do
+      local options = make_config(server)
+      lspconfig[server].setup(options)
+    end
   end
 
   -- Reload if files were supplied in command-line arguments

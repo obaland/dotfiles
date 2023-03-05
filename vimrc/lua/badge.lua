@@ -156,7 +156,7 @@ function M.progress()
     digit = digit + 1
     lcount = math.floor(lcount / 10)
   until lcount <= 0
-  return (' %%%dl  %%2c│%%3p%%%%'):format(digit)
+  return ('%%%dl:%%2c%%4p%%%%'):format(digit)
 end
 
 -- Try to guess the project's name

@@ -109,12 +109,12 @@ local extension_file_explorer = {
         padding = 0,
       },
     },
-    lualine_b = {
-      {
-        vfiler.status,
-        padding = 0
-      },
-    },
+    --lualine_b = {
+    --  {
+    --    vfiler.status,
+    --    padding = 0
+    --  },
+    --},
   },
   inactive_sections = {
     lualine_a = {
@@ -122,12 +122,12 @@ local extension_file_explorer = {
         return badge.special_name(0)
       end,
     },
-    lualine_b = {
-      {
-        vfiler.status,
-        padding = {left = 1},
-      },
-    },
+    --lualine_b = {
+    --  {
+    --    vfiler.status,
+    --    padding = {left = 1},
+    --  },
+    --},
   },
   filetypes = {'vfiler'},
 }
@@ -268,7 +268,7 @@ function M.setup()
           'diagnostics',
           sources = {'nvim_diagnostic'},
           symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
-          padding = {left = 1, right = 0},
+          padding = 0,
         },
         -- Whitespace trails
         {
