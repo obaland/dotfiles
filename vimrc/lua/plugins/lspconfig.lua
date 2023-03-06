@@ -11,7 +11,6 @@ local M = {}
 
 -- Combine base config for each server
 local function make_config(server)
-  print(server)
   -- Setup base config for each server.
   local options = {}
   options.on_attach = M.on_attach

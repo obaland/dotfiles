@@ -60,7 +60,7 @@ let s:gui_violet  = '#6c71c4'
 let s:gui_blue    = '#268bd2'
 let s:gui_cyan    = '#2aa198'
 let s:gui_green   = '#719e07' " experimental
-"let s:green       = '#859900' " original
+let s:gui_white   = '#d7d7bc' " experimental
 
 let s:term_mode    = 'cterm'
 let s:term_base03  = '8'
@@ -79,6 +79,7 @@ let s:term_violet  = '13'
 let s:term_blue    = '4'
 let s:term_cyan    = '6'
 let s:term_green   = '2'
+let s:term_white   = '7'
 
 " Formatting options and null values for passthrough effect
 " ---------------------------------------------------------
@@ -211,6 +212,7 @@ execute 'let s:fg_magenta = " ' . 'guifg='.s:gui_magenta . ' ctermfg='.s:term_ma
 execute 'let s:fg_violet  = " ' . 'guifg='.s:gui_violet  . ' ctermfg='.s:term_violet  . '"'
 execute 'let s:fg_blue    = " ' . 'guifg='.s:gui_blue    . ' ctermfg='.s:term_blue    . '"'
 execute 'let s:fg_cyan    = " ' . 'guifg='.s:gui_cyan    . ' ctermfg='.s:term_cyan    . '"'
+execute 'let s:fg_white   = " ' . 'guifg='.s:gui_white   . ' ctermfg='.s:term_white   . '"'
 
 execute 'let s:fmt_none  = " ' . 'gui=NONE'         . ' cterm=NONE'         . '"'
 execute 'let s:fmt_bold  = " ' . 'gui=NONE'.s:b     . ' cterm=NONE'.s:b     . '"'
@@ -301,26 +303,27 @@ execute 'highlight! Todo'       .s:fmt_none .s:fg_magenta.s:bg_none
 
 " Extended highlighting
 " ---------------------
-execute 'highlight! SpecialKey'   .s:fmt_none .s:fg_base00 .s:bg_base02
-execute 'highlight! NonText'      .s:fmt_none .s:fg_base00 .s:bg_none
-execute 'highlight! StatusLine'   .s:fmt_none .s:fg_base1  .s:bg_base02 .s:fmt_revb
-execute 'highlight! StatusLineNC' .s:fmt_none .s:fg_base00 .s:bg_base02 .s:fmt_revb
-execute 'highlight! Visual'       .s:fmt_none .s:fg_base01 .s:bg_base03 .s:fmt_revb
 execute 'highlight! Directory'    .s:fmt_none .s:fg_blue   .s:bg_none
 execute 'highlight! ErrorMsg'     .s:fmt_revr .s:fg_red    .s:bg_none
+execute 'highlight! FoldColumn'   .s:fmt_none .s:fg_base0  .s:bg_base02
+execute 'highlight! Folded'       .s:fmt_none .s:fg_base0  .s:bg_base02 .s:sp_base03
 execute 'highlight! IncSearch'    .s:fmt_stnd .s:fg_orange .s:bg_none
-execute 'highlight! Search'       .s:fmt_revr .s:fg_yellow .s:bg_none
-execute 'highlight! MoreMsg'      .s:fmt_none .s:fg_blue   .s:bg_none
-execute 'highlight! ModeMsg'      .s:fmt_none .s:fg_blue   .s:bg_none
 execute 'highlight! LineNr'       .s:fmt_none .s:fg_base01 .s:bg_base02
+execute 'highlight! ModeMsg'      .s:fmt_none .s:fg_blue   .s:bg_none
+execute 'highlight! MoreMsg'      .s:fmt_none .s:fg_blue   .s:bg_none
+execute 'highlight! NonText'      .s:fmt_none .s:fg_base00 .s:bg_none
 execute 'highlight! Question'     .s:fmt_none .s:fg_cyan   .s:bg_none
-execute 'highlight! VertSplit'    .s:fmt_none .s:fg_base00 .s:bg_none
+execute 'highlight! Search'       .s:fmt_revr .s:fg_yellow .s:bg_none
+execute 'highlight! SpecialKey'   .s:fmt_none .s:fg_base00 .s:bg_base02
+execute 'highlight! StatusLine'   .s:fmt_none .s:fg_base1  .s:bg_base02 .s:fmt_revb
+execute 'highlight! StatusLineNC' .s:fmt_none .s:fg_base00 .s:bg_base02 .s:fmt_revb
 execute 'highlight! Title'        .s:fmt_none .s:fg_orange .s:bg_none
+execute 'highlight! VertSplit'    .s:fmt_none .s:fg_base00 .s:bg_none
+execute 'highlight! Variable'     .s:fmt_none .s:fg_base1  .s:bg_none
+execute 'highlight! Visual'       .s:fmt_none .s:fg_base01 .s:bg_base03 .s:fmt_revb
 execute 'highlight! VisualNOS'    .s:fmt_stnd .s:fg_none   .s:bg_base02 .s:fmt_revb
 execute 'highlight! WarningMsg'   .s:fmt_none .s:fg_red    .s:bg_none
 execute 'highlight! WildMenu'     .s:fmt_none .s:fg_base2  .s:bg_base02 .s:fmt_revb
-execute 'highlight! Folded'       .s:fmt_none .s:fg_base0  .s:bg_base02 .s:sp_base03
-execute 'highlight! FoldColumn'   .s:fmt_none .s:fg_base0  .s:bg_base02
 
 execute 'highlight! DiffAdd'      .s:fmt_none .s:fg_green  .s:bg_base02 .s:sp_green
 execute 'highlight! DiffChange'   .s:fmt_none .s:fg_yellow .s:bg_base02 .s:sp_yellow
@@ -937,13 +940,13 @@ highlight! link NavicIconsNamespace     Include
 highlight! link NavicIconsPackage       Label
 highlight! link NavicIconsClass         Include
 highlight! link NavicIconsMethod        Function
-highlight! link NavicIconsProperty      @property
-highlight! link NavicIconsField         @field
-highlight! link NavicIconsConstructor   @constructor
-highlight! link NavicIconsEnum          @number
+highlight! link NavicIconsProperty      Identifier
+highlight! link NavicIconsField         Identifier
+highlight! link NavicIconsConstructor   Special
+highlight! link NavicIconsEnum          Number
 highlight! link NavicIconsInterface     Type
 highlight! link NavicIconsFunction      Function
-highlight! link NavicIconsVariable      @variable
+highlight! link NavicIconsVariable      Variable
 highlight! link NavicIconsConstant      Constant
 highlight! link NavicIconsString        String
 highlight! link NavicIconsNumber        Number
@@ -952,13 +955,13 @@ highlight! link NavicIconsArray         Type
 highlight! link NavicIconsObject        Type
 highlight! link NavicIconsKey           Normal
 highlight! link NavicIconsNull          Constant
-highlight! link NavicIconsEnumMember    @number
+highlight! link NavicIconsEnumMember    Number
 highlight! link NavicIconsStruct        Type
 highlight! link NavicIconsEvent         Constant
 highlight! link NavicIconsOperator      Operator
-highlight! link NavicIconsTypeParameter @parameter
+highlight! link NavicIconsTypeParameter Normal
 highlight! link NavicText               Normal
-execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_violet  .s:bg_back
+execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_magenta .s:bg_none
 
 " which-key
 " ---------
@@ -966,7 +969,7 @@ highlight! link WhichKeyFloat Normal
 
 " Original highlights
 " -------------------
-execute 'highlight! WinbarLspClientName' .s:fmt_none .' guifg=#d7d7bc' .s:bg_none
+execute 'highlight! WinbarLspClientName' .s:fmt_none .s:fg_white .s:bg_none
 
 " License
 " -------
