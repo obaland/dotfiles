@@ -19,6 +19,31 @@ local badge_tabline_dir_max_chars = 5
 -- ['₀','₁','₂','₃','₄','₅','₆','₇','₈','₉'])
 local numeric_charset = {'⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'}
 
+local function cwd()
+  local path = vim.fn.getcwd()
+
+  -- If vfiler is running in explorer mode, adjust the width
+  local ok, vfiler = pcall(require, 'plugins/vfiler')
+  if not ok then
+    return ' ' .. path .. ' '
+  end
+
+  local status = vfiler.get_exprolorer_status()
+  if status.bufnr then
+    local winnr = vim.fn.bufwinnr(status.bufnr)
+    if winnr >= 0 then
+      path = status.root
+      local str_width = vim.fn.strdisplaywidth(path) + 1
+      local winwidth = vim.fn.winwidth(winnr)
+      if str_width < winwidth then
+        -- "+2" is for padding at both ends.
+        path = path .. string.rep(' ', winwidth - (str_width + 2))
+      end
+    end
+  end
+  return ' ' .. path .. ' '
+end
+
 local function is_file_buffer(bufnr)
   local buftype = vim.api.nvim_buf_get_option(bufnr, 'buftype')
   return #buftype == 0
@@ -56,9 +81,7 @@ function _G.tabline()
   end
 
   -- Active project name
-  local tabparts = {
-    '%#TabLineAlt# ' .. badge.project() .. ' %#TabLineAltShade#'
-  }
+  local tabparts = {'%#TabLineAlt#', cwd(), '%#TabLineAltShade#'}
 
   -- Iterate through all tabs and collect labels
   --local current = vim.fn.tabpagenr()

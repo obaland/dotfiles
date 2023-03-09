@@ -3,7 +3,6 @@
 
 local badge = require('badge')
 local core = require('core')
-local vfiler = require('vfiler')
 
 -- Maximum number of directories in filepath
 local badge_statusline_filepath_max_dirs = 0
@@ -109,12 +108,11 @@ local extension_file_explorer = {
         padding = 0,
       },
     },
-    --lualine_b = {
-    --  {
-    --    vfiler.status,
-    --    padding = 0
-    --  },
-    --},
+    lualine_x = {
+      {
+        badge.project,
+      },
+    },
   },
   inactive_sections = {
     lualine_a = {
@@ -122,12 +120,11 @@ local extension_file_explorer = {
         return badge.special_name(0)
       end,
     },
-    --lualine_b = {
-    --  {
-    --    vfiler.status,
-    --    padding = {left = 1},
-    --  },
-    --},
+    lualine_x = {
+      {
+        badge.project,
+      },
+    },
   },
   filetypes = {'vfiler'},
 }
@@ -184,6 +181,7 @@ function M.setup()
   local config = {
     options = {
       theme = theme,
+      globalstatus = false,
       always_divide_middle = false,
       component_separators = '',
       section_separators = '│',
@@ -279,17 +277,6 @@ function M.setup()
         },
       },
       lualine_x = {
-        -- Git branch
-        {
-          'branch',
-          icon = {
-            '',
-            color = {
-              fg = colors.green,
-            }
-          },
-          padding = {left = 1, right = 0},
-        },
         -- Git status
         {
           'diff',
@@ -301,29 +288,57 @@ function M.setup()
           cond = conditions.hide_in_width(60),
           padding = {left = 1, right = 0},
         },
+        -- Git branch
+        {
+          'branch',
+          icon = {
+            '',
+            color = {
+              fg = colors.green,
+            }
+          },
+          padding = {left = 1, right = 0},
+        },
       },
       lualine_y = {
-        border_with_padding,
+        -- Border with padding,
+        {
+          function () return '│' end,
+          color = {fg = colors.base01},
+          cond = function() return vim.bo.fileencoding ~= '' end,
+          padding = 1,
+        },
         -- Encoding
         {
-          'encoding',
-          fmt = string.upper,
+          function() return string.upper(vim.bo.fileencoding) end,
           padding = 0,
         },
-        border,
+        -- Border
+        {
+          function () return '│' end,
+          color = {fg = colors.base01},
+        },
         -- File format
         {
-          'fileformat',
-          fmt = string.upper,
-          icons_enabled = false,
+          function() return string.upper(vim.bo.fileformat) end,
           padding = 0,
         },
-        border,
+        -- Border
+        {
+          function () return '│' end,
+          color = {fg = colors.base01},
+          cond = function() return vim.bo.filetype ~= '' end
+        },
         -- File type
         {
           function() return vim.bo.filetype end,
-          padding = {left = 0, right = 1},
+          padding = 0,
         },
+        -- Padding
+        {
+          function() return ' ' end,
+          padding = 0,
+        }
       },
       lualine_z = {
         {

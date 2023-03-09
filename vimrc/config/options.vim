@@ -170,6 +170,7 @@ set laststatus=2     " 常にステータス行を表示
 set colorcolumn=79   " 指定列に線を表示する
 
 set cursorline     " 行ラインは非表示だが、行番号を色分けする
+set showtabline=2    " いつタブページのラベルを表示するかを指定 (2: 常に表示)
 
 " Unicode 曖昧な文字幅の場合の幅を調整
 "set ambiwidth=double

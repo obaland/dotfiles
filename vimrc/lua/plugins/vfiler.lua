@@ -1,6 +1,8 @@
 -- plugin: vfiler.vim
 -- see: https://github.com/obaland/vfiler.vim
 
+local exprolorer_bufnrs = {}
+
 local M = {}
 
 function M.setup()
@@ -52,6 +54,7 @@ function M.start_exprolorer()
       auto_cd = true,
       auto_resize = true,
       find_file = true,
+      header = false,
       keep = true,
       name = 'exp',
       layout = 'left',
@@ -78,7 +81,21 @@ function M.start_exprolorer()
   end
   path = vim.fn.fnamemodify(path, ':p:h')
 
-  require('vfiler').start(path, configs)
+  local vfiler = require('vfiler')
+  vfiler.start(path, configs)
+
+  local status = vfiler.status(0)
+  if status.bufnr then
+    exprolorer_bufnrs[vim.fn.tabpagenr()] = status.bufnr
+  end
+end
+
+function M.get_exprolorer_status()
+  local bufnr = exprolorer_bufnrs[vim.fn.tabpagenr()]
+  if not bufnr then
+    return {}
+  end
+  return require('vfiler').status(bufnr)
 end
 
 return M

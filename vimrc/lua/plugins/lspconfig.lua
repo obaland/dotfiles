@@ -70,13 +70,20 @@ function M.on_attach(client, bufnr)
   map_buf('x', '<Leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   map_buf('n', '<Leader>ce', '<cmd>lua vim.diagnostic.open_float({source=true})<CR>', opts)
 
+  -- Call hierarchy
+  map_buf('n', '<Leader>ci', '<cmd>Lspsaga incoming_calls<CR>', opts)
+  map_buf('n', '<Leader>co', '<cmd>Lspsaga outgoing_calls<CR>', opts)
+
   -- Disable formatting
   client.server_capabilities.document_formatting = false
 
   -- For nvim-navic to work, it needs attach to the lsp server.
   local exists, navic = pcall(require, 'nvim-navic')
   if exists then
-    if client.server_capabilities.documentSymbolProvider then
+    if
+      client.supports_method('textDocument/documentSymbol')
+      and not navic.is_available()
+    then
       navic.attach(client, bufnr)
     end
   end
@@ -162,7 +169,11 @@ function M.setup()
   end
 
   -- Reload if files were supplied in command-line arguments
-  if vim.fn.argc() > 0 and vim.fn.has('vim_starting') and not vim.o.modified then
+  if
+    vim.fn.argc() > 0
+    and vim.fn.has('vim_starting')
+    and not vim.o.modified
+  then
     -- triggers the FileType autocmd that starts the servers
     vim.cmd('windo e')
   end
