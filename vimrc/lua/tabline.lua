@@ -20,25 +20,26 @@ local badge_tabline_dir_max_chars = 5
 local numeric_charset = {'⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'}
 
 local function cwd()
-  local path = vim.fn.getcwd()
-
   -- If vfiler is running in explorer mode, adjust the width
   local ok, vfiler = pcall(require, 'plugins/vfiler')
   if not ok then
-    return ' ' .. path .. ' '
+    return ''
   end
 
   local status = vfiler.get_exprolorer_status()
-  if status.bufnr then
-    local winnr = vim.fn.bufwinnr(status.bufnr)
-    if winnr >= 0 then
-      path = status.root
-      local str_width = vim.fn.strdisplaywidth(path) + 1
-      local winwidth = vim.fn.winwidth(winnr)
-      if str_width < winwidth then
-        -- "+2" is for padding at both ends.
-        path = path .. string.rep(' ', winwidth - (str_width + 2))
-      end
+  if not status.bufnr then
+    return ''
+  end
+
+  local path = ''
+  local winnr = vim.fn.bufwinnr(status.bufnr)
+  if winnr >= 0 then
+    path = status.root
+    local str_width = vim.fn.strdisplaywidth(path) + 1
+    local winwidth = vim.fn.winwidth(winnr)
+    if str_width < winwidth then
+      -- "+2" is for padding at both ends.
+      path = path .. string.rep(' ', winwidth - (str_width + 2))
     end
   end
   return ' ' .. path .. ' '
@@ -80,8 +81,13 @@ function _G.tabline()
     return ''
   end
 
-  -- Active project name
-  local tabparts = {'%#TabLineAlt#', cwd(), '%#TabLineAltShade#'}
+  local tabparts = {}
+
+  -- Current path (for vfiler.vim)
+  local path = cwd()
+  if #path > 0 then
+    tabparts = {'%#TabLineAlt#', path, '%#TabLineAltShade#'}
+  end
 
   -- Iterate through all tabs and collect labels
   --local current = vim.fn.tabpagenr()
