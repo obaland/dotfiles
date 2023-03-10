@@ -16,8 +16,29 @@ local badge_tabline_filepath_max_dirs = 0
 -- Maximum number of characters in each directory
 local badge_tabline_dir_max_chars = 5
 
+-- Maximum number of label width
+local badge_tabline_max_label_width = 128
+
 -- ['₀','₁','₂','₃','₄','₅','₆','₇','₈','₉'])
 local numeric_charset = {'⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'}
+
+local function truncate_path(path, winwidth)
+  local items = vim.split(path, '/', {})
+  local displays = {table.remove(items)}
+  local strwidth = vim.fn.strdisplaywidth(displays[1])
+
+  for i = #items, 1, -1 do
+    local item = items[i]
+    local width = vim.fn.strdisplaywidth(item)
+    if (strwidth + width + 1) > winwidth then
+      break
+    end
+    table.insert(displays, 1, item)
+    strwidth = strwidth + width + 1
+  end
+
+  return table.concat(displays, '/'), strwidth
+end
 
 local function cwd()
   -- If vfiler is running in explorer mode, adjust the width
@@ -34,12 +55,14 @@ local function cwd()
   local path = ''
   local winnr = vim.fn.bufwinnr(status.bufnr)
   if winnr >= 0 then
-    path = status.root
-    local str_width = vim.fn.strdisplaywidth(path) + 1
-    local winwidth = vim.fn.winwidth(winnr)
-    if str_width < winwidth then
-      -- "+2" is for padding at both ends.
-      path = path .. string.rep(' ', winwidth - (str_width + 2))
+    local padding = 3 -- icon and both ends.
+    local winwidth = math.min(
+      status.options.width,
+      badge_tabline_max_label_width
+    )
+    local trancated, strwidth = truncate_path(status.root, winwidth - padding)
+    if strwidth < winwidth then
+      path = trancated .. string.rep(' ', winwidth - (strwidth + padding))
     end
   end
   return ' ' .. path .. ' '
