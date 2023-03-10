@@ -79,20 +79,6 @@ function M.filepath(bufnr, max_dirs, dir_max_chars)
   return path
 end
 
-function M.filemode(normal_symbol, readonly_symbol, zoom_symbol)
-  local mode = ''
-  if not (vim.bo.readonly or vim.t.zoomed) then
-    mode = mode .. normal_symbol
-  end
-  if vim.bo.readonly then
-    mode = mode .. readonly_symbol
-  end
-  if vim.t.zoomed then
-    mode = mode .. zoom_symbol
-  end
-  return mode
-end
-
 function M.modified(symbol)
   return vim.bo.modified and symbol or ''
 end

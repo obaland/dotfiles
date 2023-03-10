@@ -20,6 +20,7 @@ local special_colors = {
 		filepath = '#D7D7BC',
 	},
 	filemode = {
+		edit     = '#5faeec',
 		modified = '#ec5f67',
 		readonly = '#ec5f67',
 	},
@@ -161,18 +162,6 @@ local extension_line_count = {
   filetypes = {'Trouble', 'DiffviewFiles', 'NeogitStatus', 'Outline'},
 }
 
--- Border section
-local border = {
-  function () return '│' end,
-  color = {fg = colors.base01},
-}
-
-local border_with_padding = {
-  function () return '│' end,
-  color = {fg = colors.base01},
-  padding = 1,
-}
-
 function M.setup()
   -- Dependency: nvim-navic
   local navic = require('plugins/navic')
@@ -211,13 +200,19 @@ function M.setup()
           padding = 0,
           color = {fg = special_colors.active.paste},
         },
-        -- Readonly or zoomed
+        -- Edit
         {
-          function()
-            return badge.filemode('#', '🔒', '🔎')
-          end,
-          padding = 0,
+          function() return '' end,
+          padding = {left = 0, right = 1},
+          color = {fg = special_colors.filemode.edit},
+          cond = function() return not vim.bo.readonly end,
+        },
+        -- Readonly
+        {
+          function() return '' end,
+          padding = {left = 0, right = 1},
           color = {fg = special_colors.filemode.readonly},
+          cond = function() return vim.bo.readonly end,
         },
         -- Buffer number
         {
@@ -258,7 +253,12 @@ function M.setup()
           padding = {left = 1},
           color = {fg = special_colors.active.filepath},
         },
-        border_with_padding,
+        -- Border with padding,
+        {
+          function () return '│' end,
+          color = {fg = colors.base01},
+          padding = 1,
+        },
       },
       lualine_c = {
         -- Diagnostics
