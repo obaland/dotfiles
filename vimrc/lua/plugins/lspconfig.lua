@@ -37,10 +37,6 @@ function M.on_attach(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
 
-  -- Keyboard mappings
-  local opts = {noremap = true, silent = true}
-  map_buf('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
-
 	-- Short-circuit for Helm template files
   local filetype = vim.bo[bufnr].filetype
 	if vim.bo[bufnr].buftype ~= '' or filetype == 'helm' or filetype == 'vfiler' then
@@ -50,6 +46,10 @@ function M.on_attach(client, bufnr)
     end, 1000)
 		return
 	end
+
+  -- Keyboard mappings
+  local opts = {noremap = true, silent = true}
+  map_buf('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
 
   -- Disable diagnostics if buffer/global indicator is on
   if vim.b[bufnr].diagnostic_disabled or vim.g.diagnostic_disabled then
