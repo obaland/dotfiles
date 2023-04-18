@@ -3,30 +3,6 @@
 
 local M = {}
 
--- https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
-local ensure_installed = {
-  'bash',
-  'c',
-  'cpp',
-  'c_sharp',
-  'css',
-  'dockerfile',
-  'help',
-  'html',
-  'javascript',
-  'json',
-  'lua',
-  'make',
-  'php',
-  'python',
-  'query',
-  'ruby',
-  'typescript',
-  'toml',
-  'vim',
-  'yaml',
-}
-
 -- Setup treesitter
 function M.setup()
   local parset_configs = require('nvim-treesitter/parsers').get_parser_configs()
@@ -40,8 +16,6 @@ function M.setup()
   }
 
   require('nvim-treesitter.configs').setup({
-    ensure_installed = ensure_installed,
-
     highlight = {
       enable = true,
       additional_vim_regex_highlighting = false,
