@@ -15,8 +15,10 @@ function M.setup()
     options = {
       columns = 'indent,devicons,name,mode,size,time',
       session = 'share',
-    }
+      toggle = true,
+    },
   }
+  require'vfiler/config'.unmap('<Space>')
 
   if not vim.fn.has('nvim') then
     -- Vim only

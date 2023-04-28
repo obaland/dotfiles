@@ -7,16 +7,22 @@ repo = 'kyazdani42/nvim-web-devicons'
 
 # Interface
 # =========
+#[[plugins]]
+#repo = 'nvim-lualine/lualine.nvim'
+#if = 'has("nvim-0.5")'
+#on_event = 'BufEnter'
+#depends = [
+#  'nvim-navic',
+#  'nvim-web-devicons',
+#  'vfiler.vim'
+#]
+#hook_source = 'lua require("plugins/lualine").setup()'
+
 [[plugins]]
-repo = 'nvim-lualine/lualine.nvim'
+repo = 'rebelot/heirline.nvim'
 if = 'has("nvim-0.5")'
 on_event = 'BufEnter'
-depends = [
-  'nvim-navic',
-  'nvim-web-devicons',
-  'vfiler.vim'
-]
-hook_source = 'lua require("plugins/lualine").setup()'
+hook_source = 'lua require("plugins/heirline").setup()'
 
 [[plugins]]
 repo = 'rcarriga/nvim-notify'
@@ -243,6 +249,13 @@ hook_source = 'lua require("plugins/vfiler").setup()'
 repo = 'obaland/vfiler-column-devicons'
 depends = ['vfiler.vim']
 on_source = 'vfiler.vim'
+
+#[[plugins]]
+#repo = 'obaland/vfiler-patch-noice.nvim'
+#if = 'has("nvim-0.5.0")'
+#depends = ['vfiler.vim']
+#on_source = 'vfiler.vim'
+#hook_source = 'lua require("vfiler/patches/noice").setup()'
 
 # Syntax
 # ======

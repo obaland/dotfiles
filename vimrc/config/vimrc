@@ -89,6 +89,7 @@ endif
 
 if has('nvim')
   call v:lua.require('tabline').setup()
+  "call v:lua.require('plugins/noice').setup()
 endif
 
 " Required
