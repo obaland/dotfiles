@@ -243,19 +243,11 @@ hook_post_source = 'lua require("plugins/which-key")'
 repo = 'obaland/vfiler.vim'
 on_cmd = 'VFiler'
 on_lua = 'vfiler'
+depends = ['vfiler-column-devicons']
 hook_source = 'lua require("plugins/vfiler").setup()'
 
 [[plugins]]
 repo = 'obaland/vfiler-column-devicons'
-depends = ['vfiler.vim']
-on_source = 'vfiler.vim'
-
-#[[plugins]]
-#repo = 'obaland/vfiler-patch-noice.nvim'
-#if = 'has("nvim-0.5.0")'
-#depends = ['vfiler.vim']
-#on_source = 'vfiler.vim'
-#hook_source = 'lua require("vfiler/patches/noice").setup()'
 
 # Syntax
 # ======
@@ -288,7 +280,7 @@ on_source = 'nvim-treesitter'
 # ==========================
 [[plugins]]
 repo = 'machakann/vim-sandwich'
-on_map = {nxo = ['<Plug>(sanwich-', '<Plug>(operator-sandwich-,', '<Plug>(textobj-sandwich-']}
+on_map = {nxo = ['<Plug>(sandwich-', '<Plug>(operator-sandwich-,', '<Plug>(textobj-sandwich-']}
 hook_add = 'let g:sandwich_no_default_key_mappings = 1'
 
 [[plugins]]
