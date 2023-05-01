@@ -38,7 +38,10 @@ local colors = {
   cyan      = '#2aa198',
   green     = '#859900',
   olivedrab = '#6b8e23',
-  rosefenicottero = '#f0435a'
+  rosefenicottero = '#f0435a',
+  soft_blue = '#5faeec',
+  soft_red  = '#ec5f67',
+  grayish_yellow = '#d7d7bc',
 }
 
 local M = {}

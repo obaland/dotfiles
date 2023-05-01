@@ -18,7 +18,6 @@ function M.setup()
       toggle = true,
     },
   }
-  require'vfiler/config'.unmap('<Space>')
 
   if not vim.fn.has('nvim') then
     -- Vim only
