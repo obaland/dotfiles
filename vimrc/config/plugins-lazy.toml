@@ -22,6 +22,11 @@ repo = 'kyazdani42/nvim-web-devicons'
 repo = 'rebelot/heirline.nvim'
 if = 'has("nvim-0.5")'
 on_event = 'BufEnter'
+depends = [
+  'gitsigns.nvim',
+  'nvim-navic',
+  'nvim-web-devicons'
+]
 hook_source = 'lua require("plugins/heirline").setup()'
 
 [[plugins]]
@@ -67,6 +72,12 @@ if = 'has("nvim-0.5.1")'
 depends = ['telescope.nvim']
 on_event = ['FileType']
 hook_post_source = 'lua require("plugins/goto-preview").setup()'
+
+[[plugins]]
+repo = 'lewis6991/gitsigns.nvim'
+if = 'has("nvim-0.8.0")'
+on_event = ['BufEnter']
+hook_source = 'lua require("gitsigns").setup()'
 
 # Completion and code analysis
 # ============================
@@ -116,6 +127,7 @@ hook_post_source = 'lua require("plugins/null-ls").setup()'
 repo = 'SmiteshP/nvim-navic'
 if = 'has("nvim-0.7")'
 on_source = 'nvim-lspconfig'
+hook_source = 'lua require("plugins/navic").setup()'
 
 [[plugins]]
 repo = 'hrsh7th/nvim-cmp'

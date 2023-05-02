@@ -881,7 +881,7 @@ highlight! link GitSignsChange DiffChange
 highlight! link GitSignsDelete DiffDelete
 
 highlight! link VGitSignAdd DiffAdd
-highlight! link VgitSignChange DiffChange
+highlight! link VGitSignChange DiffChange
 highlight! link VGitSignRemove DiffDelete
 
 " nvim-cmp syntax support

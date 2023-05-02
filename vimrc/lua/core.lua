@@ -133,4 +133,16 @@ function M.get_colors()
   return colors
 end
 
+-- Get icon from "nvim-web-devicons"
+function M.get_icon(filename)
+  -- Load nvim-web-devicons
+  local exists, devicons = pcall(require, 'nvim-web-devicons')
+  if not exists then
+    -- If not installed, returns default icon
+    return '', '#6d8086'
+  end
+  local extension = vim.fn.fnamemodify(filename, ':e')
+  return devicons.get_icon_color(filename, extension, { default = true })
+end
+
 return M
