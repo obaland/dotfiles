@@ -245,6 +245,25 @@ if has('gui_running') || has('termguicolors') && &termguicolors
   execute 'let s:sp_violet  = " guisp=' . s:gui_violet  . '"'
   execute 'let s:sp_blue    = " guisp=' . s:gui_blue    . '"'
   execute 'let s:sp_cyan    = " guisp=' . s:gui_cyan    . '"'
+else
+	let s:sp_none    = ''
+	let s:sp_back    = ''
+	let s:sp_base03  = ''
+	let s:sp_base02  = ''
+	let s:sp_base01  = ''
+	let s:sp_base00  = ''
+	let s:sp_base0   = ''
+	let s:sp_base1   = ''
+	let s:sp_base2   = ''
+	let s:sp_base3   = ''
+	let s:sp_green   = ''
+	let s:sp_yellow  = ''
+	let s:sp_orange  = ''
+	let s:sp_red     = ''
+	let s:sp_magenta = ''
+	let s:sp_violet  = ''
+	let s:sp_blue    = ''
+	let s:sp_cyan    = ''
 endif
 
 " Basic highlighting

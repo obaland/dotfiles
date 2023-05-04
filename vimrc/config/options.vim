@@ -18,7 +18,7 @@ if has('vim_starting')
 endif
 
 " Fast cliboard setup for macOS
-if IsMac() && executable('pbcopy') && has('vim_starting')
+if core#is_mac() && executable('pbcopy') && has('vim_starting')
   let g:clipboard = {
         \   'name': 'macOS-clipboard',
         \   'copy': {

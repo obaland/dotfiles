@@ -26,7 +26,7 @@ function! s:on_VimEnter() abort
   if !s:is_no_argument()
     return
   endif
-  if dein#tap('vfiler.vim')
+  if vimplug#installed_plugin('vfiler.vim')
     VFiler -auto-cd
   endif
 endfunction
@@ -71,6 +71,8 @@ if has('vim_starting')
   call s:source('init.vim')
 endif
 
+" Load plugins
+
 " Load local plugins
 let s:local_plugin_dir = $VIM_PATH . '/lplugins'
 call s:load_local_plugins(s:local_plugin_dir)
@@ -79,18 +81,18 @@ call s:source('options.vim')
 call s:source('commands.vim')
 call s:source('mappings.vim')
 
-if has('gui_running')
-  call s:source('gui.vim')
-endif
-
-if IsWindows()
-  call s:source('windows.vim')
-endif
-
-if has('nvim')
-  call v:lua.require('tabline').setup()
-  "call v:lua.require('plugins/noice').setup()
-endif
+"if has('gui_running')
+"  call s:source('gui.vim')
+"endif
+"
+"if IsWindows()
+"  call s:source('windows.vim')
+"endif
+"
+"if has('nvim')
+"  call v:lua.require('tabline').setup()
+"  "call v:lua.require('plugins/noice').setup()
+"endif
 
 " Required
 filetype plugin indent on
