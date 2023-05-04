@@ -42,6 +42,10 @@ local colors = {
   soft_blue = '#5faeec',
   soft_red  = '#ec5f67',
   grayish_yellow = '#d7d7bc',
+  indigo = '#074770',
+  dark_cyan = '#2a6776',
+  very_dark_cyan = '#00333f',
+  russian_blue = '#002832',
 }
 
 local M = {}

@@ -166,8 +166,14 @@ set helpheight=0     " ヘルプウィンドウのリサイズを無効
 set showcmd          " コマンドをスタータス行に表示
 set cmdheight=1      " コマンドラインの高さ
 "set cmdheight=0      " コマンドラインの高さ (使用時のみ表示)
-set laststatus=2     " 常にステータス行を表示
 set colorcolumn=79   " 指定列に線を表示する
+
+" 常にステータス行を表示
+if has('nvim')
+  set laststatus=3
+else
+  set laststatus=2
+endif
 
 set cursorline     " 行ラインは非表示だが、行番号を色分けする
 set showtabline=2    " いつタブページのラベルを表示するかを指定 (2: 常に表示)
