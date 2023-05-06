@@ -26,7 +26,7 @@ function! s:on_VimEnter() abort
   if !s:is_no_argument()
     return
   endif
-  if vimplug#installed_plugin('vfiler.vim')
+  if vimplug#tap('vfiler.vim')
     VFiler -auto-cd
   endif
 endfunction
@@ -72,6 +72,7 @@ if has('vim_starting')
 endif
 
 " Load plugins
+call s:source('plugins.vim')
 
 " Load local plugins
 let s:local_plugin_dir = $VIM_PATH . '/lplugins'
@@ -81,14 +82,14 @@ call s:source('options.vim')
 call s:source('commands.vim')
 call s:source('mappings.vim')
 
-"if has('gui_running')
-"  call s:source('gui.vim')
-"endif
-"
-"if IsWindows()
-"  call s:source('windows.vim')
-"endif
-"
+if has('gui_running')
+  call s:source('gui.vim')
+endif
+
+if core#is_windows()
+  call s:source('windows.vim')
+endif
+
 "if has('nvim')
 "  call v:lua.require('tabline').setup()
 "  "call v:lua.require('plugins/noice').setup()

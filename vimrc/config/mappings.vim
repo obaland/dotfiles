@@ -9,7 +9,7 @@ nmap <Leader>cd :lcd %:p:h<CR>:pwd<CR>
 
 " nvim-treesitter
 " ---------------
-if vimplug#installed_plugin('trouble.nvim')
+if vimplug#tap('trouble.nvim')
   nnoremap <leader>xx <cmd>TroubleToggle<CR>
   nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<CR>
   nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<CR>
@@ -22,7 +22,7 @@ endif
 
 " telescope.nvim
 " --------------
-if vimplug#installed_plugin('telescope.nvim')
+if vimplug#tap('telescope.nvim')
   " General pickers
   nnoremap <leader>r <cmd>Telescope resume initial_mode=normal<CR>
   nnoremap <leader>a <cmd>Telescope autocommands<CR>
@@ -60,20 +60,20 @@ endif
 
 " symbols-outline.nvim
 " -------------------
-if vimplug#installed_plugin('symbols-outline.nvim')
+if vimplug#tap('symbols-outline.nvim')
   nnoremap <leader>o <cmd>SymbolsOutline<CR>
 endif
 
 " vim-vsnip
 " ---------
-if vimplug#installed_plugin('vim-vsnip')
+if vimplug#tap('vim-vsnip')
   imap <expr><C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
   smap <expr><C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 endif
 
 " emmet-vim
 " -------------------
-if vimplug#installed_plugin('emmet-vim')
+if vimplug#tap('emmet-vim')
   autocmd user_events FileType html,css,vue,javascript,javascriptreact,svelte |
         \ EmmetInstall |
         \ imap <silent><buffer> <C-y> <Plug>(emmet-expand-abbr)
@@ -81,7 +81,7 @@ endif
 
 " vim-sandwich
 " ------------
-if vimplug#installed_plugin('vim-sandwich')
+if vimplug#tap('vim-sandwich')
   nmap <silent>sa <Plug>(sandwich-add)
   xmap <silent>sa <Plug>(sandwich-add)
   omap <silent>sa <Plug>(sandwich-add)
@@ -107,7 +107,7 @@ endif
 
 " sideways.vim
 " ------------
-if vimplug#installed_plugin('sideways.vim')
+if vimplug#tap('sideways.vim')
   nnoremap <silent><leader>< <cmd>SidewaysLeft<CR>
   nnoremap <silent><leader>> <cmd>SidewaysRight<CR>
   nnoremap <silent><leader>[ <cmd>SidewaysJumpLeft<CR>
@@ -120,14 +120,14 @@ endif
 
 " splitjoin.vim
 " -------------
-if vimplug#installed_plugin('splitjoin.vim')
+if vimplug#tap('splitjoin.vim')
 	nmap sj <cmd>SplitjoinJoin<CR>
 	nmap ss <cmd>SplitjoinSplit<CR>
 endif
 
 " linediff.vim
 " ------------
-if vimplug#installed_plugin('linediff.vim')
+if vimplug#tap('linediff.vim')
   xnoremap <leader>ldf :Linediff<CR>
   xnoremap <leader>lda :LinediffAdd<CR>
   nnoremap <leader>lds <cmd>LinediffShow<CR>
@@ -136,14 +136,14 @@ endif
 
 " dsf.vim
 " -------
-if vimplug#installed_plugin('dsf.vim')
+if vimplug#tap('dsf.vim')
   nmap <leader>dsf <Plug>DsfDelete
   nmap <leader>csf <Plug>DsfChange
 endif
 
 " which-key.nvim
 " --------------
-if vimplug#installed_plugin('which-key.nvim')
+if vimplug#tap('which-key.nvim')
   nnoremap <leader>ww <cmd>WhichKey<CR>
   nnoremap <leader>wn <cmd>WhichKey '' n<CR>
   nnoremap <leader>wi <cmd>WhichKey '' i<CR>
@@ -152,7 +152,7 @@ endif
 
 " vfiler.vim
 " ----------
-if vimplug#installed_plugin('vfiler.vim')
+if vimplug#tap('vfiler.vim')
   " Explorer view by vfiler.vim.
   noremap <silent><leader>e <cmd>lua
         \ require('plugins/vfiler').start_exprolorer()<CR>
@@ -163,7 +163,7 @@ endif
 
 " nvim-treesitter
 " ---------------
-if vimplug#installed_plugin('nvim-treesitter')
+if vimplug#tap('nvim-treesitter')
   noremap <silent><leader>tsc <cmd>TSHighlightCapturesUnderCursor<CR>
 endif
 

@@ -1,7 +1,7 @@
 " vimplug.vim
 "=============================================================================
 
-let s:plugindir = expand('$CONFIG_PATH/plugins')
+let s:plugins_dir = expand('$CONFIG_PATH/plugins')
 
 if core#is_windows()
   " For Windows
@@ -59,13 +59,13 @@ function! vimplug#install(data_path) abort
 endfunction
 
 function! vimplug#begin() abort
-  call plug#begin(s:plugindir)
+  call plug#begin(s:plugins_dir)
 endfunction
 
 function! vimplug#end() abort
   call plug#end()
 endfunction
 
-function! vimplug#installed_plugin(name)
-  return isdirectory(s:plugindir . '/' . a:name)
+function! vimplug#tap(name)
+  return isdirectory(s:plugins_dir . '/' . a:name)
 endfunction
