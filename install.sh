@@ -32,20 +32,6 @@ readonly CONFIGDIR="$ROOTDIR/configs"
 echo "Start [Install environment] ..."
 
 ###########################################################
-# Install packages
-###########################################################
-readonly PACKAGES=$CONFIGDIR/packages.list
-PACKAGECOMMAND="apt -y install"
-if [ "$(uname)" = "Darwin" ]; then
-  # for macOS
-  PACKAGECOMMAND="brew install"
-fi
-cat $PACKAGES | while read package
-do
-  $PACKAGECOMMAND $package
-done
-
-###########################################################
 # Vim or Neovim
 ###########################################################
 if [ $TYPE = "all" ] || [ $TYPE = "vim" ]; then
@@ -71,11 +57,11 @@ fi
 # Shell
 ###########################################################
 if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
-  readonly ZSHRC="$CONFIGDIR/zshrc"
+  readonly ZSHRC="$ROOTDIR/zshrc"
   readonly LINKZSHRC="$HOMEDIR/.zshrc"
   create_link $ZSHRC $LINKZSHRC
 
-  readonly TMUXCONF="$CONFIGDIR/tmux.conf"
+  readonly TMUXCONF="$ROOTDIR/tmux.conf"
   readonly LINKTMUXCONF="$HOMEDIR/.tmux.conf"
   create_link $TMUXCONF $LINKTMUXCONF
 fi
@@ -87,7 +73,7 @@ if [ $TYPE = "all" ] || [ $TYPE = "app" ]; then
   # Karabiner for macOS
   if [ "$(uname)" = "Darwin" ]; then
     readonly KARABINER="karabiner-for-vim.json"
-    readonly KARABINER_SRCPATH="${CONFIGDIR}/${KARABINER}"
+    readonly KARABINER_SRCPATH="${ROOTDIR}/${KARABINER}"
     readonly KARABINER_DESTDIR="${HOMEDIR}/.config/karabiner/assets/complex_modifications"
     readonly KARABINER_LINKPATH="${KARABINER_DESTDIR}/${KARABINER}"
 
