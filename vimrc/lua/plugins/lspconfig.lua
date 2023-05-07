@@ -203,20 +203,23 @@ function M.setup()
   -- See https://github.com/kosayoda/nvim-lightbulb
   local lightbulb = require('nvim-lightbulb')
   lightbulb.setup({ ignore = { 'null-ls' } })
-  vim.api.nvim_exec([[
-    augroup user_lspconfig
-      autocmd!
+  vim.api.nvim_exec(
+    [[
+      augroup user_lspconfig
+        autocmd!
 
-      " See https://github.com/kosayoda/nvim-lightbulb
-      autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+        " See https://github.com/kosayoda/nvim-lightbulb
+        autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
 
-      " Update loclist with diagnostics for the current file
-      autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
+        " Update loclist with diagnostics for the current file
+        autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
 
-      " Automatic diagnostic hover
-      " autocmd CursorHold * lua require("user").diagnostic.open_float({focusable = false})
-    augroup END
-  ]], false)
+        " Automatic diagnostic hover
+        " autocmd CursorHold * lua require("user").diagnostic.open_float({focusable = false})
+      augroup END
+    ]],
+    false
+  )
 end
 
 return M

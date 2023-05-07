@@ -5,8 +5,6 @@ local vfiler = require('vfiler')
 
 local M = {}
 
-local caches = {}
-
 local special_filetypes = {
   vfiler = { icon = '', name = 'vfiler' },
   undotree = { icon = '', name = 'undotree' },
@@ -24,22 +22,11 @@ local function line_count_format()
   return '%7(%l/%3L%)'
 end
 
-local function filepath(bufnr, max_dirs, dir_max_chars)
-  local name = vim.api.nvim_buf_get_name(bufnr)
-
-  -- User buffer's cached filepath
-  local cache_key = ('badge_cache_%s_filepath'):format(
-    vim.bo.filetype:lower():gsub('[^a-z]', '_')
-  )
-
-  local ok, cache = pcall(vim.api.nvim_buf_get_var, bufnr, cache_key)
-  if ok then
-    return cache
-  elseif #name < 1 then
+local function filepath(filename, max_dirs, dir_max_chars)
+  if #filename < 1 then
     return 'N/A'
   end
-  name = core.normalize_path(name)
-
+  local name = core.normalize_path(filename)
   local parts = vim.split(name, '/', {})
   local dirs = {}
   while #parts > 1 do
@@ -53,12 +40,25 @@ local function filepath(bufnr, max_dirs, dir_max_chars)
     path = path .. '/'
   end
   path = path .. parts[1]
-
-  vim.api.nvim_buf_set_var(bufnr, cache_key, path)
-  if not vim.tbl_contains(caches, cache_key) then
-    table.insert(caches, cache_key)
-  end
   return path
+end
+
+local function truncate_path(path, winwidth)
+  local items = vim.split(path, '/', {})
+  local displays = { table.remove(items) }
+  local strwidth = vim.fn.strdisplaywidth(displays[1])
+
+  for i = #items, 1, -1 do
+    local item = items[i]
+    local width = vim.fn.strdisplaywidth(item)
+    if (strwidth + width + 1) > winwidth then
+      break
+    end
+    table.insert(displays, 1, item)
+    strwidth = strwidth + width + 1
+  end
+
+  return table.concat(displays, '/'), strwidth
 end
 
 local function project_root()
@@ -212,7 +212,7 @@ local function statusline()
         -- space, we trim the file path to its initials
         -- See Flexible Components section below for dynamic truncation
         -- if not conditions.width_percent_below(#path, 0.25) then
-        return filepath(self.bufnr, 3, 5)
+        return filepath(self.filename, 3, 5)
       end,
       hl = { fg = 'grayish_yellow' },
     },
@@ -503,8 +503,30 @@ local function winbar()
 end
 
 local function tabline()
-  local vfiler = {
-
+  local vfiler_offset = {
+    condition = function()
+      local status = require('plugins/vfiler').get_exprolorer_status()
+      return status and status.bufnr
+    end,
+    {
+      provider = function()
+        local status = require('plugins/vfiler').get_exprolorer_status()
+        local padding = 3 -- icon and both ends.
+        local winwidth = math.min(status.options.width, 128)
+        local trancated, strwidth =
+          truncate_path(status.root, winwidth - padding)
+        local path = ''
+        if strwidth < winwidth then
+          path = trancated .. string.rep(' ', winwidth - (strwidth + padding))
+        end
+        return ' ' .. path .. ' '
+      end,
+      hl = 'TabLineAlt',
+    },
+    {
+      provider = '',
+      hl = 'TabLineAltShade',
+    },
   }
 
   local indicator = {
@@ -519,8 +541,30 @@ local function tabline()
 
   local tabpage_number = {
     static = {
-      -- {'₀','₁','₂','₃','₄','₅','₆','₇','₈','₉'}
-      charset = {'⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'},
+      --charsetb = {
+      --  '₀',
+      --  '₁',
+      --  '₂',
+      --  '₃',
+      --  '₄',
+      --  '₅',
+      --  '₆',
+      --  '₇',
+      --  '₈',
+      --  '₉',
+      --},
+      charset = {
+        '⁰',
+        '¹',
+        '²',
+        '³',
+        '⁴',
+        '⁵',
+        '⁶',
+        '⁷',
+        '⁸',
+        '⁹',
+      },
     },
     provider = function(self)
       -- NOTE: Up to 2 digits
@@ -531,44 +575,79 @@ local function tabline()
       local digit1 = self.tabnr % 10
       return self.charset[digit10 + 1] .. self.charset[digit1 + 1]
     end,
-    hl = function(self)
-      return self.is_active and 'TabLineSel' or 'TabLine'
-    end,
   }
 
-  local tabpage_name = {
-    static = {
-      special_filetypes = special_filetypes,
-    },
+  local fileblock = {
     init = function(self)
-      self.bufnr = vim.api.nvim_get_current_buf()
+      self.winid = vim.api.nvim_tabpage_get_win(self.tabpage)
+      self.bufnr = vim.api.nvim_win_get_buf(self.winid)
     end,
-    provider = function(self)
-      local ft = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
-      local spft = self.special_filetypes[ft]
-      local filename
-      if spft then
-        filename = spft.icon .. ' ' .. spft.name
-      else
-        local icon, _ = core.get_icon(filename)
-        filename = icon .. filepath(self.bufnr, 0, 5)
-      end
-      return ('%%%sT%s'):format(self.tabnr, filename)
-    end,
+    {
+      -- file name
+      static = {
+        special_filetypes = special_filetypes,
+      },
+      provider = function(self)
+        local ft = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
+        local spft = self.special_filetypes[ft]
+        local name
+        if spft then
+          name = spft.icon .. ' ' .. spft.name
+        else
+          local filename = vim.api.nvim_buf_get_name(self.bufnr)
+          local icon, _ = core.get_icon(filename)
+          name = icon .. ' ' .. filepath(filename, 0, 5)
+        end
+        return ('%%%sT%s'):format(self.tabnr, name)
+      end,
+    },
+    {
+      -- modifier
+      condition = function(self)
+        local buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
+        local modified = vim.api.nvim_buf_get_option(self.bufnr, 'modified')
+        return modified and (#buftype == 0)
+      end,
+      provider = ' ●',
+      hl = function(self)
+        return self.is_active and 'Number' or 'TabLine'
+      end,
+    },
   }
 
   local tabpage = {
     indicator,
     tabpage_number,
-    tabpage_name,
+    fileblock,
+    component.space(),
+    hl = function(self)
+      return self.is_active and 'TabLineSel' or 'TabLine'
+    end,
+  }
+
+  local elastic_space = {
+    provider = '%#TablineFill#%T%#TabLine#',
+  }
+
+  local session = {
+    provider = function()
+      local ok, session = pcall(vim.api.nvim_get_vvar, 'this_session')
+      if ok and #session > 0 then
+        local session_name = vim.fn.tr(session, '%', '/')
+        return vim.fn.fnamemodify(session_name, ':t:r') .. '  '
+      end
+    end,
   }
 
   return {
-    condition = function(self)
+    condition = function()
       -- Skip tabline render during session loading
       return not vim.g.SessionLoad
     end,
+    vfiler_offset,
     utils.make_tablist(tabpage),
+    elastic_space,
+    session,
   }
 end
 

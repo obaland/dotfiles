@@ -64,8 +64,9 @@ function M.start_exprolorer()
   end
 end
 
-function M.get_exprolorer_status()
-  local bufnr = exprolorer_bufnrs[vim.fn.tabpagenr()]
+function M.get_exprolorer_status(tabpagenr)
+  tabpagenr = tabpagenr or vim.fn.tabpagenr()
+  local bufnr = exprolorer_bufnrs[tabpagenr]
   if not bufnr then
     return {}
   end

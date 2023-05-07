@@ -87,11 +87,6 @@ if core#is_windows()
   call s:source('windows.vim')
 endif
 
-"if has('nvim')
-"  call v:lua.require('tabline').setup()
-"  "call v:lua.require('plugins/noice').setup()
-"endif
-
 " Required
 filetype plugin indent on
 syntax enable
