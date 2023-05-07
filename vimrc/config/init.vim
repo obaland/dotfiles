@@ -108,13 +108,67 @@ endfunction
 "---------------------------------------------------------------------------
 " Plugin
 "---------------------------------------------------------------------------
+function! s:use_package_manager(data_path)
+  let l:cache_path = a:data_path . '/dein'
+  if has('vim_starting')
+    " Add dein to vim's runtimepath
+    if &runtimepath !~# '/dein.vim'
+      let l:dein_dir = l:cache_path . '/repos/github.com/Shougo/dein.vim'
+      " Clone dein if first-time setup
+      if !isdirectory(l:dein_dir)
+        execute '!git clone https://github.com/Shougo/dein.vim' l:dein_dir
+        if v:shell_error
+          call s:error('dein installation has failed! is git installed?')
+          finish
+        endif
+      endif
+      execute 'set runtimepath^=' . substitute(
+            \ fnamemodify(l:dein_dir, ':p') , '[/\\]$', '', '')
+    endif
+
+    let g:dein#auto_recache = v:true
+    let g:dein#install_progress_type = 'echo'
+    "let g:dein#install_progress_type = 'floating'
+    let g:dein#install_message_type = 'echo'
+    let g:dein#install_max_process = 10
+  endif
+
+  " Initialize package manager (dein.vim)
+  if dein#load_state(l:cache_path)
+    let l:base_dir = $VIM_CONFIG_PATH . '/'
+    let l:plugins = l:base_dir . 'plugins.toml'
+    let l:plugins_lazy = l:base_dir . 'plugins-lazy.toml'
+
+    call dein#begin(l:cache_path, expand('<sfile>'))
+
+    call dein#load_toml(l:plugins, {'lazy': 0})
+    call dein#load_toml(l:plugins_lazy, {'lazy' : 1})
+
+    call dein#end()
+    call dein#save_state()
+
+    " Update or install plugins if a change detected
+    if dein#check_install()
+      call dein#install()
+    endif
+  endif
+
+  if has('vim_starting')
+    filetype plugin indent on
+    if !has('nvim-0.8')
+      syntax enable
+    endif
+  endif
+
+  " Enable notifications after initialization
+	let g:dein#enable_notification = v:true
+endfunction
 
 if has('vim_starting')
   call s:ensure_data_directories()
 endif
 
-""call s:install_package_manager($CONFIG_PATH)
-call vimplug#install($CONFIG_PATH)
+call s:use_package_manager($CONFIG_PATH)
 
 " Global variables
 " ----------------

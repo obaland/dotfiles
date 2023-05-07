@@ -55,7 +55,6 @@ function custom_actions.page_down(bufnr)
   require('telescope/actions/set').shift_selection(bufnr, 5)
 end
 
-
 -- Custom pickers
 
 function M.grep()
@@ -118,7 +117,7 @@ function M.setup()
   -- Transform to Telescope proper action
   custom_actions = transform_mod(custom_actions)
 
-  require('telescope').setup {
+  require('telescope').setup({
     defaults = {
       vimgrep_arguments = grep_arguments,
       sorting_strategy = 'ascending',
@@ -128,15 +127,15 @@ function M.setup()
         limit_entries = 300,
       },
 
-			prompt_prefix = '   ',
-			selection_caret = '▍ ',
-			multi_icon = ' ',
+      prompt_prefix = '   ',
+      selection_caret = '▍ ',
+      multi_icon = ' ',
 
-      file_ignore_patterns = {'node_modules'},
-      set_env = {COLORTERM = 'truecolor'},
+      file_ignore_patterns = { 'node_modules' },
+      set_env = { COLORTERM = 'truecolor' },
 
-			-- Flex layout swaps between horizontal and vertical strategies
-			-- based on the window width. See :h telescope.layout
+      -- Flex layout swaps between horizontal and vertical strategies
+      -- based on the window width. See :h telescope.layout
       layout_strategy = 'flex',
       layout_config = {
         width = 0.9,
@@ -165,47 +164,47 @@ function M.setup()
 
       mappings = {
         i = {
-          ['<Tab>']  = actions.move_selection_next,
+          ['<Tab>'] = actions.move_selection_next,
           ['<S-Tab'] = actions.move_selection_previous,
-          ['<C-j>']  = actions.move_selection_next,
-          ['<C-k>']  = actions.move_selection_previous,
+          ['<C-j>'] = actions.move_selection_next,
+          ['<C-k>'] = actions.move_selection_previous,
 
           ['<C-b>'] = custom_actions.page_up,
           ['<C-f>'] = custom_actions.page_down,
 
           ['<Down>'] = actions.cycle_history_next,
-          ['<Up>']   = actions.cycle_history_prev,
-          ['<C-n>']  = actions.cycle_history_next,
-          ['<C-p>']  = actions.cycle_history_prev,
+          ['<Up>'] = actions.cycle_history_prev,
+          ['<C-n>'] = actions.cycle_history_next,
+          ['<C-p>'] = actions.cycle_history_prev,
 
           ['<C-u>'] = actions.preview_scrolling_up,
           ['<C-d>'] = actions.preview_scrolling_down,
         },
         n = {
-          ['q']     = actions.close,
+          ['q'] = actions.close,
           ['<Esc>'] = actions.close,
 
-          ['<Tab>']  = actions.move_selection_next,
+          ['<Tab>'] = actions.move_selection_next,
           ['<S-Tab'] = actions.move_selection_previous,
 
           ['<C-b>'] = custom_actions.page_up,
           ['<C-f>'] = custom_actions.page_down,
 
-          ['<C-n>']  = actions.cycle_history_next,
-          ['<C-p>']  = actions.cycle_history_prev,
+          ['<C-n>'] = actions.cycle_history_next,
+          ['<C-p>'] = actions.cycle_history_prev,
 
           ['<C-u>'] = actions.preview_scrolling_up,
           ['<C-d>'] = actions.preview_scrolling_down,
 
           ['*'] = actions.toggle_all,
           ['u'] = actions.drop_all,
-          ['<Space>'] = actions.toggle_selection +
-                        actions.move_selection_next,
-          ['<S-Space>'] = actions.toggle_selection +
-                          actions.move_selection_next,
+          ['<Space>'] = actions.toggle_selection
+            + actions.move_selection_next,
+          ['<S-Space>'] = actions.toggle_selection
+            + actions.move_selection_next,
 
           ['gg'] = actions.move_to_top,
-          ['G']  = actions.move_to_bottom,
+          ['G'] = actions.move_to_bottom,
 
           ['s'] = actions.select_horizontal,
           ['v'] = actions.select_vertical,
@@ -222,7 +221,7 @@ function M.setup()
         sort_mru = true,
         show_all_buffers = true,
         ignore_current_buffer = true,
-        path_display = {truncate = 3},
+        path_display = { truncate = 3 },
         layout_config = {
           width = width_for_nopreview,
           height = height_dropdown_nopreview,
@@ -230,8 +229,8 @@ function M.setup()
         mappings = {
           n = {
             ['dd'] = actions.delete_buffer,
-          }
-        }
+          },
+        },
       },
       find_files = {
         theme = 'dropdown',
@@ -248,28 +247,31 @@ function M.setup()
           '--glob',
           '!.git',
           '--files',
-        }
+        },
       },
       live_grep = {
         dynamic_preview_title = true,
       },
       colorscheme = {
         enable_preview = true,
-        leyout_config = {width = 0.45, height = 0.8},
+        leyout_config = { width = 0.45, height = 0.8 },
       },
       hightlights = {
         layout_strategy = 'horizontal',
-        layout_config = {preview_width = 0.8},
-      }
+        layout_config = { preview_width = 0.8 },
+      },
     },
     extensions = {
       ['ui-select'] = {
-        require('telescope/themes').get_cursor {
-          layout_config = {width = 0.35, height = 0.35},
-        }
+        require('telescope/themes').get_cursor({
+          layout_config = { width = 0.35, height = 0.35 },
+        }),
       },
     },
-  }
+  })
+
+  -- Load ui-select
+  require('telescope').load_extension('ui-select')
 end
 
 return M

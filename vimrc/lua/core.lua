@@ -51,8 +51,8 @@ local colors = {
 local M = {}
 
 -- Vim script functions
-local is_win = vim.fn['IsWindows']
-local is_mac = vim.fn['IsMac']
+local is_win = vim.fn['core#is_windows']
+local is_mac = vim.fn['core#is_mac']
 
 local function find(name, dir, comp)
   local names = vim.split(

@@ -5,12 +5,13 @@ local M = {}
 
 -- Setup treesitter
 function M.setup()
-  local parset_configs = require('nvim-treesitter/parsers').get_parser_configs()
+  local parset_configs =
+    require('nvim-treesitter/parsers').get_parser_configs()
   parset_configs.http = {
     filetype = 'http',
     install_info = {
       url = 'https://github.com/rest-nvim/tree-sitter-http',
-      files = {'src/parser.c'},
+      files = { 'src/parser.c' },
       branch = 'main',
     },
   }
@@ -26,8 +27,8 @@ function M.setup()
     --},
 
     refactor = {
-      highlight_definitions = {enable = true},
-      highlight_current_scope = {enable = true},
+      highlight_definitions = { enable = true },
+      highlight_current_scope = { enable = true },
     },
 
     -- See: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
@@ -84,7 +85,7 @@ function M.setup()
         goto_node = '<cr>',
         show_help = '?',
       },
-    }
+    },
   })
 end
 

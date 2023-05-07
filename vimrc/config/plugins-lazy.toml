@@ -27,17 +27,17 @@ depends = [
   'nvim-navic',
   'nvim-web-devicons'
 ]
-hook_source = 'lua require("plugins/heirline").setup()'
+lua_source = 'require("plugins/heirline").setup()'
 
 [[plugins]]
 repo = 'rcarriga/nvim-notify'
 if = 'has("nvim-0.5")'
 on_lua = 'notify'
-hook_source = 'lua require("notify").setup()'
+lua_source = 'require("notify").setup()'
 
 [[plugins]]
 repo = 'itchyny/vim-cursorword'
-on_event = ['FileType']
+on_event = 'FileType'
 hook_add = 'let g:cursorword = 0'
 hook_source = '''
   augroup user_plugins_cursorword
@@ -61,30 +61,60 @@ on_event = ['CursorMoved', 'InsertEnter']
 [[plugins]]
 repo = 'kevinhwang91/nvim-bqf'
 if = 'has("nvim-0.5")'
-on_ft = ['qf']
-on_cmd = ['BqfAutoToggle']
-on_event = ['QuickFixCmdPost']
-hook_source = 'lua require("plugins/bqf").setup()'
+on_ft = 'qf'
+on_cmd = 'BqfAutoToggle'
+on_event = 'QuickFixCmdPost'
+lua_source = '''
+  local max_file_size = 100 * 1024 -- 100kb
+  require('bqf').setup({
+    auto_resize_height = false,
+    preview = {
+      auto_preview = true,
+      should_preview_cb = function(bufnr)
+        -- file size greater than 'max_file_size' can't be previewed automatically
+        local filename = vim.api.nvim_buf_get_name(bufnr)
+        local fsize = vim.fn.getfsize(filename)
+        if fsize > max_file_size then
+          return false
+        end
+        return true
+      end,
+    }
+  })
+'''
 
 [[plugins]]
 repo = 'rmagatti/goto-preview'
 if = 'has("nvim-0.5.1")'
 depends = ['telescope.nvim']
-on_event = ['FileType']
-hook_post_source = 'lua require("plugins/goto-preview").setup()'
+on_event = 'FileType'
+lua_source = '''
+  require('goto-preview').setup({
+    -- debug = false,
+    width = 78,
+    height = 15,
+    opacity = 10,
+    default_mappings = false,
+    border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'},
+    post_open_hook = function(_, window)
+      vim.api.nvim_win_set_option(window, 'spell', false)
+      vim.api.nvim_win_set_option(window, 'signcolumn', 'no')
+    end,
+  })
+'''
 
 [[plugins]]
 repo = 'lewis6991/gitsigns.nvim'
 if = 'has("nvim-0.8.0")'
-on_event = ['BufEnter']
-hook_source = 'lua require("gitsigns").setup()'
+on_event = 'BufEnter'
+lua_source = 'require("gitsigns").setup()'
 
 # Completion and code analysis
-# ============================
+#==============================
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
 if = 'has("nvim-0.7")'
-hook_post_source = 'lua require("plugins/lspconfig").setup()'
+lua_post_source = 'require("plugins/lspconfig").setup()'
 
 [[plugins]]
 repo = 'hrsh7th/cmp-nvim-lsp'
@@ -92,20 +122,22 @@ on_source = 'nvim-lspconfig'
 
 [[plugins]]
 repo = 'williamboman/mason.nvim'
-on_source = 'nvim-lspconfig'
+if = 'has("nvim-0.7")'
+on_lua = 'mason'
+hook_post_update = ':MasonUpdate'
 
 [[plugins]]
 repo = 'williamboman/mason-lspconfig.nvim'
-depends = ['mason.nvim']
-on_source = 'nvim-lspconfig'
+depends = ['nvim-lspconfig', 'mason.nvim']
+on_lua = 'mason-lspconfig'
 
 [[plugins]]
 repo = 'kosayoda/nvim-lightbulb'
-on_source = 'nvim-lspconfig'
+on_lua = 'nvim-lightbulb'
 
 [[plugins]]
 repo = 'folke/neodev.nvim'
-on_source = 'nvim-lspconfig'
+on_lua = 'neodev'
 
 [[plugins]]
 repo = 'ray-x/lsp_signature.nvim'
@@ -113,21 +145,44 @@ on_source = 'nvim-lspconfig'
 
 [[plugins]]
 repo = 'glepnir/lspsaga.nvim'
-on_source = 'nvim-lspconfig'
-hook_post_source = 'lua require("plugins/lspsaga").setup()'
+on_cmd = 'Lspsage'
+on_lua = 'lspsaga'
+lua_source = '''
+  require('lspsaga').setup({
+    max_preview_lines = 10,
+    border_style = 'rounded',
+    finder_action_keys = {
+      open = 'o',
+      vsplit = 'v',
+      split = 's',
+      quit = {'q', '<Esc>'},
+      scroll_down = '<C-f>',
+      scroll_up = '<C-b>',
+    },
+    code_action_keys = {
+      quit = {'q', '<Esc>'},
+      exec = '<CR>',
+    },
+    rename_action_quit = {'<C-c>', '<Esc>'},
+    symbol_in_winbar = {
+      enable = false,
+    },
+  })
+'''
 
 [[plugins]]
 repo = 'jose-elias-alvarez/null-ls.nvim'
 if = 'has("nvim-0.7")'
 on_source = 'nvim-lspconfig'
 depends = ['plenary.nvim', 'nvim-lspconfig']
-hook_post_source = 'lua require("plugins/null-ls").setup()'
+lua_post_source = 'require("plugins/null-ls").setup()'
 
 [[plugins]]
 repo = 'SmiteshP/nvim-navic'
 if = 'has("nvim-0.7")'
-on_source = 'nvim-lspconfig'
-hook_source = 'lua require("nvim-navic").setup()'
+depends = ['nvim-lspconfig']
+on_lua = 'nvim-navic'
+lua_source = 'require("nvim-navic").setup()'
 
 [[plugins]]
 repo = 'hrsh7th/nvim-cmp'
@@ -138,7 +193,7 @@ depends = [
   'nvim-lspconfig',
   'vim-vsnip'
 ]
-hook_post_source = 'lua require("plugins/cmp").setup()'
+lua_post_source = 'require("plugins/cmp").setup()'
 
 [[plugins]]
 repo = 'andersevenrud/cmp-tmux'
@@ -190,14 +245,25 @@ on_source = 'vim-vsnip'
 [[plugins]]
 repo = 'windwp/nvim-autopairs'
 if = 'has("nvim-0.5")'
-hook_post_source = 'lua require("nvim-autopairs").setup()'
+on_event = ['InsertEnter']
+lua_post_source = 'require("nvim-autopairs").setup()'
 
 [[plugins]]
 repo = 'folke/todo-comments.nvim'
 if = 'has("nvim-0.8")'
 depends = ['plenary.nvim']
 on_source = ['telescope.nvim', 'nvim-lspconfig']
-hook_post_source = 'lua require("plugins/todo-comments").setup()'
+lua_source = '''
+  require('todo-comments').setup({
+    signs = false,
+    colors = {
+      error =   {'#968583'},
+      info =    {'#789da1'},
+      hint =    {'#8b9683'},
+      default = {'#6ca6ad'}
+    },
+  })
+'''
 
 [[plugins]]
 repo = 'folke/trouble.nvim'
@@ -208,7 +274,7 @@ on_cmd = ['Trouble', 'TroubleToggle']
 repo = 'sindrets/diffview.nvim'
 if = 'has("nvim-0.5")'
 on_cmd = ['DiffviewOpen', 'DiffviewFileHistory']
-hook_post_source = 'lua require("plugins/diffview").setup()'
+lua_post_source = 'require("plugins/diffview").setup()'
 
 [[plugins]]
 repo = 'nvim-telescope/telescope.nvim'
@@ -217,24 +283,51 @@ if = 'has("nvim-0.7")'
 depends = ['plenary.nvim']
 on_cmd = 'Telescope'
 on_lua = 'telescope'
-hook_post_source = 'lua require("plugins/telescope").setup()'
+lua_post_source = 'require("plugins/telescope").setup()'
 
 [[plugins]]
 repo = 'nvim-telescope/telescope-ui-select.nvim'
 if = 'has("nvim-0.7")'
 depends = ['telescope.nvim']
 on_lua = 'telescope'
-hook_post_source = 'lua require("telescope").load_extension("ui-select")'
+lua_post_source = 'require("telescope").load_extension("ui-select")'
 
 [[plugins]]
 repo = 'simrat39/symbols-outline.nvim'
 if = 'has("nvim-0.7")'
 on_cmd = ['SymbolsOutline', 'SymbolsOutlineOpen']
-hook_source = 'lua require("plugins/symbols-outline").setup()'
+lua_source = '''
+  require('symbols-outline').setup({
+    highlight_hovered_item = true,
+    show_guides = true,
+    show_number = true,
+    auto_preview = false,
+    position = 'right',
+    width = 30,
+    keymaps = {
+      clase = {'<Esc>', 'q'},
+      goto_location = '<CR>',
+      focus_location = 'o',
+      hover_symbol = 'K',
+      toggle_preview = 'p',
+      rename_symbol = 'r',
+      code_actions = 'a',
+    },
+  })
+
+  vim.cmd([[
+    augroup user-symbols-outline
+      autocmd!
+      autocmd FileType Outline setlocal cursorline
+      autocmd WinEnter,BufEnter Outline setlocal cursorline
+      autocmd WinLeave,BufLeave Outline setlocal nocursorline
+    augroup END
+  ]])
+'''
 
 [[plugins]]
 repo = 'mattn/emmet-vim'
-on_event = ['InsertEnter']
+on_event = 'InsertEnter'
 on_ft = ['html', 'css', 'vue', 'javascript', 'javascriptreact', 'svelte']
 hook_source = '''
   let g:user_emmet_mode = 'i'
@@ -246,30 +339,62 @@ hook_source = '''
 [[plugins]]
 repo = 'folke/which-key.nvim'
 if = 'has("nvim-0.5.0")'
-on_cmd = ['WhichKey']
-hook_post_source = 'lua require("plugins/which-key")'
+on_cmd = 'WhichKey'
+lua_source = '''
+  require('which-key').setup({
+    icons = {
+      breadcrumb = '»',
+      separator = '  ',
+      group = '+',
+    },
+
+    popup_mappings = {
+      scroll_down = '<C-d>',
+      scroll_up   = '<C-u>',
+    },
+
+    window = {
+      border = 'single',
+    },
+
+    layout = {
+      spacing = 4,
+    },
+
+    hidden = {
+      '<silent>',
+      '<cmd>',
+      '<Cmd>',
+      '<CR>',
+      'call',
+      'lua',
+      '^:',
+      '^ ',
+    },
+  })
+'''
 
 # Filer
-# =====
+#=======
 [[plugins]]
 repo = 'obaland/vfiler.vim'
 on_cmd = 'VFiler'
 on_lua = 'vfiler'
 depends = ['vfiler-column-devicons']
-hook_source = 'lua require("plugins/vfiler").setup()'
+lua_source = 'require("plugins/vfiler").setup()'
 
 [[plugins]]
 repo = 'obaland/vfiler-column-devicons'
 
 # Syntax
-# ======
+#========
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter'
 if = 'has("nvim-0.7")'
 on_event = 'BufRead'
 on_cmd = ['TSUpdate', 'TSInstall', 'TSInstallInfo', 'TSModuleInfo', 'TSConfigInfo']
 hook_post_update = ':TSUpdate'
-hook_source = 'lua require("plugins/treesitter").setup()'
+lua_source = 'require("plugins/treesitter").setup()'
 
 [[plugins]]
 repo = 'nvim-treesitter/playground'
@@ -289,7 +414,7 @@ repo = 'windwp/nvim-ts-autotag'
 on_source = 'nvim-treesitter'
 
 # Operators and text objects
-# ==========================
+#============================
 [[plugins]]
 repo = 'machakann/vim-sandwich'
 on_map = {nxo = ['<Plug>(sandwich-', '<Plug>(operator-sandwich-,', '<Plug>(textobj-sandwich-']}
@@ -319,7 +444,7 @@ on_map = {n = '<Plug>Dsf'}
 hook_add = 'let g:dsf_no_mappings = 1'
 
 # Utility
-# =======
+#=========
 [[plugins]]
 repo = 'iamcco/markdown-preview.nvim'
 on_cmd = 'MarkdownPreview'

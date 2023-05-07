@@ -37,18 +37,22 @@ function M.on_attach(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
 
-	-- Short-circuit for Helm template files
+  -- Short-circuit for Helm template files
   local filetype = vim.bo[bufnr].filetype
-	if vim.bo[bufnr].buftype ~= '' or filetype == 'helm' or filetype == 'vfiler' then
+  if
+    vim.bo[bufnr].buftype ~= ''
+    or filetype == 'helm'
+    or filetype == 'vfiler'
+  then
     vim.diagnostic.disable(bufnr)
     vim.defer_fn(function()
       vim.diagnostic.reset(nil, bufnr)
     end, 1000)
-		return
-	end
+    return
+  end
 
   -- Keyboard mappings
-  local opts = {noremap = true, silent = true}
+  local opts = { noremap = true, silent = true }
   map_buf('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
 
   -- Disable diagnostics if buffer/global indicator is on
@@ -63,12 +67,27 @@ function M.on_attach(client, bufnr)
   map_buf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   map_buf('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   map_buf('n', ',wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  map_buf('n', ',wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  map_buf('n', ',wl', '<cmd>lua =vim.lsp.buf.list_workspace_folders()<CR>', opts)
+  map_buf(
+    'n',
+    ',wr',
+    '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>',
+    opts
+  )
+  map_buf(
+    'n',
+    ',wl',
+    '<cmd>lua =vim.lsp.buf.list_workspace_folders()<CR>',
+    opts
+  )
   map_buf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   map_buf('n', '<Leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   map_buf('x', '<Leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  map_buf('n', '<Leader>ce', '<cmd>lua vim.diagnostic.open_float({source=true})<CR>', opts)
+  map_buf(
+    'n',
+    '<Leader>ce',
+    '<cmd>lua vim.diagnostic.open_float({source=true})<CR>',
+    opts
+  )
 
   -- Call hierarchy
   map_buf('n', '<Leader>ci', '<cmd>Lspsaga incoming_calls<CR>', opts)
@@ -95,13 +114,16 @@ function M.on_attach(client, bufnr)
 
   -- Set autocommands conditional on server capabilities
   if client.supports_method('textDocument/documentHighlight') then
-    vim.api.nvim_exec([[
+    vim.api.nvim_exec(
+      [[
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
         augroup END
-    ]], false)
+    ]],
+      false
+    )
   end
 end
 
@@ -122,50 +144,41 @@ function M.setup()
   local signs = { Error = '✘', Warn = '', Hint = '', Info = 'ⁱ' }
   for type, icon in pairs(signs) do
     local hl = 'DiagnosticSign' .. type
-    vim.fn.sign_define(hl, {text = icon, texthl = hl, numhl = ''})
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
   end
 
   -- Configure LSP Handlers
   -- Configure help hover handler
-  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-    vim.lsp.handlers.hover, {border = 'rounded'}
-  )
+  vim.lsp.handlers['textDocument/hover'] =
+    vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 
   -- Configure signature help handler
-  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-    vim.lsp.handlers.signature_help, {border = 'rounded'}
-  )
+  vim.lsp.handlers['textDocument/signatureHelp'] =
+    vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
   -- Configuration Plugins
-
-  local neodev_ok, neodev = pcall(require, 'neodev')
-  if neodev_ok then
-    neodev.setup({})
-  end
+  require('neodev').setup()
 
   -- Setup language servers using mason and mason-lspconfig
-  local mason_ok, mason = pcall(require, 'mason')
-  if mason_ok then
-    mason.setup({
-      ui = {
-        icons = {
-          package_installed = '',
-          package_pending = '',
-          package_uninstalled = '',
-        },
+  require('mason').setup({
+    ui = {
+      icons = {
+        package_installed = '',
+        package_pending = '',
+        package_uninstalled = '',
       },
-    })
-    local mason_lspconfig = require('mason-lspconfig')
-    mason_lspconfig.setup()
+    },
+  })
 
-    local packages = mason_lspconfig.get_installed_servers()
+  local mason_lspconfig = require('mason-lspconfig')
+  mason_lspconfig.setup()
 
-    -- Setup language servers using nvim-lspconfig
-    local lspconfig = require('lspconfig')
-    for _, server in pairs(packages) do
-      local options = make_config(server)
-      lspconfig[server].setup(options)
-    end
+  -- Setup language servers using nvim-lspconfig
+  local packages = mason_lspconfig.get_installed_servers()
+  local lspconfig = require('lspconfig')
+  for _, server in pairs(packages) do
+    local options = make_config(server)
+    lspconfig[server].setup(options)
   end
 
   -- Reload if files were supplied in command-line arguments
@@ -179,7 +192,7 @@ function M.setup()
   end
 
   -- global custom location-list diagnostics window toggle.
-  local args = {noremap = true, silent = true}
+  local args = { noremap = true, silent = true }
   local function nmap(lhs, rhs)
     vim.api.nvim_set_keymap('n', lhs, rhs, args)
   end
@@ -188,24 +201,22 @@ function M.setup()
   nmap('<C-j>', '<cmd>lua require("lspsaga/diagnostic"):goto_next()<CR>')
 
   -- See https://github.com/kosayoda/nvim-lightbulb
-  local lightbulb_ok, lightbulb = pcall(require, 'nvim-lightbulb')
-  if lightbulb_ok then
-    lightbulb.setup({ignore = {'null-ls'}})
-    vim.api.nvim_exec([[
-      augroup user_lspconfig
-        autocmd!
+  local lightbulb = require('nvim-lightbulb')
+  lightbulb.setup({ ignore = { 'null-ls' } })
+  vim.api.nvim_exec([[
+    augroup user_lspconfig
+      autocmd!
 
-        " See https://github.com/kosayoda/nvim-lightbulb
-        autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
+      " See https://github.com/kosayoda/nvim-lightbulb
+      autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
 
-        " Update loclist with diagnostics for the current file
-        autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
+      " Update loclist with diagnostics for the current file
+      autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
 
-        " Automatic diagnostic hover
-        " autocmd CursorHold * lua require("user").diagnostic.open_float({focusable = false})
-      augroup END
-    ]], false)
-  end
+      " Automatic diagnostic hover
+      " autocmd CursorHold * lua require("user").diagnostic.open_float({focusable = false})
+    augroup END
+  ]], false)
 end
 
 return M

@@ -20,13 +20,13 @@ function M.setup()
     sources = {
       -- Whitespace
       builtins.diagnostics.trail_space.with({
-        disabled_filetype = {'gitcommit'},
+        disabled_filetype = { 'gitcommit' },
       }),
 
       -- Ansible
       builtins.diagnostics.ansiblelint.with({
         runtime_condition = has_exec('ansible-lint'),
-        extra_filetypes = {'yaml', 'yaml.ansible'},
+        extra_filetypes = { 'yaml', 'yaml.ansible' },
       }),
 
       -- Javascript
@@ -51,15 +51,15 @@ function M.setup()
       -- Shell
       builtins.diagnostics.shellcheck.with({
         runtime_condition = has_exec('shellcheck'),
-        extra_filetypes = {'bash'}
+        extra_filetypes = { 'bash' },
       }),
       builtins.diagnostics.shellcheck.with({
         runtime_condition = has_exec('shfmt'),
-        extra_filetypes = {'bash'}
+        extra_filetypes = { 'bash' },
       }),
       builtins.diagnostics.shellcheck.with({
         runtime_condition = has_exec('shellharden'),
-        extra_filetypes = {'bash'}
+        extra_filetypes = { 'bash' },
       }),
 
       -- Vim
@@ -70,11 +70,11 @@ function M.setup()
       -- Markdown
       builtins.diagnostics.markdownlint.with({
         runtime_condition = has_exec('markdownlint'),
-        extra_filetypes = {'vimwiki'},
+        extra_filetypes = { 'vimwiki' },
       }),
       builtins.diagnostics.proselint.with({
         runtime_condition = has_exec('proselint'),
-        extra_filetypes = {'vimwiki'}
+        extra_filetypes = { 'vimwiki' },
       }),
     },
   })

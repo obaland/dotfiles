@@ -15,38 +15,40 @@ local M = {}
 -- Color table for highlights
 local colors = core.get_colors()
 local special_colors = {
-	active = {
-		paste = '#98be65',
-		filepath = '#D7D7BC',
-	},
-	filemode = {
-		edit     = '#5faeec',
-		modified = '#ec5f67',
-		readonly = '#ec5f67',
-	},
+  active = {
+    paste = '#98be65',
+    filepath = '#D7D7BC',
+  },
+  filemode = {
+    edit = '#5faeec',
+    modified = '#ec5f67',
+    readonly = '#ec5f67',
+  },
 }
 
 -- Customized theme based on 'solarized_dark'.
 local theme = {
   normal = {
-    a = {fg = colors.base03, bg = colors.blue, gui = 'bold'},
-    b = {fg = colors.base1, bg = colors.base02},
-    c = {fg = colors.base1, bg = colors.base02},
+    a = { fg = colors.base03, bg = colors.blue, gui = 'bold' },
+    b = { fg = colors.base1, bg = colors.base02 },
+    c = { fg = colors.base1, bg = colors.base02 },
   },
-  insert = {a = {fg = colors.base03, bg = colors.green, gui = 'bold'}},
-  visual = {a = {fg = colors.base03, bg = colors.magenta, gui = 'bold'}},
-  replace = {a = {fg = colors.base03, bg = colors.red, gui = 'bold'}},
+  insert = { a = { fg = colors.base03, bg = colors.green, gui = 'bold' } },
+  visual = { a = { fg = colors.base03, bg = colors.magenta, gui = 'bold' } },
+  replace = { a = { fg = colors.base03, bg = colors.red, gui = 'bold' } },
   inactive = {
-    a = {fg = colors.base0, bg = colors.base02, gui = 'bold'},
-    b = {fg = colors.base0, bg = colors.base02 },
-    c = {fg = colors.base0, bg = colors.base02 },
+    a = { fg = colors.base0, bg = colors.base02, gui = 'bold' },
+    b = { fg = colors.base0, bg = colors.base02 },
+    c = { fg = colors.base0, bg = colors.base02 },
   },
 }
 
 -- Section conditions
 local conditions = {
   hide_in_width = function(width)
-    return function() return vim.fn.winwidth(0) > width end
+    return function()
+      return vim.fn.winwidth(0) > width
+    end
   end,
   buffer_not_empty = function()
     return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
@@ -58,14 +60,14 @@ local conditions = {
   end,
   enabled_lsp = function()
     local bufnr = vim.api.nvim_get_current_buf()
-    local clients = vim.lsp.get_active_clients({bufnr = bufnr})
+    local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
     return #clients ~= 0 and clients[1].name ~= 'null-ls'
-  end
+  end,
 }
 
 -- Detect quickfix vs. location list
 local function is_loclist()
-  return vim.fn.getloclist(0, {filewinid = 1}).filewinid ~= 0
+  return vim.fn.getloclist(0, { filewinid = 1 }).filewinid ~= 0
 end
 
 -- Extension: Quickfix
@@ -77,24 +79,26 @@ local extension_quickfix = {
           local pad = vim.g.global_symbol_padding or ' '
           local q = '' .. pad
           local l = '' .. pad
-          return is_loclist() and l..'Location List' or q..'Quickfix List'
+          return is_loclist() and l .. 'Location List' or q .. 'Quickfix List'
         end,
         padding = { left = 1, right = 0 },
       },
       {
         function()
           if is_loclist() then
-            return vim.fn.getloclist(0, {title = 0}).title
+            return vim.fn.getloclist(0, { title = 0 }).title
           end
-          return vim.fn.getqflist({title = 0}).title
-        end
+          return vim.fn.getqflist({ title = 0 }).title
+        end,
       },
     },
     lualine_z = {
-      function() return '%l/%L' end
+      function()
+        return '%l/%L'
+      end,
     },
   },
-  filetypes = {'qf'},
+  filetypes = { 'qf' },
 }
 
 -- Extension: File-explorer
@@ -105,7 +109,7 @@ local extension_file_explorer = {
         function()
           return badge.special_name(0)
         end,
-        separator = {left = '', right = ' '},
+        separator = { left = '', right = ' ' },
         padding = 0,
       },
     },
@@ -127,7 +131,7 @@ local extension_file_explorer = {
       },
     },
   },
-  filetypes = {'vfiler'},
+  filetypes = { 'vfiler' },
 }
 
 -- Extension: Only name and line-count
@@ -138,14 +142,16 @@ local extension_line_count = {
         function()
           return badge.special_name(0)
         end,
-        separator = {left = '', right = ' '},
-        padding = 0
+        separator = { left = '', right = ' ' },
+        padding = 0,
       },
     },
     lualine_z = {
       {
-        function() return '%l/%L' end,
-        separator = {left = '', right = ' '},
+        function()
+          return '%l/%L'
+        end,
+        separator = { left = '', right = ' ' },
       },
     },
   },
@@ -156,10 +162,12 @@ local extension_line_count = {
       end,
     },
     lualine_z = {
-      function() return '%l/%L' end
+      function()
+        return '%l/%L'
+      end,
     },
   },
-  filetypes = {'Trouble', 'DiffviewFiles', 'NeogitStatus', 'Outline'},
+  filetypes = { 'Trouble', 'DiffviewFiles', 'NeogitStatus', 'Outline' },
 }
 
 function M.setup()
@@ -187,7 +195,7 @@ function M.setup()
       lualine_a = {
         {
           'mode',
-          separator = {left = '', right = ' '},
+          separator = { left = '', right = ' ' },
           padding = 0,
         },
       },
@@ -198,26 +206,36 @@ function M.setup()
             return vim.go.paste and '=' or ''
           end,
           padding = 0,
-          color = {fg = special_colors.active.paste},
+          color = { fg = special_colors.active.paste },
         },
         -- Edit
         {
-          function() return '' end,
-          padding = {left = 0, right = 1},
-          color = {fg = special_colors.filemode.edit},
-          cond = function() return not vim.bo.readonly end,
+          function()
+            return ''
+          end,
+          padding = { left = 0, right = 1 },
+          color = { fg = special_colors.filemode.edit },
+          cond = function()
+            return not vim.bo.readonly
+          end,
         },
         -- Readonly
         {
-          function() return '' end,
-          padding = {left = 0, right = 1},
-          color = {fg = special_colors.filemode.readonly},
-          cond = function() return vim.bo.readonly end,
+          function()
+            return ''
+          end,
+          padding = { left = 0, right = 1 },
+          color = { fg = special_colors.filemode.readonly },
+          cond = function()
+            return vim.bo.readonly
+          end,
         },
         -- Buffer number
         {
-          function() return '%n' end,
-          padding = 0
+          function()
+            return '%n'
+          end,
+          padding = 0,
         },
         -- Modified sign
         {
@@ -225,7 +243,7 @@ function M.setup()
             return badge.modified('+')
           end,
           padding = 0,
-          color = {fg = special_colors.filemode.modified},
+          color = { fg = special_colors.filemode.modified },
         },
         -- File icon
         {
@@ -235,10 +253,10 @@ function M.setup()
           end,
           color = function()
             local data = badge.icon_data(0)
-            return {fg = data.color}
+            return { fg = data.color }
           end,
           cond = conditions.buffer_not_empty,
-          padding = {left = 1},
+          padding = { left = 1 },
         },
         -- File name
         {
@@ -250,13 +268,15 @@ function M.setup()
             )
           end,
           cond = conditions.buffer_not_empty,
-          padding = {left = 1},
-          color = {fg = special_colors.active.filepath},
+          padding = { left = 1 },
+          color = { fg = special_colors.active.filepath },
         },
         -- Border with padding,
         {
-          function () return '│' end,
-          color = {fg = colors.base01},
+          function()
+            return '│'
+          end,
+          color = { fg = colors.base01 },
           padding = 1,
         },
       },
@@ -264,8 +284,13 @@ function M.setup()
         -- Diagnostics
         {
           'diagnostics',
-          sources = {'nvim_diagnostic'},
-          symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
+          sources = { 'nvim_diagnostic' },
+          symbols = {
+            error = ' ',
+            warn = ' ',
+            info = ' ',
+            hint = ' ',
+          },
           padding = 0,
         },
         -- Whitespace trails
@@ -273,7 +298,7 @@ function M.setup()
           function()
             return badge.trails('␣')
           end,
-          padding = {left = 1, right = 0}
+          padding = { left = 1, right = 0 },
         },
       },
       lualine_x = {
@@ -283,10 +308,10 @@ function M.setup()
           symbols = {
             added = '₊',
             modified = '∗',
-            removed = '₋'
+            removed = '₋',
           },
           cond = conditions.hide_in_width(60),
-          padding = {left = 1, right = 0},
+          padding = { left = 1, right = 0 },
         },
         -- Git branch
         {
@@ -295,55 +320,73 @@ function M.setup()
             '',
             color = {
               fg = colors.green,
-            }
+            },
           },
-          padding = {left = 1, right = 0},
+          padding = { left = 1, right = 0 },
         },
       },
       lualine_y = {
         -- Border with padding,
         {
-          function () return '│' end,
-          color = {fg = colors.base01},
-          cond = function() return vim.bo.fileencoding ~= '' end,
+          function()
+            return '│'
+          end,
+          color = { fg = colors.base01 },
+          cond = function()
+            return vim.bo.fileencoding ~= ''
+          end,
           padding = 1,
         },
         -- Encoding
         {
-          function() return string.upper(vim.bo.fileencoding) end,
+          function()
+            return string.upper(vim.bo.fileencoding)
+          end,
           padding = 0,
         },
         -- Border
         {
-          function () return '│' end,
-          color = {fg = colors.base01},
+          function()
+            return '│'
+          end,
+          color = { fg = colors.base01 },
         },
         -- File format
         {
-          function() return string.upper(vim.bo.fileformat) end,
+          function()
+            return string.upper(vim.bo.fileformat)
+          end,
           padding = 0,
         },
         -- Border
         {
-          function () return '│' end,
-          color = {fg = colors.base01},
-          cond = function() return vim.bo.filetype ~= '' end
+          function()
+            return '│'
+          end,
+          color = { fg = colors.base01 },
+          cond = function()
+            return vim.bo.filetype ~= ''
+          end,
         },
         -- File type
         {
-          function() return vim.bo.filetype end,
+          function()
+            return vim.bo.filetype
+          end,
           padding = 0,
         },
         -- Padding
         {
-          function() return ' ' end,
+          function()
+            return ' '
+          end,
           padding = 0,
-        }
+        },
       },
       lualine_z = {
         {
           badge.progress,
-          separator = {left = '', right = ''},
+          separator = { left = '', right = '' },
         },
       },
     },
@@ -359,7 +402,7 @@ function M.setup()
               badge_statusline_dir_max_chars
             )
           end,
-          padding = {left = 1, right = 0}
+          padding = { left = 1, right = 0 },
         },
         {
           function()
@@ -373,10 +416,12 @@ function M.setup()
       lualine_y = {},
       lualine_z = {
         {
-          function() return vim.bo.filetype end,
+          function()
+            return vim.bo.filetype
+          end,
           padding = 1,
         },
-      }
+      },
     },
 
     -- WINBAR --
@@ -399,7 +444,7 @@ function M.setup()
           color = 'WinbarLspClientName',
           cond = conditions.enabled_lsp,
         },
-      }
+      },
     },
     inactive_winbar = {
       lualine_c = {
@@ -410,8 +455,8 @@ function M.setup()
           color = 'Comment',
           cond = conditions.enabled_lsp,
         },
-      }
-    }
+      },
+    },
   }
 
   vim.g.qf_disable_statusline = true

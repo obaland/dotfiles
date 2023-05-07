@@ -9,22 +9,22 @@ local vsnip_jumpable = vim.fn['vsnip#jumpable']
 
 -- cmp sources
 local cmp_sources = {
-  buffer = {name = 'buffer'},
+  buffer = { name = 'buffer' },
   cmdline = {
     name = 'cmdline',
     max_item_count = 30,
   },
-  nvim_lsp = {name = 'nvim_lsp'},
-  nvim_lua = {name = 'nvim_lua'},
-  path = {name = 'path'},
-  emoji = {name = 'emoji'},
-  vsnip = {name = 'vsnip'},
-  tabnine = {name = 'cmp_tabnine'},
+  nvim_lsp = { name = 'nvim_lsp' },
+  nvim_lua = { name = 'nvim_lua' },
+  path = { name = 'path' },
+  emoji = { name = 'emoji' },
+  vsnip = { name = 'vsnip' },
+  tabnine = { name = 'cmp_tabnine' },
   tmux = {
     name = 'tmux',
-    option = {all_panes = true},
+    option = { all_panes = true },
   },
-  latex = {name = 'latex_symbols'},
+  latex = { name = 'latex_symbols' },
 }
 
 -- Source setup. Helper function for cmp source presets.
@@ -99,7 +99,9 @@ end
 -- Feed proper terminal codes
 local function feedkey(key, mode)
   vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes(key, true, true, true), mode, true
+    vim.api.nvim_replace_termcodes(key, true, true, true),
+    mode,
+    true
   )
 end
 
@@ -126,19 +128,19 @@ function M.setup()
     },
 
     mapping = cmp.mapping.preset.insert({
-      ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 'c'}),
-      ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 'c'}),
-      ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 'c'}),
-      ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 'c'}),
-      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), {'i', 'c'}),
-      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i', 'c'}),
+      ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+      ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+      ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+      ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
       ['<C-y>'] = cmp.config.disable,
       ['<C-e>'] = cmp.mapping({
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
       }),
-      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
-      ['<CR>'] = cmp.mapping.confirm({select = false}),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
@@ -149,7 +151,7 @@ function M.setup()
         else
           fallback()
         end
-      end, {'i', 's'}),
+      end, { 'i', 's' }),
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item()
@@ -160,7 +162,7 @@ function M.setup()
         else
           fallback()
         end
-      end, {'i', 's'}),
+      end, { 'i', 's' }),
     }),
 
     window = {
@@ -169,7 +171,7 @@ function M.setup()
       }),
       documentation = cmp.config.window.bordered({
         border = 'single',
-      })
+      }),
     },
 
     formatting = {
@@ -177,8 +179,9 @@ function M.setup()
         -- Prepend with a fancy icon
         local symbol = kind_presets[vim_item.kind]
         if symbol ~= nil then
-          vim_item.kind = symbol ..
-            (vim.g.global_symbol_padding or ' ') .. vim_item.kind
+          vim_item.kind = symbol
+            .. (vim.g.global_symbol_padding or ' ')
+            .. vim_item.kind
         end
 
         -- Set menu source name
@@ -197,25 +200,37 @@ function M.setup()
   })
 
   -- Completion sources according to specific file-types.
-  cmp.setup.filetype({'markdown', 'help', 'text'}, {
-    sources = cmp_get_sources(
-      {'emoji', 'nvim_lsp', 'tabnine', 'buffer', 'path', 'vsnip', 'tmux'}
-    )
+  cmp.setup.filetype({ 'markdown', 'help', 'text' }, {
+    sources = cmp_get_sources({
+      'emoji',
+      'nvim_lsp',
+      'tabnine',
+      'buffer',
+      'path',
+      'vsnip',
+      'tmux',
+    }),
   })
 
-  cmp.setup.filetype({'lua'}, {
-    sources = cmp_get_sources(
-      {'nvim_lua', 'nvim_lsp', 'tabnine', 'buffer', 'path', 'vsnip', 'tmux'}
-    )
+  cmp.setup.filetype({ 'lua' }, {
+    sources = cmp_get_sources({
+      'nvim_lua',
+      'nvim_lsp',
+      'tabnine',
+      'buffer',
+      'path',
+      'vsnip',
+      'tmux',
+    }),
   })
 
   -- Completion sources according to specific command line
   cmp.setup.cmdline('/', {
-    sources = cmp_get_sources({'buffer'}),
+    sources = cmp_get_sources({ 'buffer' }),
   })
 
   cmp.setup.cmdline(':', {
-    sources = cmp_get_sources({'path', 'cmdline'})
+    sources = cmp_get_sources({ 'path', 'cmdline' }),
   })
 end
 

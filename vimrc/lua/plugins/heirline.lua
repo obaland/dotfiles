@@ -5,22 +5,60 @@ local vfiler = require('vfiler')
 
 local M = {}
 
+local caches = {}
+
+local special_filetypes = {
+  vfiler = { icon = '', name = 'vfiler' },
+  undotree = { icon = '', name = 'undotree' },
+  qf = { icon = '', name = 'List' },
+  TelescopePrompt = { icon = '', name = 'Telescope' },
+  Trouble = { icon = '', name = 'Trouble' },
+  DiffviewFiles = { icon = '', name = 'DiffviewFiles' },
+  Outline = { icon = '', name = 'Outline' },
+  NeogitStatus = { icon = '', name = 'NeogitStatus' },
+  ['mason.nvim'] = { icon = '', name = 'Mason' },
+  spectre_panel = { icon = '', name = 'Spectre' },
+}
+
 local function line_count_format()
   return '%7(%l/%3L%)'
 end
 
-local function filepath(filename)
-  local path = vim.fn.fnamemodify(filename, ':.')
-  if path == '' then
-    return '[No Name]'
+local function filepath(bufnr, max_dirs, dir_max_chars)
+  local name = vim.api.nvim_buf_get_name(bufnr)
+
+  -- User buffer's cached filepath
+  local cache_key = ('badge_cache_%s_filepath'):format(
+    vim.bo.filetype:lower():gsub('[^a-z]', '_')
+  )
+
+  local ok, cache = pcall(vim.api.nvim_buf_get_var, bufnr, cache_key)
+  if ok then
+    return cache
+  elseif #name < 1 then
+    return 'N/A'
   end
-  -- now, if the filename would occupy more than 1/4th of the available
-  -- space, we trim the file path to its initials
-  -- See Flexible Components section below for dynamic truncation
-  if not conditions.width_percent_below(#path, 0.25) then
-    path = vim.fn.pathshorten(path)
+  name = core.normalize_path(name)
+
+  local parts = vim.split(name, '/', {})
+  local dirs = {}
+  while #parts > 1 do
+    local dir = table.remove(parts, 1)
+    if #parts <= max_dirs then
+      table.insert(dirs, dir:sub(1, dir_max_chars))
+    end
   end
-  return core.normalize_path(path)
+  local path = table.concat(dirs, '/')
+  if #dirs > 0 then
+    path = path .. '/'
+  end
+  path = path .. parts[1]
+
+  vim.api.nvim_buf_set_var(bufnr, cache_key, path)
+  if not vim.tbl_contains(caches, cache_key) then
+    table.insert(caches, cache_key)
+  end
+  return path
 end
 
 local function project_root()
@@ -133,7 +171,8 @@ local function statusline()
   -- Component: File block
   local fileblock = {
     init = function(self)
-      self.filename = vim.api.nvim_buf_get_name(0)
+      self.bufnr = vim.api.nvim_get_current_buf()
+      self.filename = vim.api.nvim_buf_get_name(self.bufnr)
     end,
     -- flags
     {
@@ -169,7 +208,11 @@ local function statusline()
     -- filename
     {
       provider = function(self)
-        return filepath(self.filename)
+        -- now, if the filename would occupy more than 1/4th of the available
+        -- space, we trim the file path to its initials
+        -- See Flexible Components section below for dynamic truncation
+        -- if not conditions.width_percent_below(#path, 0.25) then
+        return filepath(self.bufnr, 3, 5)
       end,
       hl = { fg = 'grayish_yellow' },
     },
@@ -393,16 +436,7 @@ local function statusline()
   -- Extension: Only name and line-count
   local extension_line_count = {
     static = {
-      filetypes = {
-        undotree = { icon = '', name = 'undotree' },
-        TelescopePrompt = { icon = '', name = 'Telescope' },
-        Trouble = { icon = '', name = 'Trouble' },
-        DiffviewFiles = { icon = '', name = 'DiffviewFiles' },
-        Outline = { icon = '', name = 'Outline' },
-        NeogitStatus = { icon = '', name = 'NeogitStatus' },
-        ['mason.nvim'] = { icon = '', name = 'Mason' },
-        spectre_panel = { icon = '', name = 'Spectre' },
-      },
+      filetypes = special_filetypes,
     },
     condition = function(self)
       local types = {}
@@ -468,16 +502,89 @@ local function winbar()
   }
 end
 
+local function tabline()
+  local vfiler = {
+
+  }
+
+  local indicator = {
+    -- U+2590 ▐ Right half block, this character is right aligned so the
+    -- background highlight doesn't appear in the middle
+    -- alternatives:  right aligned => ▕ ▐ ,  left aligned => ▍
+    provider = '▍',
+    hl = function(self)
+      return self.is_active and 'TabLineSepSel' or 'TabLineSep'
+    end,
+  }
+
+  local tabpage_number = {
+    static = {
+      -- {'₀','₁','₂','₃','₄','₅','₆','₇','₈','₉'}
+      charset = {'⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'},
+    },
+    provider = function(self)
+      -- NOTE: Up to 2 digits
+      if self.tabnr < 10 then
+        return self.charset[self.tabnr + 1]
+      end
+      local digit10 = math.floor(self.tabnr / 10)
+      local digit1 = self.tabnr % 10
+      return self.charset[digit10 + 1] .. self.charset[digit1 + 1]
+    end,
+    hl = function(self)
+      return self.is_active and 'TabLineSel' or 'TabLine'
+    end,
+  }
+
+  local tabpage_name = {
+    static = {
+      special_filetypes = special_filetypes,
+    },
+    init = function(self)
+      self.bufnr = vim.api.nvim_get_current_buf()
+    end,
+    provider = function(self)
+      local ft = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
+      local spft = self.special_filetypes[ft]
+      local filename
+      if spft then
+        filename = spft.icon .. ' ' .. spft.name
+      else
+        local icon, _ = core.get_icon(filename)
+        filename = icon .. filepath(self.bufnr, 0, 5)
+      end
+      return ('%%%sT%s'):format(self.tabnr, filename)
+    end,
+  }
+
+  local tabpage = {
+    indicator,
+    tabpage_number,
+    tabpage_name,
+  }
+
+  return {
+    condition = function(self)
+      -- Skip tabline render during session loading
+      return not vim.g.SessionLoad
+    end,
+    utils.make_tablist(tabpage),
+  }
+end
+
 function M.setup()
   require('heirline').setup({
     statusline = statusline(),
     winbar = winbar(),
+    tabline = tabline(),
     opts = {
       colors = core.get_colors(),
-      --disable_winbar_cb = function(args)
-      --  local clients = vim.lsp.get_active_clients({ bufnr = args.buf })
-      --  return #clients == 0 or clients[1].name == 'null-ls'
-      --end,
+      disable_winbar_cb = function(args)
+        return conditions.buffer_matches({
+          buftype = { 'nofile', 'prompt', 'help', 'quickfile' },
+          filetype = { 'vfiler' },
+        }, args.buf)
+      end,
     },
   })
 end

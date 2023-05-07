@@ -7,44 +7,17 @@ local M = {}
 
 function M.setup()
   -- column settings
-  require'vfiler/columns/indent'.setup {
+  require('vfiler/columns/indent').setup({
     icon = '',
-  }
+  })
 
-  require'vfiler/config'.setup {
+  require('vfiler/config').setup({
     options = {
       columns = 'indent,devicons,name,mode,size,time',
       session = 'share',
       toggle = true,
     },
-  }
-
-  if not vim.fn.has('nvim') then
-    -- Vim only
-    local sink = require 'vfiler/fzf/sink'
-    require'vfiler/fzf/config'.setup {
-      action = {
-        default = sink.open_by_choose,
-      },
-
-      options = {
-        '--layout=reverse',
-        '--cycle',
-      },
-
-      layout = {
-        down = '~40%',
-      },
-    }
-
-    local fzf_action = require 'vfiler/fzf/action'
-    require'vfiler/config'.setup {
-      mappings = {
-        ['f'] = fzf_action.files,
-        ['<C-g>'] = fzf_action.rg,
-      }
-    }
-  end
+  })
 end
 
 function M.start_exprolorer()
