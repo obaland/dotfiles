@@ -1,7 +1,6 @@
 local conditions = require('heirline/conditions')
 local core = require('core')
 local utils = require('heirline/utils')
-local vfiler = require('vfiler')
 
 local M = {}
 
@@ -381,7 +380,7 @@ local function statusline()
       return conditions.buffer_matches({ filetype = { 'vfiler' } })
     end,
     init = function(self)
-      self.status = vfiler.status()
+      self.status = require('vfiler').status()
     end,
     {
       surround({ provider = ' vfiler' }),
@@ -394,6 +393,9 @@ local function statusline()
     component.border(),
     {
       provider = function(self)
+        if not self.status.current_item then
+          return ''
+        end
         return self.status.current_item.path
       end,
       hl = { fg = 'grayish_yellow' },
@@ -504,17 +506,18 @@ end
 
 local function tabline()
   local vfiler_offset = {
-    condition = function()
-      local status = require('plugins/vfiler').get_exprolorer_status()
-      return status and status.bufnr
+    condition = function(self)
+      local winid = vim.api.nvim_tabpage_list_wins(0)[1]
+      local bufnr = vim.api.nvim_win_get_buf(winid)
+      self.status = require('vfiler').status(bufnr)
+      return self.status.options and self.status.options.layout == 'left'
     end,
     {
-      provider = function()
-        local status = require('plugins/vfiler').get_exprolorer_status()
+      provider = function(self)
         local padding = 3 -- icon and both ends.
-        local winwidth = math.min(status.options.width, 128)
+        local winwidth = math.min(self.status.options.width, 128)
         local trancated, strwidth =
-          truncate_path(status.root, winwidth - padding)
+          truncate_path(self.status.root, winwidth - padding)
         local path = ''
         if strwidth < winwidth then
           path = trancated .. string.rep(' ', winwidth - (strwidth + padding))
@@ -625,7 +628,7 @@ local function tabline()
     end,
   }
 
-  local elastic_space = {
+  local terminal = {
     provider = '%#TablineFill#%T%#TabLine#',
   }
 
@@ -646,7 +649,7 @@ local function tabline()
     end,
     vfiler_offset,
     utils.make_tablist(tabpage),
-    elastic_space,
+    terminal,
     session,
   }
 end

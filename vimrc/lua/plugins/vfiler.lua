@@ -15,7 +15,6 @@ function M.setup()
     options = {
       columns = 'indent,devicons,name,mode,size,time',
       session = 'share',
-      toggle = true,
     },
   })
 end
