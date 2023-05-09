@@ -393,10 +393,12 @@ local function statusline()
     component.border(),
     {
       provider = function(self)
-        if not self.status.current_item then
+        local current = self.status.current_item
+        if not current then
           return ''
         end
-        return self.status.current_item.path
+        local num = ('[%3d/%3d] '):format(current.number, self.status.num_items)
+        return num .. current.path
       end,
       hl = { fg = 'grayish_yellow' },
     },
