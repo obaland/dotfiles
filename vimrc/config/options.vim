@@ -169,7 +169,7 @@ set cmdheight=1      " コマンドラインの高さ
 set colorcolumn=79   " 指定列に線を表示する
 
 " 常にステータス行を表示
-if has('nvim')
+if has('nvim-0.8')
   set laststatus=3
 else
   set laststatus=2
