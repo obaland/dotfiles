@@ -657,9 +657,8 @@ local function tabline()
 end
 
 function M.setup()
-  require('heirline').setup({
+  local config = {
     statusline = statusline(),
-    winbar = winbar(),
     tabline = tabline(),
     opts = {
       colors = core.get_colors(),
@@ -670,7 +669,11 @@ function M.setup()
         }, args.buf)
       end,
     },
-  })
+  }
+  if vim.fn.has('nvim-0.8') == 1 then
+    config.winbar = winbar()
+  end
+  require('heirline').setup(config)
 end
 
 return M
