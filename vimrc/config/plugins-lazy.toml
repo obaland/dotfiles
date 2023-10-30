@@ -144,7 +144,7 @@ repo = 'ray-x/lsp_signature.nvim'
 on_source = 'nvim-lspconfig'
 
 [[plugins]]
-repo = 'glepnir/lspsaga.nvim'
+repo = 'nvimdev/lspsaga.nvim'
 on_cmd = 'Lspsage'
 on_lua = 'lspsaga'
 lua_source = '''
