@@ -408,6 +408,7 @@ on_source = 'nvim-treesitter'
 [[plugins]]
 repo = 'JoosepAlviste/nvim-ts-context-commentstring'
 on_source = 'nvim-treesitter'
+lua_source = 'vim.g.skip_ts_context_commentstring_module = true'
 
 [[plugins]]
 repo = 'windwp/nvim-ts-autotag'
