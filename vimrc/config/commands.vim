@@ -3,8 +3,13 @@
 
 " Plugin manager
 "---------------
-command! -nargs=0 DeinUpdate call dein#update()
+command! -nargs=0 DeinUpdate call s:dein_update()
 command! -nargs=0 DeinClearState call dein#clear_state()
+
+function! s:dein_update()
+  call dein#update()
+  syntax on
+endfunction
 
 " File controls
 "-----------------------------------------------------------------------------

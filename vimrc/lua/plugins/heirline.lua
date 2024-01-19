@@ -32,6 +32,7 @@ local function filepath(filename, max_dirs, dir_max_chars)
     local dir = table.remove(parts, 1)
     if #parts <= max_dirs then
       table.insert(dirs, dir:sub(1, dir_max_chars))
+      table.insert(dirs, vim.fn.strcharpart(dir, 1, dir_max_chars))
     end
   end
   local path = table.concat(dirs, '/')
