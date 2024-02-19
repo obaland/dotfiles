@@ -102,17 +102,22 @@ lua_post_source = 'require("plugins/lspconfig").setup()'
 
 [[plugins]]
 repo = 'hrsh7th/cmp-nvim-lsp'
-on_source = 'nvim-lspconfig'
-
-[[plugins]]
-repo = 'mason-org/mason-registry'
+on_lua = 'nvim-lspconfig'
 
 [[plugins]]
 repo = 'williamboman/mason.nvim'
 if = 'has("nvim-0.7")'
-depends = ['mason-registry']
-on_lua = 'mason'
-hook_post_update = ':MasonUpdate'
+lua_source = '''
+  require("mason").setup({
+		ui = {
+			icons = {
+				package_installed = "",
+				package_pending = "",
+				package_uninstalled = "",
+			},
+		},
+  })
+'''
 
 [[plugins]]
 repo = 'williamboman/mason-lspconfig.nvim'

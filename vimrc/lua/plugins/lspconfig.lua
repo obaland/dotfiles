@@ -137,16 +137,6 @@ function M.setup()
 	require("neodev").setup()
 
 	-- Setup language servers using mason and mason-lspconfig
-	require("mason").setup({
-		ui = {
-			icons = {
-				package_installed = "",
-				package_pending = "",
-				package_uninstalled = "",
-			},
-		},
-	})
-
 	local mason_lspconfig = require("mason-lspconfig")
 	mason_lspconfig.setup()
 
