@@ -5,8 +5,6 @@
 --      https://github.com/ray-x/lsp_signature.nvim
 --      https://github.com/kosayoda/nvim-lightbulb
 
-local core = require("core")
-
 local M = {}
 
 -- Combine base config for each server
