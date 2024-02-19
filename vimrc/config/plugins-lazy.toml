@@ -3,29 +3,13 @@ repo = 'nvim-lua/plenary.nvim'
 if = 'has("nvim-0.5")'
 
 [[plugins]]
-repo = 'kyazdani42/nvim-web-devicons'
-
-# Interface
-# =========
-#[[plugins]]
-#repo = 'nvim-lualine/lualine.nvim'
-#if = 'has("nvim-0.5")'
-#on_event = 'BufEnter'
-#depends = [
-#  'nvim-navic',
-#  'nvim-web-devicons',
-#  'vfiler.vim'
-#]
-#hook_source = 'lua require("plugins/lualine").setup()'
-
-[[plugins]]
 repo = 'rebelot/heirline.nvim'
 if = 'has("nvim-0.5")'
 on_event = 'BufEnter'
 depends = [
   'gitsigns.nvim',
   'nvim-navic',
-  'nvim-web-devicons'
+  'vfiler-column-devicons',
 ]
 lua_source = 'require("plugins/heirline").setup()'
 
@@ -121,8 +105,12 @@ repo = 'hrsh7th/cmp-nvim-lsp'
 on_source = 'nvim-lspconfig'
 
 [[plugins]]
+repo = 'mason-org/mason-registry'
+
+[[plugins]]
 repo = 'williamboman/mason.nvim'
 if = 'has("nvim-0.7")'
+depends = ['mason-registry']
 on_lua = 'mason'
 hook_post_update = ':MasonUpdate'
 
@@ -149,21 +137,32 @@ on_cmd = 'Lspsage'
 on_lua = 'lspsaga'
 lua_source = '''
   require('lspsaga').setup({
-    max_preview_lines = 10,
-    border_style = 'rounded',
-    finder_action_keys = {
-      open = 'o',
-      vsplit = 'v',
-      split = 's',
-      quit = {'q', '<Esc>'},
+    ui = {
+      border = 'rounded',
+    },
+    scroll_preview = {
       scroll_down = '<C-f>',
       scroll_up = '<C-b>',
     },
-    code_action_keys = {
-      quit = {'q', '<Esc>'},
-      exec = '<CR>',
+    finder = {
+      keys = {
+        toggle_or_open = 'o',
+        vsplit = 'v',
+        split = 's',
+        quit = {'q', '<Esc>'},
+      },
     },
-    rename_action_quit = {'<C-c>', '<Esc>'},
+    code_action = {
+      keys = {
+        quit = {'q', '<Esc>'},
+        exec = '<CR>',
+      },
+    },
+    rename = {
+      keys = {
+        quit = {'<C-c>', '<Esc>'},
+      },
+    },
     symbol_in_winbar = {
       enable = false,
     },
