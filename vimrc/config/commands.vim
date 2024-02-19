@@ -8,7 +8,7 @@ command! -nargs=0 DeinClearState call dein#clear_state()
 
 function! s:dein_update()
   call dein#update()
-  syntax on
+  redraw
 endfunction
 
 " File controls
