@@ -9,9 +9,9 @@ command! -nargs=0 DeinClearState call dein#clear_state()
 function! s:dein_update()
   if exists('g:dein#install_github_api_token')
     call dein#check_update(v:true)
-    call core#info('Update done.')
+    call core#info('Update done.', '[dein]')
   else
-    call core#warning('Legacy dein update.')
+    call core#warning('Legacy updating.', '[dein]')
     call dein#update()
     redraw
   endif

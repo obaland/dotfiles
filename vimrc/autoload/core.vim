@@ -26,20 +26,23 @@ function! core#mkdir(path) abort
   endif
 endfunction
 
-function! core#info(message) abort
+function! core#info(message, ...) abort
+  let l:prefix = get(a:000, 0, '[config]')
   for l:message in s:str2list(a:message)
-    echom '[config] ' . l:message
+    echom l:prefix . ' ' . l:message
   endfor
 endfunction
 
-function! core#warning(message) abort
+function! core#warning(message, ...) abort
+  let l:prefix = get(a:000, 0, '[config]')
   for l:message in s:str2list(a:message)
-    echohl WarningMsg | echomsg '[config] ' . l:message | echohl None
+    echohl WarningMsg | echomsg l:prefix . ' ' . l:message | echohl None
   endfor
 endfunction
 
-function! core#error(message) abort
+function! core#error(message, ...) abort
+  let l:prefix = get(a:000, 0, '[config]')
   for l:message in s:str2list(a:message)
-    echohl ErrorMsg | echomsg '[config] ' . l:message | echohl None
+    echohl ErrorMsg | echomsg l:prefix . ' ' . l:message | echohl None
   endfor
 endfunction
