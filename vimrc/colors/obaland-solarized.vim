@@ -1,5 +1,5 @@
-" Name: solarized
-" See:  https://github.com/iCyMind/NeoSolarized
+" Name: obaland-solarized
+" See: https://ethanschoonover.com/solarized/
 
 " ---------------------------------------------------------------------
 " COLOR VALUES
@@ -38,7 +38,7 @@ highlight clear
 if exists('syntax_on')
   syntax reset
 endif
-let colors_name = 'solarized'
+let colors_name = 'obaland-solarized'
 
 " Hexadecimal palettes
 " --------------------

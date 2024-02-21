@@ -452,6 +452,14 @@ hook_add = 'let g:dsf_no_mappings = 1'
 # Utility
 #=========
 [[plugins]]
+repo = 'norcalli/nvim-colorizer.lua'
+if = 'has("nvim-0.4.0")'
+on_event = 'BufEnter'
+lua_source = '''
+require("colorizer").setup()
+'''
+
+[[plugins]]
 repo = 'iamcco/markdown-preview.nvim'
 on_cmd = 'MarkdownPreview'
 hook_post_source = 'call mkdp#util#install()'

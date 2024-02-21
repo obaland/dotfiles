@@ -106,7 +106,7 @@ syntax enable
 filetype detect
 
 set background=dark
-colorscheme solarized
+colorscheme obaland-solarized
 
 set secure
 
