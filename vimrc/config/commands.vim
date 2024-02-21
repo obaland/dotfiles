@@ -7,8 +7,14 @@ command! -nargs=0 DeinUpdate call s:dein_update()
 command! -nargs=0 DeinClearState call dein#clear_state()
 
 function! s:dein_update()
-  call dein#update()
-  redraw
+  if exists('g:dein#install_github_api_token')
+    call dein#check_update(v:true)
+    call core#info('Update done.')
+  else
+    call core#warning('Legacy dein update.')
+    call dein#update()
+    redraw
+  endif
 endfunction
 
 " File controls

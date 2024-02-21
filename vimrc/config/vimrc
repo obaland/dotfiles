@@ -31,6 +31,18 @@ function! s:on_VimEnter() abort
   endif
 endfunction
 
+function! s:load_env(path) abort
+  let l:path = expand(a:path)
+  if !filereadable(l:path)
+    echom 'Not found "' . a:path . '"'
+    return
+  endif
+  for line in readfile(l:path)
+    let l:kv = split(line, '=')
+    call execute('let $'. l:kv[0] . ' = ' . '"' . l:kv[1] . '"')
+  endfor
+endfunction
+
 function! s:load_local_plugins(path) abort
   let l:plugins_path = fnamemodify(a:path, ':p')
   if !isdirectory(l:plugins_path)
@@ -68,6 +80,7 @@ augroup MyAutoCmd
 augroup END
 
 if has('vim_starting')
+  call s:load_env($VIM_PATH . '/.env')
   call s:source('init.vim')
 endif
 

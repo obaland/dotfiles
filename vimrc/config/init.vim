@@ -109,6 +109,11 @@ endfunction
 " Plugin
 "---------------------------------------------------------------------------
 function! s:use_package_manager(data_path)
+  " Setup a token for update management
+  if exists('$GITHUB_API_TOKEN')
+    let g:dein#install_github_api_token = $GITHUB_API_TOKEN
+  endif
+
   let l:cache_path = a:data_path . '/dein'
   if has('vim_starting')
     " Add dein to vim's runtimepath
@@ -118,7 +123,7 @@ function! s:use_package_manager(data_path)
       if !isdirectory(l:dein_dir)
         execute '!git clone https://github.com/Shougo/dein.vim' l:dein_dir
         if v:shell_error
-          call s:error('dein installation has failed! is git installed?')
+          call core#error('dein installation has failed! is git installed?')
           finish
         endif
       endif

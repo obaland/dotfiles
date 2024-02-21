@@ -26,6 +26,18 @@ function! core#mkdir(path) abort
   endif
 endfunction
 
+function! core#info(message) abort
+  for l:message in s:str2list(a:message)
+    echom '[config] ' . l:message
+  endfor
+endfunction
+
+function! core#warning(message) abort
+  for l:message in s:str2list(a:message)
+    echohl WarningMsg | echomsg '[config] ' . l:message | echohl None
+  endfor
+endfunction
+
 function! core#error(message) abort
   for l:message in s:str2list(a:message)
     echohl ErrorMsg | echomsg '[config] ' . l:message | echohl None
