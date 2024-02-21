@@ -34,7 +34,7 @@ endfunction
 function! s:load_env(path) abort
   let l:path = expand(a:path)
   if !filereadable(l:path)
-    echom 'Not found "' . a:path . '"'
+    call core#warning('Not found "' . a:path . '"')
     return
   endif
   for line in readfile(l:path)
