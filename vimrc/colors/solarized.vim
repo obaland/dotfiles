@@ -355,10 +355,13 @@ execute 'highlight! SpellBad'     .s:fmt_curl .s:fg_none   .s:bg_none   .s:sp_re
 execute 'highlight! SpellCap'     .s:fmt_curl .s:fg_none   .s:bg_none   .s:sp_violet
 execute 'highlight! SpellRare'    .s:fmt_curl .s:fg_none   .s:bg_none   .s:sp_cyan
 execute 'highlight! SpellLocal'   .s:fmt_curl .s:fg_none   .s:bg_none   .s:sp_yellow
-execute 'highlight! Pmenu'        .s:fmt_none .s:fg_base0  .s:bg_base02 .s:fmt_revb
+"execute 'highlight! Pmenu'        .s:fmt_none .s:fg_base0  .s:bg_base02 .s:fmt_revb
+execute 'highlight! Pmenu'        .s:fmt_none .s:fg_base0  .s:bg_base02
 execute 'highlight! PmenuSel'     .s:fmt_none .s:fg_base01 .s:bg_base2  .s:fmt_revb
-execute 'highlight! PmenuSbar'    .s:fmt_none .s:fg_base2  .s:bg_base0  .s:fmt_revb
-execute 'highlight! PmenuThumb'   .s:fmt_none .s:fg_base0  .s:bg_base03 .s:fmt_revb
+"execute 'highlight! PmenuSbar'    .s:fmt_none .s:fg_base2  .s:bg_base0  .s:fmt_revb
+execute 'highlight! PmenuSbar'    .s:fmt_none .s:fg_base2  .s:bg_none   .s:fmt_revb
+"execute 'highlight! PmenuThumb'   .s:fmt_none .s:fg_base0  .s:bg_base03 .s:fmt_revb
+execute 'highlight! PmenuThumb'   .s:fmt_none .s:fg_base0  .s:bg_none   .s:fmt_revb
 execute 'highlight! CursorColumn' .s:fmt_none .s:fg_none   .s:bg_base02
 execute 'highlight! CursorLine'   .s:fmt_none .s:fg_none   .s:bg_base02 .s:sp_base1
 execute 'highlight! CursorLineNr' .s:fmt_none .s:fg_none   .s:bg_base02 .s:sp_base1
@@ -366,6 +369,9 @@ execute 'highlight! ColorColumn'  .s:fmt_none .s:fg_none   .s:bg_base02
 execute 'highlight! Cursor'       .s:fmt_none .s:fg_base03 .s:bg_base0
 highlight! link lCursor Cursor
 execute 'highlight! MatchParen'   .s:fmt_none .s:fg_red    .s:bg_base01
+
+" be nice for this float border to be cyan if active
+execute 'highlight! FloatBorder'  .s:fmt_none .s:fg_base01  .s:bg_none
 
 " vim syntax highlighting
 " -----------------------
@@ -721,16 +727,18 @@ highlight! link TSConditional Conditional
 highlight! link TSConstant Constant
 highlight! link TSConstBuiltin Constant
 highlight! link TSConstMacro Constant
-execute 'highlight! TSError' .s:fmt_none .s:fg_red .s:bg_none
+highlight! link TSError Error
 highlight! link TSException Exception
 highlight! link TSField Identifier
-highlight! link TSFloat Float
+"highlight! link TSFloat Float
+highlight! link TSFloat Constant
 highlight! link TSFunction Function
 highlight! link TSFuncBuiltin Function
 highlight! link TSFuncMacro Function
 highlight! link TSInclude Include
 highlight! link TSKeyword Keyword
-highlight! link TSLabel Label
+"highlight! link TSLabel Label
+highlight! link TSLabel Statement
 highlight! link TSMethod Function
 highlight! link TSNamespace Identifier
 highlight! link TSNumber Constant
@@ -749,7 +757,8 @@ highlight! link TSConstructor Function
 highlight! link TSKeywordFunction Identifier
 highlight! link TSLiteral Normal
 highlight! link TSParameter Identifier
-execute 'highlight! TSVariable' .s:fmt_none .s:fg_base1 .s:bg_none
+"execute 'highlight! TSVariable' .s:fmt_none .s:fg_base1 .s:bg_none
+highlight! link TSVariable Normal
 highlight! link TSVariableBuiltin Identifier
 highlight! link TSTag Special
 highlight! link TSTagDelimiter Delimiter
@@ -759,9 +768,9 @@ highlight! link TSTypeBuiltin Type
 
 if has('nvim-0.8')
 	" Misc
-	highlight! link @comment Comment
-	execute 'highlight! @error' .s:fmt_none .s:fg_red .s:bg_none
 	highlight! link @none NONE
+	highlight! link @comment Comment
+	highlight! link @error Error
 	highlight! link @preproc PreProc
 	highlight! link @define Define
 	highlight! link @operator Operator
@@ -821,7 +830,8 @@ if has('nvim-0.8')
 	highlight! link @property Identifier
 
 	" Identifiers
-	execute 'highlight! @variable' .s:fmt_none .s:fg_base1 .s:bg_none
+	"execute 'highlight! @variable' .s:fmt_none .s:fg_base1 .s:bg_none
+	execute 'highlight! @variable' .s:fmt_none .s:fg_base0 .s:bg_none
 	highlight! link @variable.builtin Special
 
 	highlight! link @constant Constant
@@ -833,8 +843,10 @@ if has('nvim-0.8')
 
 	" Text
 	highlight! link @text Normal
-	execute 'highlight! @strong' .s:fmt_bold .s:fg_base1 .s:bg_base03
-	execute 'highlight! @text.emphasis' .s:fmt_bold .s:fg_base1 .s:bg_base03
+	"execute 'highlight! @strong' .s:fmt_bold .s:fg_base1 .s:bg_base03
+	"execute 'highlight! @text.emphasis' .s:fmt_bold .s:fg_base1 .s:bg_base03
+	execute 'highlight! @strong' .s:fmt_bold .s:fg_base1 .s:bg_none
+	execute 'highlight! @text.emphasis' .s:fmt_bold .s:fg_base1 .s:bg_none
 	highlight! link @text.underline Underlined
 	highlight! link @text.strike Strikethrough
 	highlight! link @text.title Title
@@ -846,14 +858,40 @@ if has('nvim-0.8')
 	highlight! link @text.reference Constant
 
 	highlight! link @text.todo Todo
-	highlight! link @text.note WarningMsg
+	highlight! link @text.note Comment
 	highlight! link @text.warning WarningMsg
 	execute 'highlight! @text.danger' .s:fmt_bold .s:fg_red .s:bg_none
 
 	" Tags
-	highlight! link @tag Tag
-	highlight! link @tag.attribute Identifier
-	highlight! link @tag.delimiter Delimiter
+	"highlight! link @tag Tag
+	"highlight! link @tag.attribute Identifier
+	"highlight! link @tag.delimiter Delimiter
+	execute 'highlight! @tag' .s:fmt_none .s:fg_green .s:bg_none
+	execute 'highlight! @tag.attribute' .s:fmt_none .s:fg_blue .s:bg_none
+	execute 'highlight! @tag.delimiter' .s:fmt_none .s:fg_red .s:bg_none
+endif
+
+if has('nvim-0.9.0')
+	highlight! link @lsp.type.type Type
+	highlight! link @lsp.type.class Type
+	highlight! link @lsp.type.enum Type
+	highlight! link @lsp.type.interface Type
+	highlight! link @lsp.type.struct Type
+	highlight! link @lsp.type.typeParameter Type
+	highlight! link @lsp.type.parameter Normal
+	highlight! link @lsp.type.variable TSVariable
+	highlight! link @lsp.type.property TSProperty
+	highlight! link @lsp.type.enumMember TSProperty
+	highlight! link @lsp.type.events Label
+	highlight! link @lsp.type.function Function
+	highlight! link @lsp.type.method TSMethod
+	highlight! link @lsp.type.keyword Keyword
+	highlight! link @lsp.type.modifier Operator
+	highlight! link @lsp.type.comment Comment
+	highlight! link @lsp.type.string String
+	highlight! link @lsp.type.number Number
+	highlight! link @lsp.type.regexp TSStringRegex
+	highlight! link @lsp.type.operator Operator
 endif
 
 " LSP and Diagnostic
@@ -873,6 +911,7 @@ execute 'highlight! LspReferenceWrite' .s:fmt_bolu .s:fg_none .s:bg_none
 
 " Lspsaga syntax support
 " ----------------------
+execute 'highlight! LspSagaHoverBorder'      .s:fmt_none .s:fg_cyan   .s:bg_none
 highlight! link LspLinesDiagBorder LspSagaHoverBorder
 highlight! link LspSagaAutoPreviewBorder LspSagaHoverBorder
 execute 'highlight! LspSagaBorderTitle'      .s:fmt_bold .s:fg_yellow .s:bg_none
