@@ -6,10 +6,24 @@
 command! -nargs=0 DeinUpdate call s:dein_update()
 command! -nargs=0 DeinClearState call dein#clear_state()
 
+function! s:notify_updates_log()
+lua << EOF
+  local dein = require('dein')
+  local log = dein.get_updates_log()
+  if dein.tap('nvim-notify') then
+    require('notify')(log, 'info', {
+      title = 'Update plugins',
+    })
+  else
+    vim.fn('core#info')(log)
+  end
+EOF
+endfunction
+
 function! s:dein_update()
   if exists('g:dein#install_github_api_token')
     call dein#check_update(v:true)
-    call core#info('Update done.', '[dein]')
+    call s:notify_updates_log()
   else
     call core#warning('Legacy updating.', '[dein]')
     call dein#update()
