@@ -61,6 +61,7 @@ let s:gui_blue    = '#268bd2'
 let s:gui_cyan    = '#2aa198'
 let s:gui_green   = '#719e07' " experimental
 let s:gui_white   = '#d7d7bc' " experimental
+let s:gui_rose    = '#e95464' " experimental
 
 let s:term_mode    = 'cterm'
 let s:term_base03  = '8'
@@ -80,6 +81,42 @@ let s:term_blue    = '4'
 let s:term_cyan    = '6'
 let s:term_green   = '2'
 let s:term_white   = '7'
+let s:term_rose    = '1'
+
+" Original colors
+let s:gui_dark0 ='#222436'
+let s:gui_dark0_hl ='#2f334d'
+let s:gui_dark1 ='#24283b'
+let s:gui_dark1_hl ='#292e42'
+let s:gui_dark2 ='#414868'
+let s:gui_dark3 ='#444a73'
+let s:gui_dark4 ='#545c7e'
+let s:gui_dark5 ='#737aa2'
+let s:gui_dark6 ='#828bb8'
+let s:gui_dark7 ='#a9b1d6'
+let s:gui_gutter ='#3b4261'
+let s:gui_darkblue ='#394b70'
+let s:gui_navyblue ='#202f55'
+let s:gui_indigo ='#043c78'
+let s:gui_marineblue ='#006888'
+let s:gui_madonnablue ='#00608d'
+let s:gui_ultramarine ='#434da2'
+
+let s:term_dark0 ='0'
+let s:term_dark0_hl ='8'
+let s:term_dark1 ='0'
+let s:term_dark1_hl ='8'
+let s:term_dark2 ='0'
+let s:term_dark3 ='0'
+let s:term_dark4 ='5'
+let s:term_dark5 ='5'
+let s:term_dark6 ='5'
+let s:term_dark7 ='5'
+let s:term_gutter ='5'
+let s:term_darkblue = '4'
+let s:term_navyblue = '4'
+let s:term_indigo ='4'
+let s:term_ultramarine ='4'
 
 " Formatting options and null values for passthrough effect
 " ---------------------------------------------------------
@@ -193,6 +230,8 @@ execute 'let s:bg_magenta = " ' . 'guibg='.s:gui_magenta . ' ctermbg='.s:term_ma
 execute 'let s:bg_violet  = " ' . 'guibg='.s:gui_violet  . ' ctermbg='.s:term_violet  . '"'
 execute 'let s:bg_blue    = " ' . 'guibg='.s:gui_blue    . ' ctermbg='.s:term_blue    . '"'
 execute 'let s:bg_cyan    = " ' . 'guibg='.s:gui_cyan    . ' ctermbg='.s:term_cyan    . '"'
+execute 'let s:bg_white   = " ' . 'guibg='.s:gui_white   . ' ctermbg='.s:term_white   . '"'
+execute 'let s:bg_rose    = " ' . 'guibg='.s:gui_rose    . ' ctermbg='.s:term_rose    . '"'
 
 execute 'let s:fg_none    = " ' . 'guifg='.s:gui_none    . ' ctermfg='.s:term_none    . '"'
 execute 'let s:fg_back    = " ' . 'guifg='.s:gui_back    . ' ctermfg='.s:term_back    . '"'
@@ -213,6 +252,7 @@ execute 'let s:fg_violet  = " ' . 'guifg='.s:gui_violet  . ' ctermfg='.s:term_vi
 execute 'let s:fg_blue    = " ' . 'guifg='.s:gui_blue    . ' ctermfg='.s:term_blue    . '"'
 execute 'let s:fg_cyan    = " ' . 'guifg='.s:gui_cyan    . ' ctermfg='.s:term_cyan    . '"'
 execute 'let s:fg_white   = " ' . 'guifg='.s:gui_white   . ' ctermfg='.s:term_white   . '"'
+execute 'let s:fg_rose    = " ' . 'guifg='.s:gui_rose    . ' ctermfg='.s:term_rose    . '"'
 
 execute 'let s:fmt_none  = " ' . 'gui=NONE'         . ' cterm=NONE'         . '"'
 execute 'let s:fmt_bold  = " ' . 'gui=NONE'.s:b     . ' cterm=NONE'.s:b     . '"'
@@ -265,6 +305,24 @@ else
 	let s:sp_blue    = ''
 	let s:sp_cyan    = ''
 endif
+
+execute 'let s:fg_dark0    = " ' . 'guifg='.s:gui_dark0    . ' ctermfg='.s:term_dark0    . '"'
+execute 'let s:fg_dark0_hl = " ' . 'guifg='.s:gui_dark0_hl . ' ctermfg='.s:term_dark0_hl . '"'
+execute 'let s:fg_dark1    = " ' . 'guifg='.s:gui_dark1    . ' ctermfg='.s:term_dark1    . '"'
+execute 'let s:fg_dark1_hl = " ' . 'guifg='.s:gui_dark1_hl . ' ctermfg='.s:term_dark1_hl . '"'
+execute 'let s:fg_dark2    = " ' . 'guifg='.s:gui_dark2    . ' ctermfg='.s:term_dark2    . '"'
+execute 'let s:fg_dark3    = " ' . 'guifg='.s:gui_dark3    . ' ctermfg='.s:term_dark3    . '"'
+execute 'let s:fg_dark4    = " ' . 'guifg='.s:gui_dark4    . ' ctermfg='.s:term_dark4    . '"'
+execute 'let s:fg_dark5    = " ' . 'guifg='.s:gui_dark5    . ' ctermfg='.s:term_dark5    . '"'
+execute 'let s:fg_dark6    = " ' . 'guifg='.s:gui_dark6    . ' ctermfg='.s:term_dark6    . '"'
+execute 'let s:fg_dark7    = " ' . 'guifg='.s:gui_dark7    . ' ctermfg='.s:term_dark7    . '"'
+execute 'let s:fg_gutter   = " ' . 'guifg='.s:gui_gutter   . ' ctermfg='.s:term_gutter   . '"'
+execute 'let s:fg_darkblue = " ' . 'guifg='.s:gui_darkblue . ' ctermfg='.s:term_darkblue . '"'
+execute 'let s:fg_indigo   = " ' . 'guifg='.s:gui_indigo   . ' ctermfg='.s:term_indigo   . '"'
+execute 'let s:fg_navyblue = " ' . 'guifg='.s:gui_navyblue . ' ctermfg='.s:term_navyblue . '"'
+execute 'let s:fg_ultramarine = " ' . 'guifg='.s:gui_ultramarine . ' ctermfg='.s:term_ultramarine . '"'
+
+execute 'let s:bg_dark0_hl = " ' . 'guibg='.s:gui_dark0_hl . ' ctermbg='.s:term_dark0_hl . '"'
 
 " Basic highlighting
 
@@ -371,7 +429,7 @@ highlight! link lCursor Cursor
 execute 'highlight! MatchParen'   .s:fmt_none .s:fg_red    .s:bg_base01
 
 " be nice for this float border to be cyan if active
-execute 'highlight! FloatBorder'  .s:fmt_none .s:fg_base01  .s:bg_none
+execute 'highlight! FloatBorder'  .s:fmt_none .s:fg_base00  .s:bg_none
 
 " vim syntax highlighting
 " -----------------------
@@ -979,16 +1037,15 @@ execute 'highlight! CmpItemKindSnippet'       .s:fmt_none .s:fg_orange .s:bg_non
 " Telescope
 " ---------
 " float border not quite dark enough, maybe that needs to change?
-execute 'highlight! TelescopeBorder'          .s:fmt_none .s:fg_base01 .s:bg_none
-execute 'highlight! TelescopeMatching'        .s:fmt_none .s:fg_orange .s:bg_none
-" active border lighter for clarity
-execute 'highlight! TelescopePromptBorder'    .s:fmt_none .s:fg_cyan .s:bg_none
-" default is groups.Identifier
+execute 'highlight! TelescopeMatching'        .s:fmt_none .s:fg_rose  .s:bg_none
+execute 'highlight! TelescopeBorder'          .s:fmt_none .s:fg_base00 .s:bg_none
+execute 'highlight! TelescopePromptBorder'    .s:fmt_none .s:fg_base00 .s:bg_none
+execute 'highlight! TelescopeResultsBorder'   .s:fmt_none .s:fg_base00 .s:bg_none
+execute 'highlight! TelescopePreviewBorder'   .s:fmt_none .s:fg_base00 .s:bg_none
 highlight! link TelescopePromptPrefix Normal
 highlight! link TelescopeSelection CursorLine
-execute 'highlight! TelescopeSelectionCaret'  .s:fmt_none .s:fg_cyan .s:bg_none
-" separate them from the border a little, but not make them pop
-highlight! link TelescopeTint Normal
+execute 'highlight! TelescopeSelectionCaret'  .s:fmt_none .s:fg_dark5 .s:bg_base02
+execute 'highlight! TelescopeTitle'           .s:fmt_none .s:fg_white .s:bg_none
 
 " nvim-navic
 " ----------
