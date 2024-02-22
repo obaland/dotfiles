@@ -1078,6 +1078,37 @@ highlight! link NavicIconsTypeParameter Normal
 highlight! link NavicText               Normal
 execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_magenta .s:bg_none
 
+" nvim-navbuddy
+" ----------
+"highlight! link NavbuddyFloat
+"highlight! link NavicIconsModule        Exception
+"highlight! link NavicIconsNamespace     Include
+"highlight! link NavicIconsPackage       Label
+"highlight! link NavicIconsClass         Include
+"highlight! link NavicIconsMethod        Function
+"highlight! link NavicIconsProperty      Identifier
+"highlight! link NavicIconsField         Identifier
+"highlight! link NavicIconsConstructor   Special
+"highlight! link NavicIconsEnum          Number
+"highlight! link NavicIconsInterface     Type
+"highlight! link NavicIconsFunction      Function
+"highlight! link NavicIconsVariable      Variable
+"highlight! link NavicIconsConstant      Constant
+"highlight! link NavicIconsString        String
+"highlight! link NavicIconsNumber        Number
+"highlight! link NavicIconsBoolean       Boolean
+"highlight! link NavicIconsArray         Type
+"highlight! link NavicIconsObject        Type
+"highlight! link NavicIconsKey           Normal
+"highlight! link NavicIconsNull          Constant
+"highlight! link NavicIconsEnumMember    Number
+"highlight! link NavicIconsStruct        Type
+"highlight! link NavicIconsEvent         Constant
+"highlight! link NavicIconsOperator      Operator
+"highlight! link NavicIconsTypeParameter Normal
+"highlight! link NavicText               Normal
+"execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_magenta .s:bg_none
+
 " which-key
 " ---------
 highlight! link WhichKeyFloat Normal

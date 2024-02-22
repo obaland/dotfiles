@@ -76,12 +76,17 @@ function M.on_attach(client, bufnr)
 	client.server_capabilities.document_formatting = false
 
 	-- For nvim-navic to work, it needs attach to the lsp server.
-	local exists, navic = pcall(require, "nvim-navic")
-	if exists then
+	local exists_navic, navic = pcall(require, "nvim-navic")
+	if exists_navic then
 		if client.supports_method("textDocument/documentSymbol") and not navic.is_available() then
 			navic.attach(client, bufnr)
 		end
 	end
+
+  local exists_navbuddy, navbuddy = pcall(require, "nvim-navbuddy")
+	if exists_navbuddy then
+    navbuddy.attach(client, bufnr)
+  end
 
 	if client.config.flags then
 		client.config.flags.allow_incremental_sync = true

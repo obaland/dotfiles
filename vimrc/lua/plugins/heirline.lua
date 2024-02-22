@@ -12,6 +12,7 @@ local special_filetypes = {
   Trouble = { icon = '', name = 'Trouble' },
   DiffviewFiles = { icon = '', name = 'DiffviewFiles' },
   Outline = { icon = '', name = 'Outline' },
+  Navbuddy = { icon = '', name = 'Navbuddy' },
   NeogitStatus = { icon = '', name = 'NeogitStatus' },
   ['mason.nvim'] = { icon = '', name = 'Mason' },
   spectre_panel = { icon = '', name = 'Spectre' },

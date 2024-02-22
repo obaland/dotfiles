@@ -58,12 +58,6 @@ if dein#tap('telescope.nvim')
   xnoremap <leader>da :Telescope lsp_range_code_actions<CR>
 endif
 
-" symbols-outline.nvim
-" -------------------
-if dein#tap('symbols-outline.nvim')
-  nnoremap <leader>o <cmd>SymbolsOutline<CR>
-endif
-
 " vim-vsnip
 " ---------
 if dein#tap('vim-vsnip')
@@ -165,6 +159,12 @@ endif
 " ---------------
 if dein#tap('nvim-treesitter')
   noremap <silent><leader>tsc <cmd>TSHighlightCapturesUnderCursor<CR>
+endif
+
+" nvim-navbuddy
+" ---------------
+if dein#tap('nvim-navbuddy')
+  nnoremap <leader>n <cmd>Navbuddy<CR>
 endif
 
 " Terminal emulator
