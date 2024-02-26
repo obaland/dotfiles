@@ -83,11 +83,6 @@ function M.on_attach(client, bufnr)
 		end
 	end
 
-  local exists_navbuddy, navbuddy = pcall(require, "nvim-navbuddy")
-	if exists_navbuddy then
-    navbuddy.attach(client, bufnr)
-  end
-
 	if client.config.flags then
 		client.config.flags.allow_incremental_sync = true
 		-- client.config.flags.debounce_text_changes  = vim.opt.updatetime:get()
@@ -166,20 +161,10 @@ function M.setup()
 	nmap("<C-k>", '<cmd>lua require("lspsaga/diagnostic"):goto_prev()<CR>')
 	nmap("<C-j>", '<cmd>lua require("lspsaga/diagnostic"):goto_next()<CR>')
 
-	-- See https://github.com/kosayoda/nvim-lightbulb
-	local lightbulb = require("nvim-lightbulb")
-	lightbulb.setup({
-		ignore = {
-			clients = { "null-ls" },
-		},
-	})
 	vim.api.nvim_exec(
 		[[
       augroup user_lspconfig
         autocmd!
-
-        " See https://github.com/kosayoda/nvim-lightbulb
-        autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
 
         " Update loclist with diagnostics for the current file
         autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})

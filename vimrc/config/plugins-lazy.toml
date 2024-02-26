@@ -134,25 +134,22 @@ depends = ['nvim-lspconfig', 'mason.nvim']
 on_lua = 'mason-lspconfig'
 
 [[plugins]]
-repo = 'kosayoda/nvim-lightbulb'
-on_lua = 'nvim-lightbulb'
-
-[[plugins]]
 repo = 'folke/neodev.nvim'
 on_lua = 'neodev'
 
 [[plugins]]
 repo = 'ray-x/lsp_signature.nvim'
 on_source = 'nvim-lspconfig'
+lua_source = 'require("lsp_signature").setup({})'
 
 [[plugins]]
 repo = 'nvimdev/lspsaga.nvim'
-on_cmd = 'Lspsage'
 on_lua = 'lspsaga'
 lua_source = '''
   require('lspsaga').setup({
     ui = {
       border = 'rounded',
+      lines = { '└', '├', '│', '─', '┌' },
     },
     scroll_preview = {
       scroll_down = '<C-f>',
@@ -180,6 +177,9 @@ lua_source = '''
     symbol_in_winbar = {
       enable = false,
     },
+    outline = {
+      enable = false,
+    },
   })
 '''
 
@@ -194,21 +194,8 @@ lua_post_source = 'require("plugins/null-ls").setup()'
 repo = 'SmiteshP/nvim-navic'
 if = 'has("nvim-0.7")'
 depends = ['nvim-lspconfig']
-on_lua = 'nvim-navic'
+on_source = 'nvim-lspconfig'
 lua_source = 'require("nvim-navic").setup()'
-
-[[plugins]]
-repo = 'SmiteshP/nvim-navbuddy'
-if = 'has("nvim-0.8")'
-depends = ['nvim-lspconfig', 'nvim-navic', 'nui.nvim']
-on_lua = 'nvim-navic'
-lua_source = '''
-require("nvim-navbuddy").setup({
-  window = {
-    border = "rounded",
-  }
-})
-'''
 
 [[plugins]]
 repo = 'hrsh7th/nvim-cmp'
@@ -317,6 +304,14 @@ if = 'has("nvim-0.7")'
 depends = ['telescope.nvim']
 on_lua = 'telescope'
 lua_post_source = 'require("telescope").load_extension("ui-select")'
+
+[[plugins]]
+repo = 'hedyhli/outline.nvim'
+if = 'has("nvim-0.7")'
+on_cmd = ['Outline']
+lua_source = '''
+  require('outline').setup({})
+'''
 
 [[plugins]]
 repo = 'mattn/emmet-vim'

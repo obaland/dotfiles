@@ -969,24 +969,8 @@ execute 'highlight! LspReferenceWrite' .s:fmt_bolu .s:fg_none .s:bg_none
 
 " Lspsaga syntax support
 " ----------------------
-execute 'highlight! LspSagaHoverBorder'      .s:fmt_none .s:fg_cyan   .s:bg_none
-highlight! link LspLinesDiagBorder LspSagaHoverBorder
-highlight! link LspSagaAutoPreviewBorder LspSagaHoverBorder
-execute 'highlight! LspSagaBorderTitle'      .s:fmt_bold .s:fg_yellow .s:bg_none
-execute 'highlight! LspSagaCodeActionTitle'  .s:fmt_none .s:fg_green  .s:bg_none
-highlight! link LspSagaCodeActionBorder LspSagaHoverBorder
-highlight! link LspSagaCodeActionTruncateLine ProviderTruncateLine
-highlight! link LspSagaDefPreviewBorder LspSagaHoverBorder
-highlight! link LspSagaDiagnosticBorder LspSagaHoverBorder
-execute 'highlight! LspSagaDiagnosticHeader' .s:fmt_none .s:fg_yellow .s:bg_none
-highlight! link LspSagaDocTruncateLine ProviderTruncateLine
-execute 'highlight! LspSagaFinderSelection' .s:fmt_bold .s:fg_green .s:bg_none
-highlight! link LspSagaFloatWinBorder LspSagaHoverBorder
-highlight! link LspSagaLspFinderBorder LspSagaHoverBorder
-execute 'highlight! LspSagaHoverBorder' .s:fmt_none .s:fg_cyan .s:bg_none
-highlight! link LspSagaRenameBorder LspSagaHoverBorder
-highlight! link LspSagaShTruncateLine ProviderTruncateLine
-highlight! link LspSagaSignatureHelpBorder LspSagaHoverBorder
+highlight! default link HoverNormal Normal
+highlight! default link HoverBorder FloatBorder
 
 execute 'highlight! ProviderTruncateLine' .s:fmt_none .s:fg_base02 .s:bg_none
 
@@ -1077,13 +1061,6 @@ highlight! link NavicIconsOperator      Operator
 highlight! link NavicIconsTypeParameter Normal
 highlight! link NavicText               Normal
 execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_magenta .s:bg_none
-
-" nvim-navbuddy
-" ----------
-highlight! link NavbuddyNormalFloat Normal
-highlight! link NavbuddyCursorLine CursorLine
-highlight! link NavbuddyCursorLineKey CursorLine
-highlight! link NavbuddyCursorLineFunction CursorLine
 
 " which-key
 " ---------

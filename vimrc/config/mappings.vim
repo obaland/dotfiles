@@ -128,6 +128,12 @@ if dein#tap('linediff.vim')
   nnoremap <leader>ldr <cmd>LinediffReset<CR>
 endif
 
+" outline.nvim
+" ------------
+if dein#tap('outline.nvim')
+  noremap <silent><leader>o <cmd>Outline<CR>
+endif
+
 " dsf.vim
 " -------
 if dein#tap('dsf.vim')
@@ -159,12 +165,6 @@ endif
 " ---------------
 if dein#tap('nvim-treesitter')
   noremap <silent><leader>tsc <cmd>TSHighlightCapturesUnderCursor<CR>
-endif
-
-" nvim-navbuddy
-" ---------------
-if dein#tap('nvim-navbuddy')
-  nnoremap <leader>n <cmd>Navbuddy<CR>
 endif
 
 " Terminal emulator
