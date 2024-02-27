@@ -117,7 +117,8 @@ function M.setup()
   -- Transform to Telescope proper action
   custom_actions = transform_mod(custom_actions)
 
-  require('telescope').setup({
+  local telescope = require('telescope')
+  telescope.setup({
     defaults = {
       vimgrep_arguments = grep_arguments,
       sorting_strategy = 'ascending',
@@ -267,11 +268,18 @@ function M.setup()
           layout_config = { width = 0.35, height = 0.35 },
         }),
       },
+      aerial = {
+        -- Display symbols as <root>.<parent>.<symbol>
+        show_nesting = {
+          ['_'] = false,
+        }
+      }
     },
   })
 
-  -- Load ui-select
-  require('telescope').load_extension('ui-select')
+  -- Load extensions
+  telescope.load_extension('ui-select')
+  telescope.load_extension('aerial')
 end
 
 return M

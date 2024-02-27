@@ -414,7 +414,8 @@ execute 'highlight! SpellCap'     .s:fmt_curl .s:fg_none   .s:bg_none   .s:sp_vi
 execute 'highlight! SpellRare'    .s:fmt_curl .s:fg_none   .s:bg_none   .s:sp_cyan
 execute 'highlight! SpellLocal'   .s:fmt_curl .s:fg_none   .s:bg_none   .s:sp_yellow
 "execute 'highlight! Pmenu'        .s:fmt_none .s:fg_base0  .s:bg_base02 .s:fmt_revb
-execute 'highlight! Pmenu'        .s:fmt_none .s:fg_base0  .s:bg_base02
+"execute 'highlight! Pmenu'        .s:fmt_none .s:fg_base0  .s:bg_base02
+execute 'highlight! Pmenu'        .s:fmt_none .s:fg_base00  .s:bg_none
 execute 'highlight! PmenuSel'     .s:fmt_none .s:fg_base01 .s:bg_base2  .s:fmt_revb
 "execute 'highlight! PmenuSbar'    .s:fmt_none .s:fg_base2  .s:bg_base0  .s:fmt_revb
 execute 'highlight! PmenuSbar'    .s:fmt_none .s:fg_base2  .s:bg_none   .s:fmt_revb
@@ -427,8 +428,7 @@ execute 'highlight! ColorColumn'  .s:fmt_none .s:fg_none   .s:bg_base02
 execute 'highlight! Cursor'       .s:fmt_none .s:fg_base03 .s:bg_base0
 highlight! link lCursor Cursor
 execute 'highlight! MatchParen'   .s:fmt_none .s:fg_red    .s:bg_base01
-
-" be nice for this float border to be cyan if active
+execute 'highlight! NormalFloat'  .s:fmt_none .s:fg_base00  .s:bg_none
 execute 'highlight! FloatBorder'  .s:fmt_none .s:fg_base00  .s:bg_none
 
 " vim syntax highlighting
@@ -967,23 +967,6 @@ execute 'highlight! LspReferenceRead'  .s:fmt_undr .s:fg_none .s:bg_none
 highlight! link LspReferenceText LspReferenceRead
 execute 'highlight! LspReferenceWrite' .s:fmt_bolu .s:fg_none .s:bg_none
 
-" Lspsaga syntax support
-" ----------------------
-highlight! default link HoverNormal Normal
-highlight! default link HoverBorder FloatBorder
-
-execute 'highlight! ProviderTruncateLine' .s:fmt_none .s:fg_base02 .s:bg_none
-
-highlight! link TargetWord Title
-
-highlight! link GitSignsAdd DiffAdd
-highlight! link GitSignsChange DiffChange
-highlight! link GitSignsDelete DiffDelete
-
-highlight! link VGitSignAdd DiffAdd
-highlight! link VGitSignChange DiffChange
-highlight! link VGitSignRemove DiffDelete
-
 " nvim-cmp syntax support
 " -----------------------
 execute 'highlight! CmpDocumentation'       .s:fmt_none .s:fg_base2 .s:bg_base02
@@ -1061,6 +1044,9 @@ highlight! link NavicIconsOperator      Operator
 highlight! link NavicIconsTypeParameter Normal
 highlight! link NavicText               Normal
 execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_magenta .s:bg_none
+
+" aerial
+" ----------
 
 " which-key
 " ---------

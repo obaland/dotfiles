@@ -134,6 +134,10 @@ depends = ['nvim-lspconfig', 'mason.nvim']
 on_lua = 'mason-lspconfig'
 
 [[plugins]]
+repo = 'kosayoda/nvim-lightbulb'
+on_lua = 'nvim-lightbulb'
+
+[[plugins]]
 repo = 'folke/neodev.nvim'
 on_lua = 'neodev'
 
@@ -141,47 +145,6 @@ on_lua = 'neodev'
 repo = 'ray-x/lsp_signature.nvim'
 on_source = 'nvim-lspconfig'
 lua_source = 'require("lsp_signature").setup({})'
-
-[[plugins]]
-repo = 'nvimdev/lspsaga.nvim'
-on_lua = 'lspsaga'
-lua_source = '''
-  require('lspsaga').setup({
-    ui = {
-      border = 'rounded',
-      lines = { '└', '├', '│', '─', '┌' },
-    },
-    scroll_preview = {
-      scroll_down = '<C-f>',
-      scroll_up = '<C-b>',
-    },
-    finder = {
-      keys = {
-        toggle_or_open = 'o',
-        vsplit = 'v',
-        split = 's',
-        quit = {'q', '<Esc>'},
-      },
-    },
-    code_action = {
-      keys = {
-        quit = {'q', '<Esc>'},
-        exec = '<CR>',
-      },
-    },
-    rename = {
-      keys = {
-        quit = {'<C-c>', '<Esc>'},
-      },
-    },
-    symbol_in_winbar = {
-      enable = false,
-    },
-    outline = {
-      enable = false,
-    },
-  })
-'''
 
 [[plugins]]
 repo = 'jose-elias-alvarez/null-ls.nvim'
@@ -296,21 +259,33 @@ if = 'has("nvim-0.7")'
 depends = ['plenary.nvim', 'nvim-web-devicons']
 on_cmd = 'Telescope'
 on_lua = 'telescope'
-lua_post_source = 'require("plugins/telescope").setup()'
+lua_source = 'require("plugins/telescope").setup()'
 
 [[plugins]]
 repo = 'nvim-telescope/telescope-ui-select.nvim'
 if = 'has("nvim-0.7")'
 depends = ['telescope.nvim']
 on_lua = 'telescope'
-lua_post_source = 'require("telescope").load_extension("ui-select")'
 
 [[plugins]]
-repo = 'hedyhli/outline.nvim'
-if = 'has("nvim-0.7")'
-on_cmd = ['Outline']
+repo = 'stevearc/aerial.nvim'
+if = 'has("nvim-0.8")'
+depends = ['telescope.nvim']
+on_cmd = ['AerialToggle', 'AerialNavToggle', 'Telescope']
+on_lua = 'telescope'
 lua_source = '''
-  require('outline').setup({})
+  require('aerial').setup({
+    keymaps = {
+      ['<Esc>'] = 'actions.close',
+    },
+    nav = {
+      preview = true,
+      keymaps = {
+        ['q'] = 'actions.close',
+        ['<Esc>'] = 'actions.close',
+      }
+    }
+  })
 '''
 
 [[plugins]]

@@ -128,10 +128,14 @@ if dein#tap('linediff.vim')
   nnoremap <leader>ldr <cmd>LinediffReset<CR>
 endif
 
-" outline.nvim
+" aerial.nvim
 " ------------
-if dein#tap('outline.nvim')
-  noremap <silent><leader>o <cmd>Outline<CR>
+if dein#tap('aerial.nvim')
+  nnoremap <silent><leader>o <cmd>AerialToggle<CR>
+  nnoremap <silent><leader>n <cmd>AerialNavToggle<CR>
+  if dein#tap('telescope.nvim')
+    nnoremap <silent><leader>O <cmd>Telescope aerial<CR>
+  endif
 endif
 
 " dsf.vim

@@ -47,7 +47,7 @@ function M.on_attach(client, bufnr)
 
 	-- Keyboard mappings
 	local opts = { noremap = true, silent = true }
-	map_buf("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts)
+	map_buf("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 
 	-- Disable diagnostics if buffer/global indicator is on
 	if vim.b[bufnr].diagnostic_disabled or vim.g.diagnostic_disabled then
@@ -69,8 +69,8 @@ function M.on_attach(client, bufnr)
 	map_buf("n", "<Leader>ce", "<cmd>lua vim.diagnostic.open_float({source=true})<CR>", opts)
 
 	-- Call hierarchy
-	map_buf("n", "<Leader>ci", "<cmd>Lspsaga incoming_calls<CR>", opts)
-	map_buf("n", "<Leader>co", "<cmd>Lspsaga outgoing_calls<CR>", opts)
+	map_buf("n", "<Leader>ci", "<cmd>lua vim.lsp.buf.incoming_calls()<CR>", opts)
+	map_buf("n", "<Leader>co", "<cmd>lua vim.lsp.buf.outgoing_calls()<CR>", opts)
 
 	-- Disable formatting
 	client.server_capabilities.document_formatting = false
@@ -158,13 +158,24 @@ function M.setup()
 		vim.api.nvim_set_keymap("n", lhs, rhs, args)
 	end
 
-	nmap("<C-k>", '<cmd>lua require("lspsaga/diagnostic"):goto_prev()<CR>')
-	nmap("<C-j>", '<cmd>lua require("lspsaga/diagnostic"):goto_next()<CR>')
+	nmap("<C-k>", '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+	nmap("<C-j>", '<cmd>lua vim.diagnostic.goto_next()<CR>')
+
+  -- See https://github.com/kosayoda/nvim-lightbulb
+	local lightbulb = require('nvim-lightbulb')
+	lightbulb.setup({
+		ignore = {
+			clients = { 'null-ls' },
+		},
+	})
 
 	vim.api.nvim_exec(
 		[[
       augroup user_lspconfig
         autocmd!
+
+        " See https://github.com/kosayoda/nvim-lightbulb
+        autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()
 
         " Update loclist with diagnostics for the current file
         autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
