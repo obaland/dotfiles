@@ -7,10 +7,6 @@ repo = 'nvim-tree/nvim-web-devicons'
 if = 'has("nvim-0.7.0")'
 
 [[plugins]]
-repo = 'MunifTanjim/nui.nvim'
-if = 'has("nvim-0.5")'
-
-[[plugins]]
 repo = 'rebelot/heirline.nvim'
 if = 'has("nvim-0.5")'
 on_event = 'BufEnter'
