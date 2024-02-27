@@ -5,14 +5,14 @@ local utils = require('heirline/utils')
 local M = {}
 
 local special_filetypes = {
+  aerial = { icon = '', name = 'Outline' },
+  ['aerial-nav'] = { icon = '󱣱', name = 'Navigation' },
   vfiler = { icon = '', name = 'vfiler' },
   undotree = { icon = '', name = 'undotree' },
   qf = { icon = '', name = 'List' },
   TelescopePrompt = { icon = '', name = 'Telescope' },
   Trouble = { icon = '', name = 'Trouble' },
   DiffviewFiles = { icon = '', name = 'DiffviewFiles' },
-  Outline = { icon = '', name = 'Outline' },
-  Navbuddy = { icon = '', name = 'Navbuddy' },
   NeogitStatus = { icon = '', name = 'NeogitStatus' },
   ['mason.nvim'] = { icon = '', name = 'Mason' },
   spectre_panel = { icon = '', name = 'Spectre' },
@@ -181,7 +181,7 @@ local function statusline()
         condition = function()
           return vim.bo.modifiable and not vim.bo.readonly
         end,
-        provider = '',
+        provider = '󰽘',
         hl = { fg = 'soft_blue' },
       },
       {
@@ -358,7 +358,7 @@ local function statusline()
 
   -- Component: Ruler
   local ruler = {
-    provider = line_count_format() .. ':%2c %3p%%',
+    provider = '' .. ' %3p%%',
     hl = { fg = 'base0' },
   }
 
