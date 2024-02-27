@@ -10,7 +10,6 @@ function M.config(_)
         version = 'LuaJIT',
         path = vim.fn.split(package.path, ';'),
       },
-
       diagnostics = {
         enable = true,
         globals = {
@@ -23,9 +22,11 @@ function M.config(_)
           'after_each',
         },
       },
-
-      telemetry = {
-        enable = false,
+      workspace = {
+        library = {
+          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+        },
       },
     },
   }

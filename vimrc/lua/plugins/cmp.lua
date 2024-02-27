@@ -19,7 +19,6 @@ local cmp_sources = {
   path = { name = 'path' },
   emoji = { name = 'emoji' },
   vsnip = { name = 'vsnip' },
-  tabnine = { name = 'cmp_tabnine' },
   tmux = {
     name = 'tmux',
     option = { all_panes = true },
@@ -32,14 +31,7 @@ local function cmp_get_sources(arr)
   local sources = {}
   for _, name in ipairs(arr) do
     local index = #sources + 1
-    if name == 'tabnine' then
-      local ok, _ = pcall(require, 'cmp-tabnine')
-      if ok then
-        sources[index] = cmp_sources[name]
-      end
-    else
-      sources[index] = cmp_sources[name]
-    end
+    sources[index] = cmp_sources[name]
   end
   return sources
 end
@@ -52,7 +44,6 @@ local completion_labels = {
   nvim_lua = '[ Lua]',
   luasnip = '[ LSnip]',
   snippet = '[ VSnip]',
-  cmp_tabnine = '[ TN]',
   path = '[פּ Path]',
   tmux = '[Tmux]',
 }
@@ -113,7 +104,6 @@ function M.setup()
     -- Set default cmp sources
     sources = cmp_get_sources({
       'nvim_lsp',
-      'tabnine',
       'buffer',
       'path',
       'vsnip',
@@ -132,7 +122,7 @@ function M.setup()
       ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
       ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
       ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
-      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
       ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
       ['<C-y>'] = cmp.config.disable,
       ['<C-e>'] = cmp.mapping({
@@ -140,7 +130,10 @@ function M.setup()
         c = cmp.mapping.close(),
       }),
       ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      ['<CR>'] = cmp.mapping.confirm({ select = false }),
+      ['<CR>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Insert,
+        select = true,
+      }),
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
@@ -167,10 +160,10 @@ function M.setup()
 
     window = {
       completion = cmp.config.window.bordered({
-        border = 'single',
+        border = 'rounded',
       }),
       documentation = cmp.config.window.bordered({
-        border = 'single',
+        border = 'rounded',
       }),
     },
 
@@ -204,7 +197,6 @@ function M.setup()
     sources = cmp_get_sources({
       'emoji',
       'nvim_lsp',
-      'tabnine',
       'buffer',
       'path',
       'vsnip',
@@ -216,7 +208,6 @@ function M.setup()
     sources = cmp_get_sources({
       'nvim_lua',
       'nvim_lsp',
-      'tabnine',
       'buffer',
       'path',
       'vsnip',
