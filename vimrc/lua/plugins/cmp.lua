@@ -3,10 +3,6 @@
 
 local M = {}
 
--- VSnip functions
-local vsnip_available = vim.fn['vsnip#available']
-local vsnip_jumpable = vim.fn['vsnip#jumpable']
-
 -- cmp sources
 local cmp_sources = {
   buffer = { name = 'buffer' },
@@ -18,7 +14,7 @@ local cmp_sources = {
   nvim_lua = { name = 'nvim_lua' },
   path = { name = 'path' },
   emoji = { name = 'emoji' },
-  vsnip = { name = 'vsnip' },
+  snippet = { name = 'luasnip' },
   tmux = {
     name = 'tmux',
     option = { all_panes = true },
@@ -43,7 +39,6 @@ local completion_labels = {
   nvim_lsp = '[ LSP]',
   nvim_lua = '[ Lua]',
   luasnip = '[ LSnip]',
-  snippet = '[ VSnip]',
   path = '[פּ Path]',
   tmux = '[Tmux]',
 }
@@ -64,7 +59,7 @@ local kind_presets = {
   Value = '',
   Enum = '練', -- 練 ℰ 
   Keyword = '', --   🔐
-  Snippet = '⮡', -- ﬌  ⮡ 
+  Snippet = '', -- ﬌  ⮡ 
   Color = '',
   File = '', --  
   Reference = '', --  
@@ -100,20 +95,21 @@ end
 
 function M.setup()
   local cmp = require('cmp')
+  local luasnip = require('luasnip')
+
   cmp.setup({
     -- Set default cmp sources
     sources = cmp_get_sources({
       'nvim_lsp',
       'buffer',
       'path',
-      'vsnip',
+      'snippet',
       'tmux',
     }),
 
-    snipeet = {
+    snippet = {
       expand = function(args)
-        -- Using https://github.com/hrsh7th/vim-vsnip for snippets.
-        vim.fn['vsnip#anonymous'](args.body)
+        luasnip.lsp_expand(args.body)
       end,
     },
 
@@ -137,8 +133,8 @@ function M.setup()
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
-        elseif vsnip_available() == 1 then
-          feedkey('<Plug>(vsnip-expand-or-jump)', '')
+        elseif luasnip.expand_or_jumpable() then
+          feedkey('<Plug>(luasnip-expand-or-jump)', '')
         elseif has_words_before() then
           cmp.complete()
         else
@@ -148,10 +144,10 @@ function M.setup()
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item()
-        elseif vsnip_jumpable(-1) == 1 then
-          feedkey('<Plug>(vsnip-jump-prev)', '')
+        elseif luasnip.jumpable(-1) then
+          feedkey('<Plug>(luasnip-jump-prev)', '')
         elseif has_words_before() then
-          cmp.coplete()
+          cmp.complete()
         else
           fallback()
         end
@@ -199,7 +195,7 @@ function M.setup()
       'nvim_lsp',
       'buffer',
       'path',
-      'vsnip',
+      'snippet',
       'tmux',
     }),
   })
@@ -210,7 +206,7 @@ function M.setup()
       'nvim_lsp',
       'buffer',
       'path',
-      'vsnip',
+      'snippet',
       'tmux',
     }),
   })
@@ -223,6 +219,10 @@ function M.setup()
   cmp.setup.cmdline(':', {
     sources = cmp_get_sources({ 'path', 'cmdline' }),
   })
+
+  -- Insert `(` after select function or method item.
+  local autopairs = require('nvim-autopairs/completion/cmp')
+  cmp.event:on('confirm_done', autopairs.on_confirm_done())
 end
 
 return M

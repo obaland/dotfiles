@@ -60,9 +60,9 @@ endif
 
 " vim-vsnip
 " ---------
-if dein#tap('vim-vsnip')
-  imap <expr><C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-  smap <expr><C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+if dein#tap('LuaSnip')
+  imap <expr><C-l> luasnip#expand_or_jumpable() ? '<Plug>(luasnip-expand-or-jump)' : '<C-l>'
+  smap <expr><C-l> luasnip#expand_or_jumpable() ? '<Plug>(luasnip-expand-or-jump)' : '<C-l>'
 endif
 
 " emmet-vim

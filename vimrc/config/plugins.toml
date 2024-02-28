@@ -3,3 +3,8 @@ repo = 'Shougo/dein.vim'
 
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
+
+[[plugins]]
+repo = 'L3MON4D3/LuaSnip'
+if = 'has("nvim-0.7")'
+lua_post_source = 'require("plugins/luasnip").setup()'
