@@ -101,16 +101,15 @@ on_source = 'nvim-lspconfig'
 lua_source = 'require("lsp_signature").setup({})'
 
 [[plugins]]
-repo = 'jose-elias-alvarez/null-ls.nvim'
+repo = 'nvimtools/none-ls.nvim'
 if = 'has("nvim-0.7")'
 on_source = 'nvim-lspconfig'
-depends = ['plenary.nvim', 'nvim-lspconfig']
-lua_post_source = 'require("plugins/null-ls").setup()'
+depends = ['plenary.nvim']
+lua_post_source = 'require("plugins/none-ls").setup()'
 
 [[plugins]]
 repo = 'SmiteshP/nvim-navic'
 if = 'has("nvim-0.7")'
-depends = ['nvim-lspconfig']
 on_source = 'nvim-lspconfig'
 lua_source = 'require("nvim-navic").setup()'
 
@@ -203,8 +202,8 @@ require("nvim-autopairs").setup({
 [[plugins]]
 repo = 'folke/todo-comments.nvim'
 if = 'has("nvim-0.8")'
-depends = ['plenary.nvim']
-on_source = ['telescope.nvim', 'nvim-lspconfig']
+depends = ['plenary.nvim', 'trouble.nvim', 'telescope.nvim']
+on_cmd = ['TodoTrouble', 'TodoTelescope']
 lua_source = '''
   require('todo-comments').setup({
     signs = false,
@@ -291,7 +290,7 @@ on_map = {xo = ['<Plug>Sideways']}
 
 [[plugins]]
 repo = 'AndrewRadev/linediff.vim'
-on_cmd = ['Linediff', 'LinediffAdd']
+on_cmd = ['Linediff', 'LinediffAdd', 'LinediffShow', 'LinediffReset']
 
 [[plugins]]
 repo = 'AndrewRadev/splitjoin.vim'

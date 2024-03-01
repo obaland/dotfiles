@@ -18,6 +18,10 @@ if dein#tap('trouble.nvim')
   nnoremap gR <cmd>TroubleToggle lsp_reference<CR>
   nnoremap ]x <cmd>lua require('trouble').next({skip_groups = true, jump = true})<CR>
   nnoremap [x <cmd>lua require('trouble').previous({skip_groups = true, jump = true})<CR>
+
+  if dein#tap('todo-comments.nvim')
+    nnoremap <leader>xt <cmd>TodoTrouble<CR>
+  endif
 endif
 
 " telescope.nvim
@@ -56,6 +60,10 @@ if dein#tap('telescope.nvim')
   nnoremap <leader>dr <cmd>Telescope lsp_references<CR>
   nnoremap <leader>da <cmd>Telescope lsp_code_actions<CR>
   xnoremap <leader>da :Telescope lsp_range_code_actions<CR>
+
+  if dein#tap('todo-comments.nvim')
+    nnoremap <leader>tt <cmd>TodoTelescope<CR>
+  endif
 endif
 
 " vim-vsnip
