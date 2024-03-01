@@ -128,7 +128,7 @@ function M.setup()
       ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
       ['<CR>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
+        select = false,
       }),
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then

@@ -10,21 +10,6 @@ function M.setup()
     updateevents = 'TextChanged,TextChangedI',
   })
 
-  -- vscode format
-  local from_vscode = require('luasnip/loaders/from_vscode')
-  from_vscode.lazy_load()
-  from_vscode.lazy_load({ paths = vim.g.vscode_snippets_path or '' })
-
-  -- snipmate format
-  local from_snipmate = require('luasnip/loaders/from_snipmate')
-  from_snipmate.load()
-  from_snipmate.lazy_load({ paths = vim.g.snipmate_snippets_path or '' })
-
-  -- lua format
-  local from_lua = require('luasnip/loaders/from_lua')
-  from_lua.load()
-  from_lua.lazy_load({ paths = vim.g.lua_snippets_path or '' })
-
   vim.api.nvim_create_autocmd('InsertLeave', {
     callback = function()
       local bufnr = vim.api.nvim_get_current_buf()

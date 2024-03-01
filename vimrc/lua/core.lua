@@ -148,4 +148,18 @@ function M.get_icon(filename)
   return devicons.get_icon_color(filename)
 end
 
+-- API
+--============================================================================
+M.api = {}
+
+-- LSP attach function using `LspAttach` event
+function M.api.on_lsp_attach(callback)
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+      callback(vim.lsp.get_client_by_id(ev.data.client_id), ev.buf)
+    end,
+  })
+end
+
 return M

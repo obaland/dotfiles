@@ -75,14 +75,6 @@ function M.on_attach(client, bufnr)
 	-- Disable formatting
 	client.server_capabilities.document_formatting = false
 
-	-- For nvim-navic to work, it needs attach to the lsp server.
-	local exists_navic, navic = pcall(require, "nvim-navic")
-	if exists_navic then
-		if client.supports_method("textDocument/documentSymbol") and not navic.is_available() then
-			navic.attach(client, bufnr)
-		end
-	end
-
 	-- For lsp_signature to work, it needs attach to the lsp server.
   require('lsp_signature').on_attach({
     hint_prefix = '󰛩 '
