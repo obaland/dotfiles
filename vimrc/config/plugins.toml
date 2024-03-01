@@ -22,13 +22,6 @@ repo = 'lewis6991/gitsigns.nvim'
 if = 'has("nvim-0.8.0")'
 lua_post_source = 'require("gitsigns").setup()'
 
-# Completion and code analysis
-#=============================================================================
-[[plugins]]
-repo = 'L3MON4D3/LuaSnip'
-if = 'has("nvim-0.7")'
-lua_post_source = 'require("plugins/luasnip").setup()'
-
 # Syntax
 #=============================================================================
 [[plugins]]
@@ -72,6 +65,65 @@ lua_post_source = '''
   require('telescope').load_extension('ui-select')
 '''
 
+# Completion and code analysis
+#=============================================================================
+[[plugins]]
+repo = 'williamboman/mason.nvim'
+if = 'has("nvim-0.7")'
+lua_post_source = '''
+  require("mason").setup({
+		ui = {
+      border = "rounded",
+			icons = {
+				package_installed = "✓",
+				package_pending = "➜",
+				package_uninstalled = "✗",
+			},
+		},
+  })
+'''
+
+[[plugins]]
+repo = 'williamboman/mason-lspconfig.nvim'
+depends = ['mason.nvim']
+lua_post_source = 'require("mason-lspconfig").setup()'
+
+[[plugins]]
+repo = 'folke/neodev.nvim'
+
+[[plugins]]
+repo = 'kosayoda/nvim-lightbulb'
+
+[[plugins]]
+repo = 'ray-x/lsp_signature.nvim'
+lua_post_source = 'require("lsp_signature").setup({})'
+
+[[plugins]]
+repo = 'SmiteshP/nvim-navic'
+if = 'has("nvim-0.7")'
+lua_post_source = 'require("nvim-navic").setup()'
+
+[[plugins]]
+repo = 'neovim/nvim-lspconfig'
+if = 'has("nvim-0.7")'
+depends = [
+  'mason.nvim',
+  'mason-lspconfig.nvim',
+  'neodev.nvim',
+  'nvim-lightbulb',
+  'nvim-navic',
+  'lsp_signature.nvim'
+]
+lua_post_source = 'require("plugins/lspconfig").setup()'
+
+[[plugins]]
+repo = 'L3MON4D3/LuaSnip'
+if = 'has("nvim-0.7")'
+lua_post_source = 'require("plugins/luasnip").setup()'
+
+[[plugins]]
+repo = 'rafamadriz/friendly-snippets'
+
 # Filer
 #=============================================================================
 [[plugins]]
@@ -88,3 +140,15 @@ repo = 'obaland/vfiler-column-devicons'
 repo = 'norcalli/nvim-colorizer.lua'
 if = 'has("nvim-0.4.0")'
 lua_post_source = 'require("colorizer").setup()'
+
+# Interface
+#=============================================================================
+[[plugins]]
+repo = 'rebelot/heirline.nvim'
+if = 'has("nvim-0.5")'
+depends = [
+  'gitsigns.nvim',
+  'nvim-navic',
+  'vfiler-column-devicons',
+]
+lua_post_source = 'require("plugins/heirline").setup()'

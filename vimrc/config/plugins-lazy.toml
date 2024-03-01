@@ -1,15 +1,4 @@
 [[plugins]]
-repo = 'rebelot/heirline.nvim'
-if = 'has("nvim-0.5")'
-on_event = 'BufEnter'
-depends = [
-  'gitsigns.nvim',
-  'nvim-navic',
-  'vfiler-column-devicons',
-]
-lua_source = 'require("plugins/heirline").setup()'
-
-[[plugins]]
 repo = 'itchyny/vim-cursorword'
 on_event = 'FileType'
 hook_add = 'let g:cursorword = 0'
@@ -60,65 +49,10 @@ lua_source = '''
 # Completion and code analysis
 #=============================================================================
 [[plugins]]
-repo = 'neovim/nvim-lspconfig'
-if = 'has("nvim-0.7")'
-on_event = 'BufEnter'
-lua_post_source = 'require("plugins/lspconfig").setup()'
-
-[[plugins]]
-repo = 'williamboman/mason.nvim'
-if = 'has("nvim-0.7")'
-on_source = 'nvim-lspconfig'
-lua_source = '''
-  require("mason").setup({
-		ui = {
-      border = "rounded",
-			icons = {
-				package_installed = "✓",
-				package_pending = "➜",
-				package_uninstalled = "✗",
-			},
-		},
-  })
-'''
-
-[[plugins]]
-repo = 'williamboman/mason-lspconfig.nvim'
-depends = ['nvim-lspconfig', 'mason.nvim']
-on_lua = 'mason-lspconfig'
-
-[[plugins]]
-repo = 'kosayoda/nvim-lightbulb'
-on_lua = 'nvim-lightbulb'
-
-[[plugins]]
-repo = 'folke/neodev.nvim'
-on_lua = 'neodev'
-
-[[plugins]]
-repo = 'ray-x/lsp_signature.nvim'
-on_source = 'nvim-lspconfig'
-lua_source = 'require("lsp_signature").setup({})'
-
-[[plugins]]
-repo = 'nvimtools/none-ls.nvim'
-if = 'has("nvim-0.7")'
-on_source = 'nvim-lspconfig'
-depends = ['plenary.nvim']
-lua_post_source = 'require("plugins/none-ls").setup()'
-
-[[plugins]]
-repo = 'SmiteshP/nvim-navic'
-if = 'has("nvim-0.7")'
-on_source = 'nvim-lspconfig'
-lua_source = 'require("nvim-navic").setup()'
-
-[[plugins]]
 repo = 'stevearc/aerial.nvim'
 if = 'has("nvim-0.8")'
 depends = ['nvim-lspconfig', 'nvim-treesitter', 'telescope.nvim']
 on_cmd = ['AerialToggle', 'AerialNavToggle', 'Telescope']
-on_lua = 'nvim-lspconfig'
 lua_source = '''
   require('aerial').setup({
     close_on_select = true,
@@ -147,7 +81,7 @@ depends = [
   'nvim-lspconfig',
   'LuaSnip'
 ]
-lua_post_source = 'require("plugins/cmp").setup()'
+lua_source = 'require("plugins/cmp").setup()'
 
 [[plugins]]
 repo = 'hrsh7th/cmp-nvim-lsp'
@@ -179,10 +113,6 @@ on_source = 'nvim-cmp'
 
 [[plugins]]
 repo = 'saadparwaiz1/cmp_luasnip'
-on_source = 'nvim-cmp'
-
-[[plugins]]
-repo = 'rafamadriz/friendly-snippets'
 on_source = 'nvim-cmp'
 
 [[plugins]]

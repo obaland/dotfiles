@@ -76,6 +76,7 @@ endfunction
 " Set augroup.
 augroup MyAutoCmd
   autocmd!
+  autocmd VimEnter * ++once call dein#call_hook('post_source')
   autocmd VimEnter * ++once ++nested call s:on_VimEnter()
   autocmd BufNewFile,BufRead *.xaml setf xml
 augroup END

@@ -83,6 +83,11 @@ function M.on_attach(client, bufnr)
 		end
 	end
 
+	-- For lsp_signature to work, it needs attach to the lsp server.
+  require('lsp_signature').on_attach({
+    hint_prefix = '󰛩 '
+  }, bufnr)
+
 	if client.config.flags then
 		client.config.flags.allow_incremental_sync = true
 		-- client.config.flags.debounce_text_changes  = vim.opt.updatetime:get()
@@ -114,6 +119,9 @@ function M.setup()
 			spacing = 4,
 			prefix = "●",
 		},
+    float = {
+      border = 'rounded',
+    },
 	})
 
 	-- Diagnostics signs and hightlights
@@ -125,7 +133,11 @@ function M.setup()
 
 	-- Configure LSP Handlers
 	-- Configure help hover handler
-	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+    vim.lsp.handlers.hover, {
+      border = "rounded"
+    }
+  )
 
 	-- Configure signature help handler
 	vim.lsp.handlers["textDocument/signatureHelp"] =
@@ -134,12 +146,8 @@ function M.setup()
 	-- Configuration Plugins
 	require("neodev").setup()
 
-	-- Setup language servers using mason and mason-lspconfig
-	local mason_lspconfig = require("mason-lspconfig")
-	mason_lspconfig.setup()
-
 	-- Setup language servers using nvim-lspconfig
-	local packages = mason_lspconfig.get_installed_servers()
+	local packages = require('mason-lspconfig').get_installed_servers()
 	local lspconfig = require("lspconfig")
 	for _, server in pairs(packages) do
 		local options = make_config(server)
@@ -162,8 +170,7 @@ function M.setup()
 	nmap("<C-j>", '<cmd>lua vim.diagnostic.goto_next()<CR>')
 
   -- See https://github.com/kosayoda/nvim-lightbulb
-	local lightbulb = require('nvim-lightbulb')
-	lightbulb.setup({
+	require('nvim-lightbulb').setup({
 		ignore = {
 			clients = { 'null-ls' },
 		},
