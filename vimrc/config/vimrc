@@ -27,6 +27,7 @@ function! s:on_VimEnter() abort
     return
   endif
   if dein#tap('vfiler.vim')
+    lua require('plugins/vfiler').setup()
     VFiler -auto-cd
   endif
 endfunction
@@ -75,7 +76,7 @@ endfunction
 " Set augroup.
 augroup MyAutoCmd
   autocmd!
-  autocmd VimEnter * ++nested call s:on_VimEnter()
+  autocmd VimEnter * ++once ++nested call s:on_VimEnter()
   autocmd BufNewFile,BufRead *.xaml setf xml
 augroup END
 
