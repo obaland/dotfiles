@@ -93,9 +93,11 @@ lua_source = 'require("mason-lspconfig").setup()'
 
 [[plugins]]
 repo = 'folke/neodev.nvim'
+lua_source = 'require("neodev").setup()'
 
 [[plugins]]
 repo = 'kosayoda/nvim-lightbulb'
+lua_source = 'require("nvim-lightbulb").setup()'
 
 [[plugins]]
 repo = 'ray-x/lsp_signature.nvim'

@@ -135,9 +135,6 @@ function M.setup()
 	vim.lsp.handlers["textDocument/signatureHelp"] =
 		vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
-	-- Configuration Plugins
-	require("neodev").setup()
-
 	-- Setup language servers using nvim-lspconfig
 	local packages = require('mason-lspconfig').get_installed_servers()
 	local lspconfig = require("lspconfig")
@@ -160,13 +157,6 @@ function M.setup()
 
 	nmap("<C-k>", '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 	nmap("<C-j>", '<cmd>lua vim.diagnostic.goto_next()<CR>')
-
-  -- See https://github.com/kosayoda/nvim-lightbulb
-	require('nvim-lightbulb').setup({
-		ignore = {
-			clients = { 'null-ls' },
-		},
-	})
 
 	vim.api.nvim_exec2(
 		[[
