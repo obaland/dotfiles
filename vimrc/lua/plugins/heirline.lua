@@ -399,7 +399,10 @@ local function statusline()
         if not current then
           return ''
         end
-        local num = ('[%3d/%3d] '):format(current.number, self.status.num_items)
+        local num = ('[%3d/%3d] '):format(
+          current.number,
+          self.status.num_items
+        )
         return num .. current.path
       end,
       hl = { fg = 'grayish_yellow' },

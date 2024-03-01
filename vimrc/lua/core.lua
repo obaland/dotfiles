@@ -1,6 +1,7 @@
 -- core.lua
 -----------
 
+-- stylua: ignore start
 local project_root_patterns = {
   ['.git']    = {is_dir = false},
   ['.git/']   = {is_dir = true},
@@ -9,17 +10,22 @@ local project_root_patterns = {
   ['.bzr/']   = {is_dir = true},
   ['.svn/']   = {is_dir = true},
 }
+-- stylua: ignore end
 
-vim.api.nvim_exec([[
-augroup core_lua_cache
-	autocmd!
-	autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost *
-        \ unlet! b:core_project_dir |
-        \ unlet! b:core_project_dir_last_cwd
-augroup END
-]], false)
+vim.api.nvim_exec(
+  [[
+    augroup core_lua_cache
+      autocmd!
+      autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost *
+            \ unlet! b:core_project_dir |
+            \ unlet! b:core_project_dir_last_cwd
+    augroup END
+  ]],
+  false
+)
 
 -- Color table based on "solarized dark"
+-- stylua: ignore start
 local colors = {
   base03    = '#002b36',
   base02    = '#073642',
@@ -47,6 +53,7 @@ local colors = {
   very_dark_cyan = '#00333f',
   russian_blue = '#002832',
 }
+-- stylua: ignore end
 
 local M = {}
 
@@ -55,9 +62,8 @@ local is_win = vim.fn['core#is_windows']
 local is_mac = vim.fn['core#is_mac']
 
 local function find(name, dir, comp)
-  local names = vim.split(
-    M.normalize_path(dir), '/', {plain = true, trimempty = true}
-  )
+  local names =
+    vim.split(M.normalize_path(dir), '/', { plain = true, trimempty = true })
   while #names > 0 do
     local current = table.concat(names, '/')
     if comp(current .. '/' .. name) == 1 then
@@ -77,12 +83,10 @@ local function findfile(name, dir)
 end
 
 local function project_root(bufnr, cwd)
-  local dir_ok, dir = pcall(
-    vim.api.nvim_buf_get_var, bufnr, 'core_project_dir'
-  )
-  local dir_last_cwd_ok, dir_last_cwd = pcall(
-    vim.api.nvim_buf_get_var, bufnr, 'core_project_dir_last_cwd'
-  )
+  local dir_ok, dir =
+    pcall(vim.api.nvim_buf_get_var, bufnr, 'core_project_dir')
+  local dir_last_cwd_ok, dir_last_cwd =
+    pcall(vim.api.nvim_buf_get_var, bufnr, 'core_project_dir_last_cwd')
   if (dir_ok and dir_last_cwd_ok) and dir_last_cwd == cwd then
     return dir
   end
@@ -127,9 +131,7 @@ function M.project_root_bufname(bufnr)
   if vim.fn.filereadable(bufname) ~= 1 then
     return M.project_root(bufnr)
   end
-  return project_root(
-    bufnr, vim.fn.fnamemodify(bufname, ':p:h')
-  )
+  return project_root(bufnr, vim.fn.fnamemodify(bufname, ':p:h'))
 end
 
 -- Get color table
@@ -153,9 +155,9 @@ end
 M.api = {}
 
 -- LSP attach function using `LspAttach` event
-function M.api.on_lsp_attach(callback)
+function M.api.on_lsp_attach(group, callback)
   vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    group = vim.api.nvim_create_augroup(group, {}),
     callback = function(ev)
       callback(vim.lsp.get_client_by_id(ev.data.client_id), ev.buf)
     end,

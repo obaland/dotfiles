@@ -272,8 +272,8 @@ function M.setup()
         -- Display symbols as <root>.<parent>.<symbol>
         show_nesting = {
           ['_'] = false,
-        }
-      }
+        },
+      },
     },
   })
 end

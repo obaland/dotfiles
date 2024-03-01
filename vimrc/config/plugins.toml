@@ -9,4 +9,23 @@ repo = 'Shougo/dein.vim'
 [[plugins]]
 repo = 'L3MON4D3/LuaSnip'
 if = 'has("nvim-0.7")'
-lua_post_source = 'require("plugins/luasnip").setup()'
+lua_post_source = '''
+  local luasnip = require('luasnip')
+  luasnip.config.set_config({
+    history = true,
+    updateevents = 'TextChanged,TextChangedI',
+  })
+
+  vim.api.nvim_create_autocmd('InsertLeave', {
+    group = vim.api.nvim_create_augroup('user_luasnip', {}),
+    callback = function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      if
+        luasnip.session.current_nodes[bufnr]
+        and not luasnip.session.jump_active
+      then
+        luasnip.unlink_current()
+      end
+    end,
+  })
+'''
