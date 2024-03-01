@@ -17,6 +17,11 @@ repo = 'rcarriga/nvim-notify'
 if = 'has("nvim-0.5")'
 lua_post_source = 'require("notify").setup()'
 
+[[plugins]]
+repo = 'lewis6991/gitsigns.nvim'
+if = 'has("nvim-0.8.0")'
+lua_post_source = 'require("gitsigns").setup()'
+
 # Completion and code analysis
 #=============================================================================
 [[plugins]]

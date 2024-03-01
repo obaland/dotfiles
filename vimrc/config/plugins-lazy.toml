@@ -57,12 +57,6 @@ lua_source = '''
   })
 '''
 
-[[plugins]]
-repo = 'lewis6991/gitsigns.nvim'
-if = 'has("nvim-0.8.0")'
-on_event = 'BufEnter'
-lua_source = 'require("gitsigns").setup()'
-
 # Completion and code analysis
 #=============================================================================
 [[plugins]]
