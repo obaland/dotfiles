@@ -276,10 +276,6 @@ function M.setup()
       }
     },
   })
-
-  -- Load extensions
-  telescope.load_extension('ui-select')
-  telescope.load_extension('aerial')
 end
 
 return M

@@ -54,6 +54,24 @@ lua_add = 'vim.g.skip_ts_context_commentstring_module = true'
 repo = 'windwp/nvim-ts-autotag'
 depends = ['nvim-treesitter']
 
+# Finder
+#=============================================================================
+[[plugins]]
+repo = 'nvim-telescope/telescope.nvim'
+rev = '0.1.x'
+if = 'has("nvim-0.7")'
+depends = ['plenary.nvim', 'nvim-web-devicons']
+lua_post_source = 'require("plugins/telescope").setup()'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope-ui-select.nvim'
+if = 'has("nvim-0.7")'
+depends = ['telescope.nvim']
+lua_post_source = '''
+  -- Load extensions for telescope.nvim
+  require('telescope').load_extension('ui-select')
+'''
+
 # Filer
 #=============================================================================
 [[plugins]]

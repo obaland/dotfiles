@@ -115,6 +115,31 @@ on_source = 'nvim-lspconfig'
 lua_source = 'require("nvim-navic").setup()'
 
 [[plugins]]
+repo = 'stevearc/aerial.nvim'
+if = 'has("nvim-0.8")'
+depends = ['nvim-lspconfig', 'nvim-treesitter', 'telescope.nvim']
+on_cmd = ['AerialToggle', 'AerialNavToggle', 'Telescope']
+on_lua = 'nvim-lspconfig'
+lua_source = '''
+  require('aerial').setup({
+    close_on_select = true,
+    keymaps = {
+      ['<Esc>'] = 'actions.close',
+    },
+    nav = {
+      preview = true,
+      keymaps = {
+        ['q'] = 'actions.close',
+        ['<Esc>'] = 'actions.close',
+      }
+    }
+  })
+
+  -- Load extensions for telescope.nvim
+  require('telescope').load_extension('aerial')
+'''
+
+[[plugins]]
 repo = 'hrsh7th/nvim-cmp'
 if = 'has("nvim-0.5")'
 on_event = ['InsertEnter', 'CmdlineEnter']
@@ -202,43 +227,6 @@ repo = 'sindrets/diffview.nvim'
 if = 'has("nvim-0.5")'
 on_cmd = ['DiffviewOpen', 'DiffviewFileHistory']
 lua_post_source = 'require("plugins/diffview").setup()'
-
-[[plugins]]
-repo = 'nvim-telescope/telescope.nvim'
-rev = '0.1.x'
-if = 'has("nvim-0.7")'
-depends = ['plenary.nvim', 'nvim-web-devicons']
-on_cmd = 'Telescope'
-on_lua = 'telescope'
-lua_source = 'require("plugins/telescope").setup()'
-
-[[plugins]]
-repo = 'nvim-telescope/telescope-ui-select.nvim'
-if = 'has("nvim-0.7")'
-depends = ['telescope.nvim']
-on_lua = 'telescope'
-
-[[plugins]]
-repo = 'stevearc/aerial.nvim'
-if = 'has("nvim-0.8")'
-depends = ['telescope.nvim']
-on_cmd = ['AerialToggle', 'AerialNavToggle', 'Telescope']
-on_lua = 'telescope'
-lua_source = '''
-  require('aerial').setup({
-    close_on_select = true,
-    keymaps = {
-      ['<Esc>'] = 'actions.close',
-    },
-    nav = {
-      preview = true,
-      keymaps = {
-        ['q'] = 'actions.close',
-        ['<Esc>'] = 'actions.close',
-      }
-    }
-  })
-'''
 
 [[plugins]]
 repo = 'mattn/emmet-vim'
