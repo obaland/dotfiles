@@ -13,6 +13,13 @@ repo = 'nvim-tree/nvim-web-devicons'
 if = 'has("nvim-0.7.0")'
 
 [[plugins]]
+repo = 'rcarriga/nvim-notify'
+if = 'has("nvim-0.5")'
+lua_post_source = 'require("notify").setup()'
+
+# Completion and code analysis
+#=============================================================================
+[[plugins]]
 repo = 'L3MON4D3/LuaSnip'
 if = 'has("nvim-0.7")'
 lua_post_source = 'require("plugins/luasnip").setup()'
