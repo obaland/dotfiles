@@ -29,6 +29,31 @@ repo = 'L3MON4D3/LuaSnip'
 if = 'has("nvim-0.7")'
 lua_post_source = 'require("plugins/luasnip").setup()'
 
+# Syntax
+#=============================================================================
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+if = 'has("nvim-0.7")'
+hook_post_update = ':TSUpdate'
+lua_post_source = 'require("plugins/treesitter").setup()'
+
+[[plugins]]
+repo = 'nvim-treesitter/playground'
+depends = ['nvim-treesitter']
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter-textobjects'
+depends = ['nvim-treesitter']
+
+[[plugins]]
+repo = 'JoosepAlviste/nvim-ts-context-commentstring'
+depends = ['nvim-treesitter']
+lua_add = 'vim.g.skip_ts_context_commentstring_module = true'
+
+[[plugins]]
+repo = 'windwp/nvim-ts-autotag'
+depends = ['nvim-treesitter']
+
 # Filer
 #=============================================================================
 [[plugins]]
