@@ -1,12 +1,4 @@
 [[plugins]]
-repo = 'nvim-lua/plenary.nvim'
-if = 'has("nvim-0.5")'
-
-[[plugins]]
-repo = 'nvim-tree/nvim-web-devicons'
-if = 'has("nvim-0.7.0")'
-
-[[plugins]]
 repo = 'rebelot/heirline.nvim'
 if = 'has("nvim-0.5")'
 on_event = 'BufEnter'
@@ -98,7 +90,7 @@ on_event = 'BufEnter'
 lua_source = 'require("gitsigns").setup()'
 
 # Completion and code analysis
-#==============================
+#=============================================================================
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
 if = 'has("nvim-0.7")'
@@ -329,20 +321,8 @@ lua_source = '''
   })
 '''
 
-# Filer
-#=======
-[[plugins]]
-repo = 'obaland/vfiler.vim'
-on_cmd = 'VFiler'
-on_lua = 'vfiler'
-depends = ['vfiler-column-devicons']
-lua_source = 'require("plugins/vfiler").setup()'
-
-[[plugins]]
-repo = 'obaland/vfiler-column-devicons'
-
 # Syntax
-#========
+#=============================================================================
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter'
 if = 'has("nvim-0.7")'
@@ -370,7 +350,7 @@ repo = 'windwp/nvim-ts-autotag'
 on_source = 'nvim-treesitter'
 
 # Operators and text objects
-#============================
+#=============================================================================
 [[plugins]]
 repo = 'machakann/vim-sandwich'
 on_map = {nxo = ['<Plug>(sandwich-', '<Plug>(operator-sandwich-,', '<Plug>(textobj-sandwich-']}
@@ -400,15 +380,7 @@ on_map = {n = '<Plug>Dsf'}
 hook_add = 'let g:dsf_no_mappings = 1'
 
 # Utility
-#=========
-[[plugins]]
-repo = 'norcalli/nvim-colorizer.lua'
-if = 'has("nvim-0.4.0")'
-on_event = 'BufEnter'
-lua_source = '''
-require("colorizer").setup()
-'''
-
+#=============================================================================
 [[plugins]]
 repo = 'iamcco/markdown-preview.nvim'
 on_cmd = 'MarkdownPreview'

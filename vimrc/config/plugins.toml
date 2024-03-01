@@ -5,6 +5,31 @@ repo = 'Shougo/dein.vim'
 repo = 'vim-jp/vimdoc-ja'
 
 [[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+if = 'has("nvim-0.5")'
+
+[[plugins]]
+repo = 'nvim-tree/nvim-web-devicons'
+if = 'has("nvim-0.7.0")'
+
+[[plugins]]
 repo = 'L3MON4D3/LuaSnip'
 if = 'has("nvim-0.7")'
 lua_post_source = 'require("plugins/luasnip").setup()'
+
+# Filer
+#=============================================================================
+[[plugins]]
+repo = 'obaland/vfiler.vim'
+depends = ['vfiler-column-devicons']
+lua_post_source = 'require("plugins/vfiler").setup()'
+
+[[plugins]]
+repo = 'obaland/vfiler-column-devicons'
+
+# Utility
+#=============================================================================
+[[plugins]]
+repo = 'norcalli/nvim-colorizer.lua'
+if = 'has("nvim-0.4.0")'
+lua_post_source = 'require("colorizer").setup()'
