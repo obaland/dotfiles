@@ -169,7 +169,7 @@ lua_source = '''
 [[plugins]]
 repo = 'hrsh7th/nvim-cmp'
 if = 'has("nvim-0.5")'
-on_event = ['InsertEnter', 'CmdlineEnter']
+on_event = ['BufEnter']
 depends = [
   'nvim-autopairs',
   'nvim-lspconfig',
@@ -208,6 +208,30 @@ on_source = 'nvim-cmp'
 [[plugins]]
 repo = 'saadparwaiz1/cmp_luasnip'
 on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'L3MON4D3/LuaSnip'
+if = 'has("nvim-0.7")'
+lua_post_source = '''
+  local luasnip = require('luasnip')
+  luasnip.config.set_config({
+    history = true,
+    updateevents = 'TextChanged,TextChangedI',
+  })
+
+  vim.api.nvim_create_autocmd('InsertLeave', {
+    group = vim.api.nvim_create_augroup('user_luasnip', {}),
+    callback = function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      if
+        luasnip.session.current_nodes[bufnr]
+        and not luasnip.session.jump_active
+      then
+        luasnip.unlink_current()
+      end
+    end,
+  })
+'''
 
 [[plugins]]
 repo = 'rafamadriz/friendly-snippets'

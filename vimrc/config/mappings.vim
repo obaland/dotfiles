@@ -33,8 +33,8 @@ if dein#tap('telescope.nvim')
   nnoremap <leader>bb <cmd>Telescope buffers<CR>
   nnoremap <leader>hl <cmd>Telescope highlights<CR>
   nnoremap <leader>v <cmd>Telescope registers<CR>
-	nnoremap <leader>; <cmd>Telescope command_history<CR>
-	nnoremap <leader>/ <cmd>Telescope search_history<CR>
+  nnoremap <leader>; <cmd>Telescope command_history<CR>
+  nnoremap <leader>/ <cmd>Telescope search_history<CR>
 
   " Grep
   nnoremap <leader>gg <cmd>lua require('plugins/telescope').grep()<CR>
@@ -123,8 +123,8 @@ endif
 " splitjoin.vim
 " -------------
 if dein#tap('splitjoin.vim')
-	nmap sj <cmd>SplitjoinJoin<CR>
-	nmap ss <cmd>SplitjoinSplit<CR>
+  nmap sj <cmd>SplitjoinJoin<CR>
+  nmap ss <cmd>SplitjoinSplit<CR>
 endif
 
 " linediff.vim
@@ -156,15 +156,17 @@ endif
 " which-key.nvim
 " --------------
 if dein#tap('which-key.nvim')
-  nnoremap <leader>ww <cmd>WhichKey<CR>
-  nnoremap <leader>wn <cmd>WhichKey '' n<CR>
-  nnoremap <leader>wi <cmd>WhichKey '' i<CR>
-  nnoremap <leader>wv <cmd>WhichKey '' v<CR>
+  nnoremap <leader>kk <cmd>WhichKey<CR>
+  nnoremap <leader>kn <cmd>WhichKey '' n<CR>
+  nnoremap <leader>ki <cmd>WhichKey '' i<CR>
+  nnoremap <leader>kv <cmd>WhichKey '' v<CR>
 endif
 
 " vfiler.vim
 " ----------
 if dein#tap('vfiler.vim')
+  noremap <silent><leader>F <cmd>VFiler<CR>
+
   " Explorer view by vfiler.vim.
   noremap <silent><leader>e <cmd>lua
         \ require('plugins/vfiler').start_exprolorer()<CR>

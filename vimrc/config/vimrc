@@ -27,8 +27,7 @@ function! s:on_VimEnter() abort
     return
   endif
   if dein#tap('vfiler.vim')
-    lua require('plugins/vfiler').setup()
-    VFiler -auto-cd
+    VFiler
   endif
 endfunction
 

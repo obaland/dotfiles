@@ -13,6 +13,7 @@ function M.setup()
 
   require('vfiler/config').setup({
     options = {
+      auto_cd = true,
       columns = 'indent,devicons,name,mode,size,time',
       session = 'share',
     },
@@ -24,7 +25,6 @@ function M.start_exprolorer()
 
   local configs = {
     options = {
-      auto_cd = true,
       auto_resize = true,
       find_file = true,
       header = false,

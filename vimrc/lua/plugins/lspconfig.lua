@@ -51,57 +51,33 @@ function M.on_attach(client, bufnr)
     return
   end
 
-  -- Keyboard mappings
-  local opts = { noremap = true, silent = true }
-  map_buf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-
   -- Disable diagnostics if buffer/global indicator is on
   if vim.b[bufnr].diagnostic_disabled or vim.g.diagnostic_disabled then
     vim.diagnostic_disable(bufnr)
   end
 
+  -- Keyboard mappings
+  -- stylua: ignore start
+  local opts = { noremap = true, silent = true }
+  map_buf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   map_buf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   map_buf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   map_buf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   map_buf('n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   map_buf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   map_buf('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  map_buf('n', ',wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  map_buf(
-    'n',
-    ',wr',
-    '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>',
-    opts
-  )
-  map_buf(
-    'n',
-    ',wl',
-    '<cmd>lua =vim.lsp.buf.list_workspace_folders()<CR>',
-    opts
-  )
+  map_buf('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  map_buf('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  map_buf('n', '<leader>wl', '<cmd>lua =vim.lsp.buf.list_workspace_folders()<CR>', opts)
   map_buf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   map_buf('n', '<Leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   map_buf('x', '<Leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  map_buf(
-    'n',
-    '<Leader>ce',
-    '<cmd>lua vim.diagnostic.open_float({source=true})<CR>',
-    opts
-  )
+  map_buf('n', '<Leader>ce', '<cmd>lua vim.diagnostic.open_float({source=true})<CR>', opts)
 
   -- Call hierarchy
-  map_buf(
-    'n',
-    '<Leader>ci',
-    '<cmd>lua vim.lsp.buf.incoming_calls()<CR>',
-    opts
-  )
-  map_buf(
-    'n',
-    '<Leader>co',
-    '<cmd>lua vim.lsp.buf.outgoing_calls()<CR>',
-    opts
-  )
+  map_buf('n', '<Leader>ci', '<cmd>lua vim.lsp.buf.incoming_calls()<CR>', opts)
+  map_buf('n', '<Leader>co', '<cmd>lua vim.lsp.buf.outgoing_calls()<CR>', opts)
+  -- stylua: ignore end
 
   -- Disable formatting
   client.server_capabilities.document_formatting = false
