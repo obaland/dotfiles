@@ -419,7 +419,10 @@ local function statusline()
     {
       provider = function()
         local registry = require('mason-registry')
-        return 'Installed: ' .. #registry.get_installed_packages() .. '/' .. #registry.get_all_package_specs()
+        return ("Installed: %d/%d"):format(
+          #registry.get_installed_packages(),
+          #registry.get_all_package_specs()
+        )
       end,
       hl = { fg = 'grayish_yellow' },
     },
