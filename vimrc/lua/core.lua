@@ -9,20 +9,20 @@ local project_root_patterns = {
   ['.hg/']    = {is_dir = true},
   ['.bzr/']   = {is_dir = true},
   ['.svn/']   = {is_dir = true},
+  ['.vs/']    = {is_dir = true},
 }
--- stylua: ignore end
 
-vim.api.nvim_exec(
+-- NOTE: vim compatibility
+local command = vim.fn.has('nvim') and vim.cmd or vim.command
+command(
   [[
-    augroup core_lua_cache
+    augroup user_cache
       autocmd!
-      autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost *
-            \ unlet! b:core_project_dir |
-            \ unlet! b:core_project_dir_last_cwd
+      autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost * unlet! b:core_project_dir | unlet! b:core_project_dir_last_cwd
     augroup END
-  ]],
-  false
+  ]]
 )
+-- stylua: ignore end
 
 -- Color table based on "solarized dark"
 -- stylua: ignore start
@@ -62,8 +62,8 @@ local is_win = vim.fn['core#is_windows']
 local is_mac = vim.fn['core#is_mac']
 
 local function find(name, dir, comp)
-  local names =
-    vim.split(M.normalize_path(dir), '/', { plain = true, trimempty = true })
+  -- NOTE: vim compatibility
+  local names = vim.fn.split(M.normalize_path(dir), '/')
   while #names > 0 do
     local current = table.concat(names, '/')
     if comp(current .. '/' .. name) == 1 then
@@ -83,21 +83,20 @@ local function findfile(name, dir)
 end
 
 local function project_root(bufnr, cwd)
-  local dir_ok, dir =
-    pcall(vim.api.nvim_buf_get_var, bufnr, 'core_project_dir')
-  local dir_last_cwd_ok, dir_last_cwd =
-    pcall(vim.api.nvim_buf_get_var, bufnr, 'core_project_dir_last_cwd')
-  if (dir_ok and dir_last_cwd_ok) and dir_last_cwd == cwd then
-    return dir
+  -- NOTE: vim compatibility
+  local exists = vim.fn.exists('b:core_project_dir')
+    and vim.fn.exists('b:core_project_dir_last_cwd')
+  if exists and vim.b.core_project_dir_last_cwd == cwd then
+    return vim.b.core_project_dir
   end
 
-  dir = ''
+  local dir = ''
   for pattern, property in pairs(project_root_patterns) do
     local fn_find = property.is_dir and finddir or findfile
     dir = fn_find(pattern, cwd)
     if #dir > 0 then
-      vim.api.nvim_buf_set_var(bufnr, 'core_project_dir', dir)
-      vim.api.nvim_buf_set_var(bufnr, 'core_project_dir_last_cwd', cwd)
+      vim.b.core_project_dir = dir
+      vim.b.core_project_dir_last_cwd = cwd
       return dir
     end
   end
@@ -155,9 +154,9 @@ end
 M.api = {}
 
 -- LSP attach function using `LspAttach` event
-function M.api.on_lsp_attach(group, callback)
+function M.api.on_lsp_attach(callback, group)
   vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup(group, {}),
+    group = group,
     callback = function(ev)
       callback(vim.lsp.get_client_by_id(ev.data.client_id), ev.buf)
     end,

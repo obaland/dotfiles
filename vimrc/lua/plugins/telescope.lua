@@ -102,12 +102,15 @@ local function height_dropdown_nopreview(_, _, rows)
 end
 
 -- Enable indent-guides in telescope preview
-vim.cmd([[
-	augroup telescope_events
-		autocmd!
-		autocmd User TelescopePreviewerLoaded setlocal wrap list number
-	augroup END
-]])
+vim.api.nvim_create_autocmd('User', {
+  group = vim.api.nvim_create_augroup('telescope_events', {}),
+  pattern = 'TelescopePreviewerLoaded',
+  callback = function(_)
+    vim.opt_local.wrap = true
+    vim.opt_local.list = true
+    vim.opt_local.number = true
+  end,
+})
 
 -- Setup
 function M.setup()

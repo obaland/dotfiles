@@ -46,3 +46,5 @@ function! core#error(message, ...) abort
     echohl ErrorMsg | echomsg l:prefix . ' ' . l:message | echohl None
   endfor
 endfunction
+
+" vim:set ft=vim sw=2 sts=2 et:

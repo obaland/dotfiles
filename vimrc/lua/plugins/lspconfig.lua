@@ -2,28 +2,25 @@
 -- see: https://github.com/neovim/nvim-lspconfig
 --      https://github.com/williamboman/mason.nvim
 --      https://github.com/williamboman/mason-lspconfig.nvim
---      https://github.com/kosayoda/nvim-lightbulb
+
+local core = require('core')
 
 local M = {}
 
-local augroup_lsp_document_highlight =
-  vim.api.nvim_create_augroup('lsp_document_highlight', {})
+local augroup = vim.api.nvim_create_augroup('user_lspconfig', {})
 
 -- Combine base config for each server
 local function make_config(server)
   -- Setup base config for each server.
-  local options = {}
-  options.on_attach = M.on_attach
-
-  local exists, module = pcall(require, 'cmp_nvim_lsp')
-  if exists then
-    options.capabilities = module.default_capabilities()
-  end
+  local options = {
+    capabilities = vim.lsp.protocol.make_client_capabilities(),
+    --on_attach = M.on_attach,
+  }
 
   -- Merge user-defined lsp settings.
-  exists, module = pcall(require, 'lsp/' .. server)
-  if exists then
-    local user_config = module.config(options)
+  local ok, user_lsp = pcall(require, 'lsp/' .. server)
+  if ok then
+    local user_config = user_lsp.config(options)
     for key, value in pairs(user_config) do
       options[key] = value
     end
@@ -32,7 +29,7 @@ local function make_config(server)
 end
 
 -- Buffer attached
-function M.on_attach(client, bufnr)
+local function on_attach(client, bufnr)
   local function map_buf(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -90,14 +87,14 @@ function M.on_attach(client, bufnr)
   -- Set autocommands conditional on server capabilities
   if client.supports_method('textDocument/documentHighlight') then
     vim.api.nvim_create_autocmd('CursorHold', {
-      group = augroup_lsp_document_highlight,
+      group = augroup,
       callback = function(_)
         vim.lsp.buf.document_highlight()
       end,
       buffer = bufnr,
     })
     vim.api.nvim_create_autocmd('CursorMoved', {
-      group = augroup_lsp_document_highlight,
+      group = augroup,
       callback = function(_)
         vim.lsp.buf.clear_references()
       end,
@@ -167,19 +164,15 @@ function M.setup()
   nmap('<C-k>', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
   nmap('<C-j>', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 
-  local augroup = vim.api.nvim_create_augroup('user_lspconfig', {})
-  vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-    group = augroup,
-    callback = function(_)
-      require('nvim-lightbulb').update_lightbulb()
-    end,
-  })
   vim.api.nvim_create_autocmd('DiagnosticChanged', {
     group = augroup,
     callback = function(_)
       vim.diagnostic.setloclist({ open = false })
     end,
   })
+
+  -- Create an attach event for each LSP.
+  core.api.on_lsp_attach(on_attach, augroup)
 end
 
 return M

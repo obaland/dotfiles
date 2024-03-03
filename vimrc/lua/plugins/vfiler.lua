@@ -1,9 +1,11 @@
 -- plugin: vfiler.vim
 -- see: https://github.com/obaland/vfiler.vim
 
-local exprolorer_bufnrs = {}
+local core = require('core')
 
 local M = {}
+
+local exprolorer_bufnrs = {}
 
 function M.setup()
   -- column settings
@@ -48,7 +50,7 @@ function M.start_exprolorer()
     },
   }
 
-  local path = vim.fn.bufname(vim.fn.bufnr())
+  local path = core.project_root(vim.fn.bufnr())
   if vim.fn.isdirectory(path) ~= 1 then
     path = vim.fn.getcwd()
   end

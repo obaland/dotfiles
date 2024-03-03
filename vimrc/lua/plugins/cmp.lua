@@ -219,10 +219,6 @@ function M.setup()
   cmp.setup.cmdline(':', {
     sources = cmp_get_sources({ 'path', 'cmdline' }),
   })
-
-  -- Insert `(` after select function or method item.
-  local autopairs = require('nvim-autopairs/completion/cmp')
-  cmp.event:on('confirm_done', autopairs.on_confirm_done())
 end
 
 return M

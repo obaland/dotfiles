@@ -171,8 +171,10 @@ if dein#tap('vfiler.vim')
   noremap <silent><leader>e <cmd>lua
         \ require('plugins/vfiler').start_exprolorer()<CR>
 
-  " Floating view by vfiler.vim.
-  noremap <silent><leader>E <cmd>VFiler -layout=floating<CR>
+  if has('nvim')
+    " Floating view by vfiler.vim.
+    noremap <silent><leader>E <cmd>VFiler -layout=floating<CR>
+  endif
 endif
 
 " nvim-treesitter

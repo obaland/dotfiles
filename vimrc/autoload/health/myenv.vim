@@ -1,7 +1,5 @@
-"-------------------------------------------------------------------------
 " myenv.vim
-
-let s:is_windows = has('win32') || has('win64')
+"=============================================================================
 
 function! s:check_command(command) abort
   let l:msg = a:command.name . ' [' . a:command.desc . ']'
@@ -12,7 +10,7 @@ function! s:check_command(command) abort
     return v:true
   endif
 
-  let l:guide = s:is_windows ? a:command.guide_win :
+  let l:guide = core#is_window() ? a:command.guide_win :
         \ has('mac') ? a:command.guide_mac : a:command.guide_unix
   call health#report_warn(
         \ printf('%s - Not Executable', a:command.name),
@@ -36,7 +34,7 @@ endfunction
 function! s:check_configuration() abort
   let l:configs = {}
 
-  if has('nvim') && s:is_windows
+  if has('nvim') && core#is_window()
     let l:configs['$VIM_PYTHON_PROG_ROOT'] = 'the Root direcotry path of python2 executable program.'
     let l:configs['$VIM_PYTHON3_PROG_ROOT'] = 'the Root direcotry path of python3 executable program.'
   endif
@@ -81,16 +79,6 @@ function! s:check_commands() abort
     call add(l:commands, l:ag)
   endif
 
-  " bat
-  let l:bat = {
-        \ 'name': 'bat',
-        \ 'desc': 'A cat(1) clone with syntax highlighting and Git integration. (https://github.com/sharkdp/bat)',
-        \ 'guide_win': 'choco install bat',
-        \ 'guide_mac': 'brew install bat',
-        \ 'guide_unix': 'apt install bat',
-        \ }
-  call add(l:commands, l:bat)
-
   for l:command in l:commands
     call s:check_command(l:command)
   endfor
@@ -108,3 +96,5 @@ function! health#myenv#check() abort
     execute('call ' . l:check[1] . '()')
   endfor
 endfunction
+
+" vim:set ft=vim sw=2 sts=2 et:
