@@ -16,7 +16,13 @@ function M.setup()
     },
   }
 
+  -- Parser install directory settings.
+  local install_dir = vim.fn.stdpath('data') .. '/treesitter'
+  vim.opt.runtimepath:append(install_dir)
+
   require('nvim-treesitter.configs').setup({
+    parser_install_dir = install_dir,
+
     highlight = {
       enable = true,
       additional_vim_regex_highlighting = false,
