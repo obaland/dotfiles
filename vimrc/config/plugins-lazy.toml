@@ -102,6 +102,13 @@ depends = [
 lua_source = 'require("plugins/lspconfig").setup()'
 
 [[plugins]]
+repo = 'nvimtools/none-ls.nvim'
+if = 'has("nvim-0.5")'
+depends = ['plenary.nvim']
+on_event = ['BufRead']
+lua_source = 'require("plugins/none-ls").setup()'
+
+[[plugins]]
 repo = 'folke/neodev.nvim'
 on_lua = 'lspconfig'
 lua_source = 'require("neodev").setup()'
