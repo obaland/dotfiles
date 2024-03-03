@@ -7,14 +7,11 @@ local M = {}
 local special_filetypes = {
   aerial = { icon = '', name = 'Outline' },
   ['aerial-nav'] = { icon = '󱣱', name = 'Navigation' },
-  vfiler = { icon = '', name = 'vfiler' },
   undotree = { icon = '', name = 'undotree' },
-  qf = { icon = '', name = 'List' },
   TelescopePrompt = { icon = '', name = 'Telescope' },
   Trouble = { icon = '', name = 'Trouble' },
   DiffviewFiles = { icon = '', name = 'DiffviewFiles' },
   NeogitStatus = { icon = '', name = 'NeogitStatus' },
-  ['mason.nvim'] = { icon = '', name = 'Mason' },
   spectre_panel = { icon = '', name = 'Spectre' },
 }
 
@@ -410,6 +407,28 @@ local function statusline()
     component.align(),
   }
 
+  -- Extension: Mason
+  local extension_mason = {
+    condition = function()
+      return conditions.buffer_matches({ filetype = { 'mason' } })
+    end,
+    {
+      surround({ provider = ' Mason' }),
+    },
+    component.border(),
+    {
+      provider = function()
+        local registry = require('mason-registry')
+        return 'Installed: ' .. #registry.get_installed_packages() .. '/' .. #registry.get_all_package_specs()
+      end,
+      hl = { fg = 'grayish_yellow' },
+    },
+    component.align(),
+    surround({
+      provider = line_count_format(),
+    }),
+  }
+
   -- Extension: Quickfix
   local extension_quickfix = {
     condition = function()
@@ -419,13 +438,16 @@ local function statusline()
       self.is_loclist = vim.fn.getloclist(0, { filewinid = 1 }).filewinid ~= 0
     end,
     {
-      provider = function(self)
-        local pad = vim.g.global_symbol_padding or ' '
-        local q = ' ' .. pad
-        local l = ' ' .. pad
-        return self.is_loclist and l .. 'Location List'
-          or q .. 'Quickfix List'
-      end,
+      surround({
+        provider = function(self)
+          local pad = vim.g.global_symbol_padding or ' '
+          local q = ' ' .. pad
+          local l = ' ' .. pad
+          return self.is_loclist and l .. 'Location List'
+            or q .. 'Quickfix List'
+        end,
+      }),
+      hl = { fg = 'blue' },
     },
     component.border(),
     {
@@ -471,6 +493,7 @@ local function statusline()
     hl = { bg = 'base02' },
     fallthrough = false,
     extension_vfiler,
+    extension_mason,
     extension_quickfix,
     extension_line_count,
     components,
@@ -480,18 +503,23 @@ end
 local function winbar()
   return {
     {
+      provider = ' ',
+      hl = 'WinbarLspClientName',
+    },
+    {
       init = function(self)
-        local bufnr = vim.api.nvim_get_current_buf()
-        self.clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+        self.bufnr = vim.api.nvim_get_current_buf()
       end,
       provider = function(self)
-        local name
-        if #self.clients == 0 then
-          name = '[No Active Lsp]'
-        else
-          name = self.clients[1].name
+        local clients = vim.lsp.get_active_clients({ bufnr = self.bufnr })
+        if #clients > 0 then
+          for _, client in ipairs(clients) do
+            if client.name ~= 'null-ls' then
+              return client.name
+            end
+          end
         end
-        return ' ' .. name
+        return '[No Active Lsp]'
       end,
       hl = 'WinbarLspClientName',
     },
