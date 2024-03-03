@@ -14,13 +14,12 @@ local function make_config(server)
   -- Setup base config for each server.
   local options = {
     capabilities = vim.lsp.protocol.make_client_capabilities(),
-    --on_attach = M.on_attach,
   }
 
   -- Merge user-defined lsp settings.
   local ok, user_lsp = pcall(require, 'lsp/' .. server)
   if ok then
-    local user_config = user_lsp.config(options)
+    local user_config = user_lsp.make_config(options)
     for key, value in pairs(user_config) do
       options[key] = value
     end
@@ -138,9 +137,9 @@ function M.setup()
     vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
   -- Setup language servers using nvim-lspconfig
-  local packages = require('mason-lspconfig').get_installed_servers()
+  local servers = require('mason-lspconfig').get_installed_servers()
   local lspconfig = require('lspconfig')
-  for _, server in pairs(packages) do
+  for _, server in pairs(servers) do
     local options = make_config(server)
     lspconfig[server].setup(options)
   end

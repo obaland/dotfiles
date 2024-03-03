@@ -3,7 +3,7 @@
 
 local M = {}
 
-function M.config(options)
+function M.make_config(options)
   options.Lua = {
     runtime = {
       version = 'LuaJIT',
