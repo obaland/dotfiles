@@ -5,20 +5,10 @@ local M = {}
 
 -- Setup treesitter
 function M.setup()
-  local parset_configs =
-    require('nvim-treesitter/parsers').get_parser_configs()
-  parset_configs.http = {
-    filetype = 'http',
-    install_info = {
-      url = 'https://github.com/rest-nvim/tree-sitter-http',
-      files = { 'src/parser.c' },
-      branch = 'main',
-    },
-  }
-
   -- Parser install directory settings.
+  -- NOTE: Priority over `query` to be installed in neovim.
   local install_dir = vim.fn.stdpath('data') .. '/treesitter'
-  vim.opt.runtimepath:append(install_dir)
+  vim.opt.runtimepath:prepend(install_dir)
 
   require('nvim-treesitter.configs').setup({
     parser_install_dir = install_dir,
