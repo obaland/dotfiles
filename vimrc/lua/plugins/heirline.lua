@@ -7,12 +7,12 @@ local M = {}
 local special_filetypes = {
   aerial = { icon = '', name = 'Outline' },
   ['aerial-nav'] = { icon = '󱣱', name = 'Navigation' },
-  undotree = { icon = '', name = 'undotree' },
-  TelescopePrompt = { icon = '', name = 'Telescope' },
-  Trouble = { icon = '', name = 'Trouble' },
   DiffviewFiles = { icon = '', name = 'DiffviewFiles' },
+  mason = { icon = '', name = 'Mason' },
   NeogitStatus = { icon = '', name = 'NeogitStatus' },
   spectre_panel = { icon = '', name = 'Spectre' },
+  TelescopePrompt = { icon = '', name = 'Telescope' },
+  undotree = { icon = '', name = 'undotree' },
 }
 
 local function line_count_format()
@@ -89,6 +89,169 @@ end
 function component.align()
   return { provider = '%=' }
 end
+
+-- Extensions
+--============================================================================
+local extensions = {}
+
+-- vfiler
+extensions.vfiler = {
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'vfiler' } })
+  end,
+  init = function(self)
+    self.status = require('vfiler').status()
+  end,
+  {
+    surround({ provider = ' vfiler' }),
+    hl = { fg = 'blue' },
+  },
+  {
+    provider = ' ' .. project_root(),
+    hl = { fg = 'green', bold = true },
+  },
+  component.border(),
+  {
+    provider = function(self)
+      local current = self.status.current_item
+      if not current then
+        return ''
+      end
+      local num = ('[%3d/%3d] '):format(
+        current.number,
+        self.status.num_items
+      )
+      return num .. current.path
+    end,
+    hl = { fg = 'grayish_yellow' },
+  },
+  component.align(),
+}
+
+-- Telescope
+extensions.telescope = {
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'TelescopePrompt' } })
+  end,
+  {
+    surround({ provider = ' Telescope' }),
+    hl = { fg = 'blue' },
+  },
+  component.align(),
+}
+
+-- Mason
+extensions.mason = {
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'mason' } })
+  end,
+  {
+    surround({ provider = ' Mason' }),
+    hl = { fg = 'blue' },
+  },
+  component.border(),
+  {
+    provider = function()
+      local registry = require('mason-registry')
+      return ("Installed: %d/%d"):format(
+        #registry.get_installed_packages(),
+        #registry.get_all_package_specs()
+      )
+    end,
+    hl = { fg = 'grayish_yellow' },
+  },
+  component.align(),
+  surround({
+    provider = line_count_format(),
+  }),
+}
+
+-- Quickfix
+extensions.quickfix = {
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'qf' } })
+  end,
+  init = function(self)
+    self.is_loclist = vim.fn.getloclist(0, { filewinid = 1 }).filewinid ~= 0
+  end,
+  {
+    surround({
+      provider = function(self)
+        local pad = vim.g.global_symbol_padding or ' '
+        local q = ' ' .. pad
+        local l = ' ' .. pad
+        return self.is_loclist and l .. 'Location List'
+          or q .. 'Quickfix List'
+      end,
+    }),
+    hl = { fg = 'blue' },
+  },
+  component.border(),
+  {
+    provider = function(self)
+      if self.is_loclist then
+        return vim.fn.getloclist(0, { title = 0 }).title
+      end
+      return vim.fn.getqflist({ title = 0 }).title
+    end,
+  },
+  component.align(),
+  surround({
+    provider = line_count_format(),
+  }),
+}
+
+-- Trouble
+extensions.trouble = {
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'Trouble' } })
+  end,
+  {
+    surround({ provider = ' Trouble' }),
+    hl = { fg = 'blue' },
+  },
+  init = function(self)
+    local options = require('trouble/config').options
+    local words = vim.split(options.mode, '[%W]')
+    for i, word in ipairs(words) do
+      words[i] = word:sub(1, 1):upper() .. word:sub(2)
+    end
+    self.mode = table.concat(words)
+  end,
+  component.border(),
+  {
+    provider = function(self)
+      return self.mode
+    end,
+    hl = { fg = 'green', bold = true },
+  },
+  component.align(),
+}
+
+-- Only name and line-count
+extensions.line_count = {
+  static = {
+    filetypes = special_filetypes,
+  },
+  condition = function(self)
+    local types = {}
+    for type, _ in pairs(self.filetypes) do
+      table.insert(types, type)
+    end
+    return conditions.buffer_matches({ filetype = types })
+  end,
+  surround({
+    provider = function(self)
+      local ft = self.filetypes[vim.bo.filetype]
+      return ft.icon .. ' ' .. ft.name
+    end,
+    hl = { fg = 'blue' },
+  }),
+  component.align(),
+  surround({
+    provider = line_count_format(),
+  }),
+}
 
 local function statusline()
   -- Component: Mode
@@ -317,6 +480,18 @@ local function statusline()
 
   -- Component: File type
   local filetype = {
+    -- type
+    {
+      condition = function()
+        return vim.bo.filetype ~= ''
+      end,
+      component.border(),
+      {
+        provider = function()
+          return vim.bo.filetype
+        end,
+      },
+    },
     -- encoding
     {
       condition = function()
@@ -335,18 +510,6 @@ local function statusline()
       {
         provider = function()
           return string.upper(vim.bo.fileformat)
-        end,
-      },
-    },
-    -- type
-    {
-      condition = function()
-        return vim.bo.filetype ~= ''
-      end,
-      component.border(),
-      {
-        provider = function()
-          return vim.bo.filetype
         end,
       },
     },
@@ -372,132 +535,15 @@ local function statusline()
     surround(ruler),
   }
 
-  -- Extension: vfiler
-  local extension_vfiler = {
-    condition = function()
-      return conditions.buffer_matches({ filetype = { 'vfiler' } })
-    end,
-    init = function(self)
-      self.status = require('vfiler').status()
-    end,
-    {
-      surround({ provider = ' vfiler' }),
-      hl = { fg = 'blue' },
-    },
-    {
-      provider = ' ' .. project_root(),
-      hl = { fg = 'green', bold = true },
-    },
-    component.border(),
-    {
-      provider = function(self)
-        local current = self.status.current_item
-        if not current then
-          return ''
-        end
-        local num = ('[%3d/%3d] '):format(
-          current.number,
-          self.status.num_items
-        )
-        return num .. current.path
-      end,
-      hl = { fg = 'grayish_yellow' },
-    },
-    component.align(),
-  }
-
-  -- Extension: Mason
-  local extension_mason = {
-    condition = function()
-      return conditions.buffer_matches({ filetype = { 'mason' } })
-    end,
-    {
-      surround({ provider = ' Mason' }),
-    },
-    component.border(),
-    {
-      provider = function()
-        local registry = require('mason-registry')
-        return ("Installed: %d/%d"):format(
-          #registry.get_installed_packages(),
-          #registry.get_all_package_specs()
-        )
-      end,
-      hl = { fg = 'grayish_yellow' },
-    },
-    component.align(),
-    surround({
-      provider = line_count_format(),
-    }),
-  }
-
-  -- Extension: Quickfix
-  local extension_quickfix = {
-    condition = function()
-      return conditions.buffer_matches({ filetype = { 'qf' } })
-    end,
-    init = function(self)
-      self.is_loclist = vim.fn.getloclist(0, { filewinid = 1 }).filewinid ~= 0
-    end,
-    {
-      surround({
-        provider = function(self)
-          local pad = vim.g.global_symbol_padding or ' '
-          local q = ' ' .. pad
-          local l = ' ' .. pad
-          return self.is_loclist and l .. 'Location List'
-            or q .. 'Quickfix List'
-        end,
-      }),
-      hl = { fg = 'blue' },
-    },
-    component.border(),
-    {
-      provider = function(self)
-        if self.is_loclist then
-          return vim.fn.getloclist(0, { title = 0 }).title
-        end
-        return vim.fn.getqflist({ title = 0 }).title
-      end,
-    },
-    component.align(),
-    surround({
-      provider = line_count_format(),
-    }),
-  }
-
-  -- Extension: Only name and line-count
-  local extension_line_count = {
-    static = {
-      filetypes = special_filetypes,
-    },
-    condition = function(self)
-      local types = {}
-      for type, _ in pairs(self.filetypes) do
-        table.insert(types, type)
-      end
-      return conditions.buffer_matches({ filetype = types })
-    end,
-    surround({
-      provider = function(self)
-        local ft = self.filetypes[vim.bo.filetype]
-        return ft.icon .. ' ' .. ft.name
-      end,
-      hl = { fg = 'blue' },
-    }),
-    component.align(),
-    surround({
-      provider = line_count_format(),
-    }),
-  }
-
   return {
     hl = { bg = 'base02' },
     fallthrough = false,
-    extension_vfiler,
-    extension_mason,
-    extension_quickfix,
-    extension_line_count,
+    extensions.vfiler,
+    extensions.telescope,
+    extensions.mason,
+    extensions.quickfix,
+    extensions.trouble,
+    extensions.line_count,
     components,
   }
 end
