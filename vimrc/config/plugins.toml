@@ -302,6 +302,7 @@ lua_source = '''
 [[plugins]]
 repo = 'folke/trouble.nvim'
 if = 'has("nvim-0.5")'
+depends = 'nvim-web-devicons'
 on_cmd = ['Trouble', 'TroubleToggle']
 
 [[plugins]]
@@ -367,6 +368,7 @@ repo = 'rebelot/heirline.nvim'
 if = 'has("nvim-0.5")'
 depends = [
   'gitsigns.nvim',
+  'trouble.nvim',
   'mason.nvim',
   'nvim-navic',
   'vfiler.vim',
