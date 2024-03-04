@@ -776,6 +776,11 @@ highlight! link TabLineSel Normal
 highlight! TabLineSep      ctermfg=0   ctermbg=236 guifg=#2C2C2C guibg=#303030 cterm=NONE gui=NONE
 highlight! TabLineSepSel   ctermfg=4   ctermbg=8   guifg=#268bd2 guibg=#002b36 cterm=NONE gui=NONE
 
+" WinBar
+" -------
+execute 'highlight! WinBar' .s:fmt_bold .s:fg_base0 .s:bg_back
+highlight! link WinBarNC WinBar
+
 " TreeSitter
 " ----------
 highlight! link TSBoolean Constant
@@ -1054,7 +1059,7 @@ highlight! link WhichKeyFloat Normal
 
 " Original highlights
 " -------------------
-execute 'highlight! WinbarLspClientName' .s:fmt_none .s:fg_white .s:bg_none
+execute 'highlight! WinBarLspClientName' .s:fmt_none .s:fg_white .s:bg_none
 
 " License
 " -------

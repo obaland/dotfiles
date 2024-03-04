@@ -552,7 +552,7 @@ local function winbar()
   return {
     {
       provider = ' ',
-      hl = 'WinbarLspClientName',
+      hl = 'WinBarLspClientName',
     },
     {
       init = function(self)
