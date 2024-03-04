@@ -10,7 +10,7 @@ function! s:check_command(command) abort
     return v:true
   endif
 
-  let l:guide = core#is_window() ? a:command.guide_win :
+  let l:guide = core#is_windows() ? a:command.guide_win :
         \ has('mac') ? a:command.guide_mac : a:command.guide_unix
   call health#report_warn(
         \ printf('%s - Not Executable', a:command.name),
@@ -34,7 +34,7 @@ endfunction
 function! s:check_configuration() abort
   let l:configs = {}
 
-  if has('nvim') && core#is_window()
+  if has('nvim') && core#is_windows()
     let l:configs['$VIM_PYTHON_PROG_ROOT'] = 'the Root direcotry path of python2 executable program.'
     let l:configs['$VIM_PYTHON3_PROG_ROOT'] = 'the Root direcotry path of python3 executable program.'
   endif
