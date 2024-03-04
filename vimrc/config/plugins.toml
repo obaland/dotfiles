@@ -1,2 +1,479 @@
 [[plugins]]
-repo = 'Shougo/dein.vim'
+repo = 'vim-jp/vimdoc-ja'
+on_cmd = ['help', 'h']
+
+[[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+if = 'has("nvim-0.5")'
+
+[[plugins]]
+repo = 'nvim-tree/nvim-web-devicons'
+if = 'has("nvim-0.7")'
+
+[[plugins]]
+repo = 'rcarriga/nvim-notify'
+if = 'has("nvim-0.5")'
+on_lua = 'notify'
+lua_source = 'require("notify").setup()'
+
+[[plugins]]
+repo = 'lewis6991/gitsigns.nvim'
+if = 'has("nvim-0.8")'
+on_event = 'BufEnter'
+lua_source = 'require("gitsigns").setup()'
+
+# Syntax
+#=============================================================================
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+if = 'has("nvim-0.7")'
+on_event = 'BufRead'
+hook_post_update = ':TSUpdate'
+lua_source = 'require("plugins/treesitter").setup()'
+
+[[plugins]]
+repo = 'nvim-treesitter/playground'
+on_source = 'nvim-treesitter'
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter-textobjects'
+on_source = 'nvim-treesitter'
+
+[[plugins]]
+repo = 'JoosepAlviste/nvim-ts-context-commentstring'
+on_source = 'nvim-treesitter'
+lua_add = 'vim.g.skip_ts_context_commentstring_module = true'
+
+[[plugins]]
+repo = 'windwp/nvim-ts-autotag'
+on_source = 'nvim-treesitter'
+
+# Finder
+#=============================================================================
+[[plugins]]
+repo = 'nvim-telescope/telescope.nvim'
+rev = '0.1.x'
+if = 'has("nvim-0.7")'
+depends = ['plenary.nvim', 'nvim-web-devicons']
+on_cmd = 'Telescope'
+on_lua = 'telescope'
+lua_source = 'require("plugins/telescope").setup()'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope-ui-select.nvim'
+if = 'has("nvim-0.7")'
+depends = 'telescope.nvim'
+lua_source = '''
+  -- Load extensions for telescope.nvim
+  require('telescope').load_extension('ui-select')
+'''
+
+# Completion and code analysis
+#=============================================================================
+[[plugins]]
+repo = 'williamboman/mason.nvim'
+if = 'has("nvim-0.7")'
+lua_source = '''
+  require("mason").setup({
+		ui = {
+      border = "rounded",
+			icons = {
+				package_installed = "✓",
+				package_pending = "➜",
+				package_uninstalled = "✗",
+			},
+		},
+  })
+'''
+
+[[plugins]]
+repo = 'williamboman/mason-lspconfig.nvim'
+depends = 'mason.nvim'
+lua_source = 'require("mason-lspconfig").setup()'
+
+[[plugins]]
+repo = 'neovim/nvim-lspconfig'
+if = 'has("nvim-0.7")'
+on_event = 'BufRead'
+depends = [
+  'mason.nvim',
+  'mason-lspconfig.nvim'
+]
+lua_source = 'require("plugins/lspconfig").setup()'
+
+[[plugins]]
+repo = 'nvimtools/none-ls.nvim'
+if = 'has("nvim-0.5")'
+depends = 'plenary.nvim'
+on_event = 'BufRead'
+lua_source = 'require("plugins/none-ls").setup()'
+
+[[plugins]]
+repo = 'folke/neodev.nvim'
+on_lua = 'lspconfig'
+lua_source = 'require("neodev").setup()'
+
+[[plugins]]
+repo = 'kosayoda/nvim-lightbulb'
+on_lua = 'lspconfig'
+lua_source = '''
+  local lightbulb = require('nvim-lightbulb')
+  lightbulb.setup()
+
+  vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+    group = vim.api.nvim_create_augroup('user_lightbulb', {}),
+    callback = function(_)
+      lightbulb.update_lightbulb()
+    end,
+  })
+'''
+
+[[plugins]]
+repo = 'ray-x/lsp_signature.nvim'
+on_lua = 'lspconfig'
+lua_source = '''
+  lsp_signature = require('lsp_signature')
+  lsp_signature.setup({})
+
+  local group = vim.api.nvim_create_augroup('user_lsp_signature', {})
+  require('core').api.on_lsp_attach(function(client, bufnr)
+    lsp_signature.on_attach({
+      hint_prefix = '󰛩 '
+    }, bufnr)
+  end, group)
+'''
+
+[[plugins]]
+repo = 'SmiteshP/nvim-navic'
+if = 'has("nvim-0.7")'
+on_lua = 'lspconfig'
+lua_source = '''
+  local navic = require('nvim-navic')
+  navic.setup()
+
+  local group = vim.api.nvim_create_augroup('user_navic', {})
+  require('core').api.on_lsp_attach(function(client, bufnr)
+    if
+      client.supports_method('textDocument/documentSymbol')
+      and not navic.is_available()
+    then
+      navic.attach(client, bufnr)
+    end
+  end, group)
+'''
+
+[[plugins]]
+repo = 'stevearc/aerial.nvim'
+if = 'has("nvim-0.8")'
+depends = ['nvim-lspconfig', 'nvim-treesitter', 'telescope.nvim']
+on_cmd = ['AerialToggle', 'AerialNavToggle', 'Telescope']
+lua_source = '''
+  require('aerial').setup({
+    close_on_select = true,
+    keymaps = {
+      ['<Esc>'] = 'actions.close',
+    },
+    nav = {
+      preview = true,
+      keymaps = {
+        ['q'] = 'actions.close',
+        ['<Esc>'] = 'actions.close',
+      }
+    }
+  })
+
+  -- Load extensions for telescope.nvim
+  require('telescope').load_extension('aerial')
+'''
+
+[[plugins]]
+repo = 'hrsh7th/nvim-cmp'
+if = 'has("nvim-0.5")'
+on_event = 'BufEnter'
+depends = [
+  'nvim-lspconfig',
+  'LuaSnip'
+]
+lua_source = 'require("plugins/cmp").setup()'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'andersevenrud/cmp-tmux'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-buffer'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-cmdline'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-emoji'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lua'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-path'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'saadparwaiz1/cmp_luasnip'
+on_source = 'nvim-cmp'
+
+[[plugins]]
+repo = 'L3MON4D3/LuaSnip'
+if = 'has("nvim-0.7")'
+lua_post_source = '''
+  local luasnip = require('luasnip')
+  luasnip.config.set_config({
+    history = true,
+    updateevents = 'TextChanged,TextChangedI',
+  })
+
+  vim.api.nvim_create_autocmd('InsertLeave', {
+    group = vim.api.nvim_create_augroup('user_luasnip', {}),
+    callback = function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      if
+        luasnip.session.current_nodes[bufnr]
+        and not luasnip.session.jump_active
+      then
+        luasnip.unlink_current()
+      end
+    end,
+  })
+'''
+
+[[plugins]]
+repo = 'rafamadriz/friendly-snippets'
+depends = 'LuaSnip'
+lua_source = '''
+  -- Load from `friendly-snippets`
+  require('luasnip/loaders/from_vscode').lazy_load()
+  require('luasnip/loaders/from_snipmate').lazy_load()
+  require('luasnip/loaders/from_lua').lazy_load()
+'''
+
+[[plugins]]
+repo = 'windwp/nvim-autopairs'
+if = 'has("nvim-0.5")'
+depends = 'nvim-cmp'
+on_event = 'InsertEnter'
+lua_source = '''
+  require("nvim-autopairs").setup({
+    fast_wrap = {},
+    disable_filetype = {
+      'TelescopePrompt',
+      'vfiler',
+      'vim',
+    },
+  })
+
+  -- Insert `(` after select function or method item.
+  local autopairs = require('nvim-autopairs/completion/cmp')
+  require('cmp').event:on('confirm_done', autopairs.on_confirm_done())
+'''
+
+[[plugins]]
+repo = 'folke/todo-comments.nvim'
+if = 'has("nvim-0.8")'
+depends = ['plenary.nvim', 'trouble.nvim', 'telescope.nvim']
+on_cmd = ['TodoTrouble', 'TodoTelescope']
+lua_source = '''
+  require('todo-comments').setup({
+    signs = false,
+    colors = {
+      error =   {'#968583'},
+      info =    {'#789da1'},
+      hint =    {'#8b9683'},
+      default = {'#6ca6ad'}
+    },
+  })
+'''
+
+[[plugins]]
+repo = 'folke/trouble.nvim'
+if = 'has("nvim-0.5")'
+on_cmd = ['Trouble', 'TroubleToggle']
+
+[[plugins]]
+repo = 'sindrets/diffview.nvim'
+if = 'has("nvim-0.7")'
+depends = 'nvim-web-devicons'
+on_cmd = ['DiffviewOpen', 'DiffviewFileHistory']
+lua_post_source = 'require("plugins/diffview").setup()'
+
+[[plugins]]
+repo = 'mattn/emmet-vim'
+on_event = 'InsertEnter'
+on_ft = ['html', 'css', 'vue', 'javascript', 'javascriptreact', 'svelte']
+hook_source = '''
+  let g:user_emmet_mode = 'i'
+  let g:user_emmet_install_global = 0
+  let g:user_emmet_install_command = 0
+  let g:user_emmet_complete_tag = 0
+'''
+
+[[plugins]]
+repo = 'folke/which-key.nvim'
+if = 'has("nvim-0.5")'
+on_cmd = 'WhichKey'
+lua_source = '''
+  require('which-key').setup({
+    icons = {
+      breadcrumb = '»',
+      separator = '  ',
+      group = '+',
+    },
+
+    popup_mappings = {
+      scroll_down = '<C-d>',
+      scroll_up   = '<C-u>',
+    },
+
+    window = {
+      border = 'single',
+    },
+
+    layout = {
+      spacing = 4,
+    },
+
+    hidden = {
+      '<silent>',
+      '<cmd>',
+      '<Cmd>',
+      '<CR>',
+      'call',
+      'lua',
+      '^:',
+      '^ ',
+    },
+  })
+'''
+
+# Interface
+#=============================================================================
+[[plugins]]
+repo = 'rebelot/heirline.nvim'
+if = 'has("nvim-0.5")'
+depends = [
+  'gitsigns.nvim',
+  'mason.nvim',
+  'nvim-navic',
+  'vfiler.vim',
+  'vfiler-column-devicons',
+]
+on_event = 'BufEnter'
+lua_source = 'require("plugins/heirline").setup()'
+
+# Filer
+#=============================================================================
+[[plugins]]
+repo = 'obaland/vfiler.vim'
+depends = 'vfiler-column-devicons'
+on_cmd = 'VFiler'
+on_lua = 'vfiler'
+lua_source = 'require("plugins/vfiler").setup()'
+
+[[plugins]]
+repo = 'obaland/vfiler-column-devicons'
+
+# Operators and text objects
+#=============================================================================
+[[plugins]]
+repo = 'machakann/vim-sandwich'
+on_map = {nxo = ['<Plug>(sandwich-', '<Plug>(operator-sandwich-,', '<Plug>(textobj-sandwich-']}
+hook_add = 'let g:sandwich_no_default_key_mappings = 1'
+
+[[plugins]]
+repo = 'AndrewRadev/sideways.vim'
+on_cmd = ['SidewaysLeft', 'SidewaysRight', 'SidewaysJumpLeft', 'SidewaysJumpRight']
+on_map = {xo = ['<Plug>Sideways']}
+
+[[plugins]]
+repo = 'AndrewRadev/linediff.vim'
+on_cmd = ['Linediff', 'LinediffAdd', 'LinediffShow', 'LinediffReset']
+
+[[plugins]]
+repo = 'AndrewRadev/splitjoin.vim'
+on_cmd = ['SplitjoinJoin', 'SplitjoinSplit']
+hook_add = '''
+  let g:splitjoin_join_mapping = ""
+  let g:splitjoin_split_mapping = ""
+  autocmd user_events FileType go let b:splitjoin_trailing_comma = 1
+'''
+
+[[plugins]]
+repo = 'AndrewRadev/dsf.vim'
+on_map = {n = '<Plug>Dsf'}
+hook_add = 'let g:dsf_no_mappings = 1'
+
+# Utility
+#=============================================================================
+[[plugins]]
+repo = 'itchyny/vim-cursorword'
+on_event = 'FileType'
+hook_add = 'let g:cursorword = 0'
+hook_source = '''
+  augroup user_plugins_cursorword
+    autocmd!
+    autocmd FileType json,yaml,markdown,nginx,dosini,conf,text
+      \ let b:cursorword = 1
+    autocmd WinEnter * if &diff || &pvw | let b:cursorword = 0 | endif
+    autocmd InsertEnter * if get(b:, 'cursorword', 0) == 1 |
+      \ let b:cursorword = 0 |
+      \ endif
+    autocmd InsertLeave * if get(b:, 'cursorword', 1) == 0 |
+      \ let b:cursorword = 1 |
+      \ endif
+  augroup END
+'''
+
+[[plugins]]
+repo = 'romainl/vim-cool'
+on_event = ['CursorMoved', 'InsertEnter']
+
+[[plugins]]
+repo = 'kevinhwang91/nvim-bqf'
+if = 'has("nvim-0.5")'
+on_ft = 'qf'
+on_cmd = 'BqfAutoToggle'
+on_event = 'QuickFixCmdPost'
+lua_source = '''
+  local max_file_size = 100 * 1024 -- 100kb
+  require('bqf').setup({
+    auto_resize_height = false,
+    preview = {
+      auto_preview = true,
+      should_preview_cb = function(bufnr)
+        -- file size greater than 'max_file_size' can't be previewed automatically
+        local filename = vim.api.nvim_buf_get_name(bufnr)
+        local fsize = vim.fn.getfsize(filename)
+        if fsize > max_file_size then
+          return false
+        end
+        return true
+      end,
+    }
+  })
+'''
+
+[[plugins]]
+repo = 'norcalli/nvim-colorizer.lua'
+if = 'has("nvim-0.4.0")'
+on_event = 'BufEnter'
+lua_source = 'require("colorizer").setup()'
+
+[[plugins]]
+repo = 'iamcco/markdown-preview.nvim'
+on_cmd = 'MarkdownPreview'
+hook_post_source = 'call mkdp#util#install()'

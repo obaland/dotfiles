@@ -142,12 +142,12 @@ function! s:use_package_manager(data_path)
   if dein#load_state(l:cache_path)
     let l:base_dir = $VIM_CONFIG_PATH . '/'
     let l:plugins = l:base_dir . 'plugins.toml'
-    let l:plugins_lazy = l:base_dir . 'plugins-lazy.toml'
 
     call dein#begin(l:cache_path, expand('<sfile>'))
 
-    call dein#load_toml(l:plugins, {'lazy': 0})
-    call dein#load_toml(l:plugins_lazy, {'lazy' : 1})
+    " Addition of dein.vim itself
+    call dein#add('Shougo/dein.vim')
+    call dein#load_toml(l:plugins, {'lazy': 1})
 
     call dein#end()
     call dein#save_state()
