@@ -379,6 +379,7 @@ lua_source = 'require("plugins/heirline").setup()'
 #=============================================================================
 [[plugins]]
 repo = 'obaland/vfiler.vim'
+if = 'has("nvim-0.5") || (v:version >= 802 && has("lua"))'
 depends = 'vfiler-column-devicons'
 on_cmd = 'VFiler'
 on_lua = 'vfiler'
