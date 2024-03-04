@@ -28,9 +28,8 @@ local function filepath(filename, max_dirs, dir_max_chars)
   local dirs = {}
   while #parts > 1 do
     local dir = table.remove(parts, 1)
-    if #parts <= max_dirs then
+    if #parts < max_dirs then
       table.insert(dirs, dir:sub(1, dir_max_chars))
-      table.insert(dirs, vim.fn.strcharpart(dir, 1, dir_max_chars))
     end
   end
   local path = table.concat(dirs, '/')
@@ -210,7 +209,7 @@ local function statusline()
         -- space, we trim the file path to its initials
         -- See Flexible Components section below for dynamic truncation
         -- if not conditions.width_percent_below(#path, 0.25) then
-        return filepath(self.filename, 3, 5)
+        return filepath(self.filename, 3, 32)
       end,
       hl = { fg = 'grayish_yellow' },
     },
