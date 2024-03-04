@@ -12,6 +12,11 @@ end
 function M.setup()
   local builtins = require('null-ls').builtins
   require('null-ls').setup({
+    should_attach = function(_)
+      -- Exclude buffers in `vfiler.vim`
+      return vim.bo.filetype ~= 'vfiler'
+    end,
+
     sources = {
       -- Whitespace
       builtins.diagnostics.trail_space.with({
