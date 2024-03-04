@@ -7,7 +7,7 @@ let s:is_mac = !s:is_windows && !has('win32unix')
       \     || (!executable('xdg-open') && system('uname') =~? '^darwin'))
 
 " Convert string to list
-function! s:str2list(expr)
+function! s:str2list(expr) abort
   return type(a:expr) ==# v:t_list ? a:expr : split(a:expr, '\n')
 endfunction
 

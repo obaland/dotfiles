@@ -13,7 +13,7 @@ local augroup = vim.api.nvim_create_augroup('user_lspconfig', {})
 local function make_config(server)
   -- Setup base config for each server.
   local options = {
-    capabilities = vim.lsp.protocol.make_client_capabilities(),
+    capabilities = require('cmp_nvim_lsp').default_capabilities(),
   }
 
   -- Merge user-defined lsp settings.

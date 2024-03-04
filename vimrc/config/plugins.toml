@@ -97,7 +97,8 @@ if = 'has("nvim-0.7")'
 on_event = 'BufRead'
 depends = [
   'mason.nvim',
-  'mason-lspconfig.nvim'
+  'mason-lspconfig.nvim',
+  'cmp-nvim-lsp'
 ]
 lua_source = 'require("plugins/lspconfig").setup()'
 
@@ -154,7 +155,8 @@ lua_source = '''
   local group = vim.api.nvim_create_augroup('user_navic', {})
   require('core').api.on_lsp_attach(function(client, bufnr)
     if
-      client.supports_method('textDocument/documentSymbol')
+      client.name ~= 'null-ls'
+      and client.supports_method('textDocument/documentSymbol')
       and not navic.is_available()
     then
       navic.attach(client, bufnr)

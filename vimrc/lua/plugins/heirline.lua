@@ -569,7 +569,8 @@ local function winbar()
         end
         return '[No Active Lsp]'
       end,
-      hl = 'WinbarLspClientName',
+      hl = 'WinBarLspClientName',
+      update = { 'LspAttach', 'LspDetach' },
     },
     {
       provider = ' │ ',
