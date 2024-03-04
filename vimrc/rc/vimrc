@@ -3,9 +3,10 @@
 "=============================================================================
 
 " Vim directories
-let $VIM_PATH = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
-let $VIM_CONFIG_PATH = $VIM_PATH . '/config'
 let $CONFIG_PATH = expand('~/.config')
+let $VIM_PATH = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
+let $VIM_RC_PATH = $VIM_PATH . '/rc'
+let $VIM_CONFIGS_PATH = $VIM_PATH . '/configs'
 let $VIM_FILES = expand('~/vimfiles')
 let $VIM_BACKUP = $VIM_FILES . '/backup'
 let $VIM_SESSIONS = $VIM_FILES . '/sessions'
@@ -13,7 +14,7 @@ let $VIM_SWAP = $VIM_FILES . '/swap'
 let $VIM_UNDO = $VIM_FILES . '/swap'
 
 function! s:source(path) abort
-  let l:abspath = resolve($VIM_CONFIG_PATH . '/'. a:path)
+  let l:abspath = resolve($VIM_RC_PATH . '/'. a:path)
   execute 'source' fnameescape(l:abspath)
 endfunction
 

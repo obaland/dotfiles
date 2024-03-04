@@ -27,21 +27,21 @@ function! core#mkdir(path) abort
 endfunction
 
 function! core#info(message, ...) abort
-  let l:prefix = get(a:000, 0, '[config]')
+  let l:prefix = get(a:000, 0, '[vimrc]')
   for l:message in s:str2list(a:message)
     echom l:prefix . ' ' . l:message
   endfor
 endfunction
 
 function! core#warning(message, ...) abort
-  let l:prefix = get(a:000, 0, '[config]')
+  let l:prefix = get(a:000, 0, '[vimrc]')
   for l:message in s:str2list(a:message)
     echohl WarningMsg | echomsg l:prefix . ' ' . l:message | echohl None
   endfor
 endfunction
 
 function! core#error(message, ...) abort
-  let l:prefix = get(a:000, 0, '[config]')
+  let l:prefix = get(a:000, 0, '[vimrc]')
   for l:message in s:str2list(a:message)
     echohl ErrorMsg | echomsg l:prefix . ' ' . l:message | echohl None
   endfor

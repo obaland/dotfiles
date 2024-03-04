@@ -98,7 +98,7 @@ function! s:ensure_data_directories()
         \ $VIM_SESSIONS,
         \ $VIM_SWAP,
         \ $VIM_UNDO,
-				\ ]
+        \ ]
     if !isdirectory(l:path)
       call mkdir(l:path, 'p', 0770)
     endif
@@ -140,7 +140,7 @@ function! s:use_package_manager(data_path)
 
   " Initialize package manager (dein.vim)
   if dein#load_state(l:cache_path)
-    let l:base_dir = $VIM_CONFIG_PATH . '/'
+    let l:base_dir = $VIM_RC_PATH . '/'
     let l:plugins = l:base_dir . 'plugins.toml'
 
     call dein#begin(l:cache_path, expand('<sfile>'))

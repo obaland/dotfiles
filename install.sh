@@ -27,7 +27,6 @@ fi
 
 readonly ROOTDIR=$(cd $(dirname $0) && pwd)
 readonly HOMEDIR=$(cd ~ && pwd)
-readonly CONFIGDIR="$ROOTDIR/configs"
 
 echo "Start [Install environment] ..."
 

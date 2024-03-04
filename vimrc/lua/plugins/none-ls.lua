@@ -1,6 +1,8 @@
 -- plugin: none-ls.nvim
 -- see: https://github.com/nvimtools/none-ls.nvim
 
+local core = require('core')
+
 local M = {}
 
 -- List of file types to ignore `none-ls`.
@@ -19,7 +21,11 @@ local function hook_has_exec(filename)
 end
 
 function M.setup()
+  local configs_dir = core.normalize_path(
+    os.getenv('VIM_CONFIGS_PATH') .. '/none-ls'
+  )
   local builtins = require('null-ls').builtins
+
   require('null-ls').setup({
     should_attach = function(bufnr)
       local filetype = vim.bo[bufnr].filetype
@@ -36,17 +42,7 @@ function M.setup()
       builtins.formatting.stylua,
       builtins.diagnostics.selene.with({
         runtime_condition = hook_has_exec('selene'),
-        diagnostic_config = {
-          globals = {
-            'vim',
-            'use',
-            'describe',
-            'it',
-            'assert',
-            'before_each',
-            'after_each',
-          },
-        },
+        extra_args = { '--config', configs_dir .. '/selene.toml' },
       }),
 
       -- SQL

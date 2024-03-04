@@ -18,7 +18,8 @@ command(
   [[
     augroup user_cache
       autocmd!
-      autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost * unlet! b:core_project_dir | unlet! b:core_project_dir_last_cwd
+      autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost *
+            \ unlet! b:core_project_dir | unlet! b:core_project_dir_last_cwd
     augroup END
   ]]
 )
@@ -86,8 +87,9 @@ local function project_root(bufnr, cwd)
   -- NOTE: vim compatibility
   local exists = vim.fn.exists('b:core_project_dir')
     and vim.fn.exists('b:core_project_dir_last_cwd')
-  if exists and vim.b.core_project_dir_last_cwd == cwd then
-    return vim.b.core_project_dir
+  local last_cwd = vim.fn.getbufvar(bufnr, 'core_project_dir_last_cwd')
+  if exists and last_cwd == cwd then
+    return vim.fn.getbufvar(bufnr, 'core_project_dir')
   end
 
   local dir = ''
@@ -95,8 +97,8 @@ local function project_root(bufnr, cwd)
     local fn_find = property.is_dir and finddir or findfile
     dir = fn_find(pattern, cwd)
     if #dir > 0 then
-      vim.b.core_project_dir = dir
-      vim.b.core_project_dir_last_cwd = cwd
+      vim.fn.setbufvar(bufnr, 'core_project_dir', dir)
+      vim.fn.setbufvar(bufnr, 'core_project_dir_last_cwd', cwd)
       return dir
     end
   end
