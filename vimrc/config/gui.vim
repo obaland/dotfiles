@@ -4,10 +4,8 @@
 "-----------------------------------------------------------------------------
 " Fonts:
 "-----------------------------------------------------------------------------
-if IsWindows()
+if core#is_windows()
   set encoding=utf8
-  set guifont=Source_Code_Pro:h10
-  set guifontwide=MS_Gothic:h10
   set ambiwidth=double
 
   " Number of pixel lines inserted between characters.

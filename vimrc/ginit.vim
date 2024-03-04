@@ -3,7 +3,7 @@
 "=============================================================================
 
 " Font
-Guifont! SauceCodePro Nerd Font:h11
+Guifont! SauceCodePro NF:h11
 "Guifont! Source Code Pro:h11
 "Guifont! 源ノ角ゴシック Code JP R:h10
 
