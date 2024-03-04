@@ -110,7 +110,7 @@ endfunction
 "---------------------------------------------------------------------------
 function! s:use_package_manager(data_path)
   " Check version
-  if !(has('nvim-0.5') || v:version >= 802)
+  if !(has('nvim-0.8') || v:version >= 802)
     call core#warning('Plugin manager is not supported in this version.')
     return
   endif
