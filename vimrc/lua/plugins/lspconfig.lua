@@ -3,8 +3,6 @@
 --      https://github.com/williamboman/mason.nvim
 --      https://github.com/williamboman/mason-lspconfig.nvim
 
-local core = require('core')
-
 local M = {}
 
 local augroup = vim.api.nvim_create_augroup('user_lspconfig', {})
@@ -171,7 +169,7 @@ function M.setup()
   })
 
   -- Create an attach event for each LSP.
-  core.api.on_lsp_attach(on_attach, augroup)
+  require('core').api.on_lsp_attach(on_attach, augroup)
 end
 
 return M
