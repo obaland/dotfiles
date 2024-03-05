@@ -136,6 +136,9 @@ function M.setup()
   vim.lsp.handlers['textDocument/signatureHelp'] =
     vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
+  -- the `lua_ls` setting in neodev.nim
+  require('neodev').setup({})
+
   -- Setup language servers using nvim-lspconfig
   local servers = require('mason-lspconfig').get_installed_servers()
   local lspconfig = require('lspconfig')

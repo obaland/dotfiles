@@ -92,13 +92,17 @@ depends = 'mason.nvim'
 lua_source = 'require("mason-lspconfig").setup()'
 
 [[plugins]]
+repo = 'folke/neodev.nvim'
+
+[[plugins]]
 repo = 'neovim/nvim-lspconfig'
 if = 'has("nvim-0.7")'
 on_event = 'BufRead'
 depends = [
   'mason.nvim',
   'mason-lspconfig.nvim',
-  'cmp-nvim-lsp'
+  'cmp-nvim-lsp',
+  'neodev.nvim'
 ]
 lua_source = 'require("plugins/lspconfig").setup()'
 
@@ -108,11 +112,6 @@ if = 'has("nvim-0.5")'
 depends = 'plenary.nvim'
 on_event = 'BufRead'
 lua_source = 'require("plugins/none-ls").setup()'
-
-[[plugins]]
-repo = 'folke/neodev.nvim'
-on_lua = 'lspconfig'
-lua_source = 'require("neodev").setup()'
 
 [[plugins]]
 repo = 'kosayoda/nvim-lightbulb'
