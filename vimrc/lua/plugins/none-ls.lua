@@ -22,7 +22,7 @@ end
 
 function M.setup()
   local configs_dir = core.normalize_path(
-    os.getenv('VIM_CONFIGS_PATH') .. '/none-ls'
+    vim.env.VIM_CONFIGS_PATH .. '/none-ls'
   )
   local builtins = require('null-ls').builtins
 

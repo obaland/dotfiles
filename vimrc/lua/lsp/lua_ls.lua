@@ -16,9 +16,14 @@ function M.make_config(options)
         },
       },
       workspace = {
+        checkThirdParty = false,
         library = {
-          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          vim.fn.expand('$VIMRUNTIME/lua'),
+          vim.fn.expand('$VIMRUNTIME/lua/vim/lsp'),
+          '${3rd}/luv/library',
+          '${3rd}/busted/library',
+          '${3rd}/luassert/library',
+          unpack(vim.api.nvim_get_runtime_file('', true)),
         },
       },
     },
