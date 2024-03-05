@@ -433,7 +433,7 @@ local function statusline()
   local git = {
     condition = conditions.is_git_repo,
     init = function(self)
-      self.status_dict = vim.b.gitsigns_status_dict
+      self.status_dict = vim.api.nvim_buf_get_var(0, 'gitsigns_status_dict')
       self.has_changed = self.status_dict.added ~= 0
         or self.status_dict.removed ~= 0
         or self.status_dict.changed ~= 0
@@ -718,9 +718,9 @@ local function tabline()
 
   local session = {
     provider = function()
-      local ok, session = pcall(vim.api.nvim_get_vvar, 'this_session')
-      if ok and #session > 0 then
-        local session_name = vim.fn.tr(session, '%', '/')
+      local ok, this_session = pcall(vim.api.nvim_get_vvar, 'this_session')
+      if ok and #this_session > 0 then
+        local session_name = vim.fn.tr(this_session, '%', '/')
         return vim.fn.fnamemodify(session_name, ':t:r') .. '  '
       end
     end,
