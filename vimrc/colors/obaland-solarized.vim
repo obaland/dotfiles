@@ -212,79 +212,79 @@ let s:i = ',italic'
 
 " Highlighting primitives
 " -----------------------
-execute 'let s:bg_none    = " ' . 'guibg='.s:gui_none    . ' ctermbg='.s:term_none    . '"'
-execute 'let s:bg_back    = " ' . 'guibg='.s:gui_back    . ' ctermbg='.s:term_back    . '"'
-execute 'let s:bg_base03  = " ' . 'guibg='.s:gui_base03  . ' ctermbg='.s:term_base03  . '"'
-execute 'let s:bg_base02  = " ' . 'guibg='.s:gui_base02  . ' ctermbg='.s:term_base02  . '"'
-execute 'let s:bg_base01  = " ' . 'guibg='.s:gui_base01  . ' ctermbg='.s:term_base01  . '"'
-execute 'let s:bg_base00  = " ' . 'guibg='.s:gui_base00  . ' ctermbg='.s:term_base00  . '"'
-execute 'let s:bg_base0   = " ' . 'guibg='.s:gui_base0   . ' ctermbg='.s:term_base0   . '"'
-execute 'let s:bg_base1   = " ' . 'guibg='.s:gui_base1   . ' ctermbg='.s:term_base1   . '"'
-execute 'let s:bg_base2   = " ' . 'guibg='.s:gui_base2   . ' ctermbg='.s:term_base2   . '"'
-execute 'let s:bg_base3   = " ' . 'guibg='.s:gui_base3   . ' ctermbg='.s:term_base3   . '"'
-execute 'let s:bg_green   = " ' . 'guibg='.s:gui_green   . ' ctermbg='.s:term_green   . '"'
-execute 'let s:bg_yellow  = " ' . 'guibg='.s:gui_yellow  . ' ctermbg='.s:term_yellow  . '"'
-execute 'let s:bg_orange  = " ' . 'guibg='.s:gui_orange  . ' ctermbg='.s:term_orange  . '"'
-execute 'let s:bg_red     = " ' . 'guibg='.s:gui_red     . ' ctermbg='.s:term_red     . '"'
-execute 'let s:bg_magenta = " ' . 'guibg='.s:gui_magenta . ' ctermbg='.s:term_magenta . '"'
-execute 'let s:bg_violet  = " ' . 'guibg='.s:gui_violet  . ' ctermbg='.s:term_violet  . '"'
-execute 'let s:bg_blue    = " ' . 'guibg='.s:gui_blue    . ' ctermbg='.s:term_blue    . '"'
-execute 'let s:bg_cyan    = " ' . 'guibg='.s:gui_cyan    . ' ctermbg='.s:term_cyan    . '"'
-execute 'let s:bg_white   = " ' . 'guibg='.s:gui_white   . ' ctermbg='.s:term_white   . '"'
-execute 'let s:bg_rose    = " ' . 'guibg='.s:gui_rose    . ' ctermbg='.s:term_rose    . '"'
+let s:bg_none    = printf(' guibg=%s ctermbg=%s', s:gui_none, s:term_none)
+let s:bg_back    = printf(' guibg=%s ctermbg=%s', s:gui_back, s:term_back)
+let s:bg_base03  = printf(' guibg=%s ctermbg=%s', s:gui_base03, s:term_base03)
+let s:bg_base02  = printf(' guibg=%s ctermbg=%s', s:gui_base02, s:term_base02)
+let s:bg_base01  = printf(' guibg=%s ctermbg=%s', s:gui_base01, s:term_base01)
+let s:bg_base00  = printf(' guibg=%s ctermbg=%s', s:gui_base00, s:term_base00)
+let s:bg_base0   = printf(' guibg=%s ctermbg=%s', s:gui_base0, s:term_base0)
+let s:bg_base1   = printf(' guibg=%s ctermbg=%s', s:gui_base1, s:term_base1)
+let s:bg_base2   = printf(' guibg=%s ctermbg=%s', s:gui_base2, s:term_base2)
+let s:bg_base3   = printf(' guibg=%s ctermbg=%s', s:gui_base3, s:term_base3)
+let s:bg_green   = printf(' guibg=%s ctermbg=%s', s:gui_green, s:term_green)
+let s:bg_yellow  = printf(' guibg=%s ctermbg=%s', s:gui_yellow, s:term_yellow)
+let s:bg_orange  = printf(' guibg=%s ctermbg=%s', s:gui_orange, s:term_orange)
+let s:bg_red     = printf(' guibg=%s ctermbg=%s', s:gui_red, s:term_red)
+let s:bg_magenta = printf(' guibg=%s ctermbg=%s', s:gui_magenta, s:term_magenta)
+let s:bg_violet  = printf(' guibg=%s ctermbg=%s', s:gui_violet, s:term_violet)
+let s:bg_blue    = printf(' guibg=%s ctermbg=%s', s:gui_blue, s:term_blue)
+let s:bg_cyan    = printf(' guibg=%s ctermbg=%s', s:gui_cyan, s:term_cyan)
+let s:bg_white   = printf(' guibg=%s ctermbg=%s', s:gui_white, s:term_white)
+let s:bg_rose    = printf(' guibg=%s ctermbg=%s', s:gui_rose, s:term_rose)
 
-execute 'let s:fg_none    = " ' . 'guifg='.s:gui_none    . ' ctermfg='.s:term_none    . '"'
-execute 'let s:fg_back    = " ' . 'guifg='.s:gui_back    . ' ctermfg='.s:term_back    . '"'
-execute 'let s:fg_base03  = " ' . 'guifg='.s:gui_base03  . ' ctermfg='.s:term_base03  . '"'
-execute 'let s:fg_base02  = " ' . 'guifg='.s:gui_base02  . ' ctermfg='.s:term_base02  . '"'
-execute 'let s:fg_base01  = " ' . 'guifg='.s:gui_base01  . ' ctermfg='.s:term_base01  . '"'
-execute 'let s:fg_base00  = " ' . 'guifg='.s:gui_base00  . ' ctermfg='.s:term_base00  . '"'
-execute 'let s:fg_base0   = " ' . 'guifg='.s:gui_base0   . ' ctermfg='.s:term_base0   . '"'
-execute 'let s:fg_base1   = " ' . 'guifg='.s:gui_base1   . ' ctermfg='.s:term_base1   . '"'
-execute 'let s:fg_base2   = " ' . 'guifg='.s:gui_base2   . ' ctermfg='.s:term_base2   . '"'
-execute 'let s:fg_base3   = " ' . 'guifg='.s:gui_base3   . ' ctermfg='.s:term_base3   . '"'
-execute 'let s:fg_green   = " ' . 'guifg='.s:gui_green   . ' ctermfg='.s:term_green   . '"'
-execute 'let s:fg_yellow  = " ' . 'guifg='.s:gui_yellow  . ' ctermfg='.s:term_yellow  . '"'
-execute 'let s:fg_orange  = " ' . 'guifg='.s:gui_orange  . ' ctermfg='.s:term_orange  . '"'
-execute 'let s:fg_red     = " ' . 'guifg='.s:gui_red     . ' ctermfg='.s:term_red     . '"'
-execute 'let s:fg_magenta = " ' . 'guifg='.s:gui_magenta . ' ctermfg='.s:term_magenta . '"'
-execute 'let s:fg_violet  = " ' . 'guifg='.s:gui_violet  . ' ctermfg='.s:term_violet  . '"'
-execute 'let s:fg_blue    = " ' . 'guifg='.s:gui_blue    . ' ctermfg='.s:term_blue    . '"'
-execute 'let s:fg_cyan    = " ' . 'guifg='.s:gui_cyan    . ' ctermfg='.s:term_cyan    . '"'
-execute 'let s:fg_white   = " ' . 'guifg='.s:gui_white   . ' ctermfg='.s:term_white   . '"'
-execute 'let s:fg_rose    = " ' . 'guifg='.s:gui_rose    . ' ctermfg='.s:term_rose    . '"'
+let s:fg_none    = printf(' guifg=%s ctermfg=%s', s:gui_none, s:term_none)
+let s:fg_back    = printf(' guifg=%s ctermfg=%s', s:gui_back, s:term_back)
+let s:fg_base03  = printf(' guifg=%s ctermfg=%s', s:gui_base03, s:term_base03)
+let s:fg_base02  = printf(' guifg=%s ctermfg=%s', s:gui_base02, s:term_base02)
+let s:fg_base01  = printf(' guifg=%s ctermfg=%s', s:gui_base01, s:term_base01)
+let s:fg_base00  = printf(' guifg=%s ctermfg=%s', s:gui_base00, s:term_base00)
+let s:fg_base0   = printf(' guifg=%s ctermfg=%s', s:gui_base0, s:term_base0)
+let s:fg_base1   = printf(' guifg=%s ctermfg=%s', s:gui_base1, s:term_base1)
+let s:fg_base2   = printf(' guifg=%s ctermfg=%s', s:gui_base2, s:term_base2)
+let s:fg_base3   = printf(' guifg=%s ctermfg=%s', s:gui_base3, s:term_base3)
+let s:fg_green   = printf(' guifg=%s ctermfg=%s', s:gui_green, s:term_green)
+let s:fg_yellow  = printf(' guifg=%s ctermfg=%s', s:gui_yellow, s:term_yellow)
+let s:fg_orange  = printf(' guifg=%s ctermfg=%s', s:gui_orange, s:term_orange)
+let s:fg_red     = printf(' guifg=%s ctermfg=%s', s:gui_red, s:term_red)
+let s:fg_magenta = printf(' guifg=%s ctermfg=%s', s:gui_magenta, s:term_magenta)
+let s:fg_violet  = printf(' guifg=%s ctermfg=%s', s:gui_violet, s:term_violet)
+let s:fg_blue    = printf(' guifg=%s ctermfg=%s', s:gui_blue, s:term_blue)
+let s:fg_cyan    = printf(' guifg=%s ctermfg=%s', s:gui_cyan, s:term_cyan)
+let s:fg_white   = printf(' guifg=%s ctermfg=%s', s:gui_white, s:term_white)
+let s:fg_rose    = printf(' guifg=%s ctermfg=%s', s:gui_rose, s:term_rose)
 
-execute 'let s:fmt_none  = " ' . 'gui=NONE'         . ' cterm=NONE'         . '"'
-execute 'let s:fmt_bold  = " ' . 'gui=NONE'.s:b     . ' cterm=NONE'.s:b     . '"'
-execute 'let s:fmt_bolu  = " ' . 'gui=NONE'.s:b.s:u . ' cterm=NONE'.s:b.s:u . '"'
-execute 'let s:fmt_bldi  = " ' . 'gui=NONE'.s:b     . ' cterm=NONE'.s:b     . '"'
-execute 'let s:fmt_undr  = " ' . 'gui=NONE'.s:u     . ' cterm=NONE'.s:u     . '"'
-execute 'let s:fmt_curl  = " ' . 'gui=NONE'.s:c     . ' cterm=NONE'.s:c     . '"'
-execute 'let s:fmt_ital  = " ' . 'gui=NONE'.s:i     . ' cterm=NONE'.s:i     . '"'
-execute 'let s:fmt_stnd  = " ' . 'gui=NONE'.s:s     . ' cterm=NONE'.s:s     . '"'
-execute 'let s:fmt_revr  = " ' . 'gui=NONE'.s:r     . ' cterm=NONE'.s:r     . '"'
-execute 'let s:fmt_revb  = " ' . 'gui=NONE'.s:r.s:b . ' cterm=NONE'.s:r.s:b . '"'
-execute 'let s:fmt_revbu = " ' . 'gui=NONE'.s:r.s:b.s:u . ' cterm=NONE'.s:r.s:b.s:u . '"'
+let s:fmt_none  = ' gui=NONE'             . ' cterm=NONE'
+let s:fmt_bold  = ' gui=NONE'.s:b         . ' cterm=NONE'.s:b
+let s:fmt_bolu  = ' gui=NONE'.s:b.s:u     . ' cterm=NONE'.s:b.s:u
+let s:fmt_bldi  = ' gui=NONE'.s:b         . ' cterm=NONE'.s:b
+let s:fmt_undr  = ' gui=NONE'.s:u         . ' cterm=NONE'.s:u
+let s:fmt_curl  = ' gui=NONE'.s:c         . ' cterm=NONE'.s:c
+let s:fmt_ital  = ' gui=NONE'.s:i         . ' cterm=NONE'.s:i
+let s:fmt_stnd  = ' gui=NONE'.s:s         . ' cterm=NONE'.s:s
+let s:fmt_revr  = ' gui=NONE'.s:r         . ' cterm=NONE'.s:r
+let s:fmt_revb  = ' gui=NONE'.s:r.s:b     . ' cterm=NONE'.s:r.s:b
+let s:fmt_revbu = ' gui=NONE'.s:r.s:b.s:u . ' cterm=NONE'.s:r.s:b.s:u
 
 if has('gui_running') || has('termguicolors') && &termguicolors
-  execute 'let s:sp_none    = " guisp=' . s:gui_none    . '"'
-  execute 'let s:sp_back    = " guisp=' . s:gui_back    . '"'
-  execute 'let s:sp_base03  = " guisp=' . s:gui_base03  . '"'
-  execute 'let s:sp_base02  = " guisp=' . s:gui_base02  . '"'
-  execute 'let s:sp_base01  = " guisp=' . s:gui_base01  . '"'
-  execute 'let s:sp_base00  = " guisp=' . s:gui_base00  . '"'
-  execute 'let s:sp_base0   = " guisp=' . s:gui_base0   . '"'
-  execute 'let s:sp_base1   = " guisp=' . s:gui_base1   . '"'
-  execute 'let s:sp_base2   = " guisp=' . s:gui_base2   . '"'
-  execute 'let s:sp_base3   = " guisp=' . s:gui_base3   . '"'
-  execute 'let s:sp_green   = " guisp=' . s:gui_green   . '"'
-  execute 'let s:sp_yellow  = " guisp=' . s:gui_yellow  . '"'
-  execute 'let s:sp_orange  = " guisp=' . s:gui_orange  . '"'
-  execute 'let s:sp_red     = " guisp=' . s:gui_red     . '"'
-  execute 'let s:sp_magenta = " guisp=' . s:gui_magenta . '"'
-  execute 'let s:sp_violet  = " guisp=' . s:gui_violet  . '"'
-  execute 'let s:sp_blue    = " guisp=' . s:gui_blue    . '"'
-  execute 'let s:sp_cyan    = " guisp=' . s:gui_cyan    . '"'
+  let s:sp_none    = ' guisp=' . s:gui_none
+  let s:sp_back    = ' guisp=' . s:gui_back
+  let s:sp_base03  = ' guisp=' . s:gui_base03
+  let s:sp_base02  = ' guisp=' . s:gui_base02
+  let s:sp_base01  = ' guisp=' . s:gui_base01
+  let s:sp_base00  = ' guisp=' . s:gui_base00
+  let s:sp_base0   = ' guisp=' . s:gui_base0
+  let s:sp_base1   = ' guisp=' . s:gui_base1
+  let s:sp_base2   = ' guisp=' . s:gui_base2
+  let s:sp_base3   = ' guisp=' . s:gui_base3
+  let s:sp_green   = ' guisp=' . s:gui_green
+  let s:sp_yellow  = ' guisp=' . s:gui_yellow
+  let s:sp_orange  = ' guisp=' . s:gui_orange
+  let s:sp_red     = ' guisp=' . s:gui_red
+  let s:sp_magenta = ' guisp=' . s:gui_magenta
+  let s:sp_violet  = ' guisp=' . s:gui_violet
+  let s:sp_blue    = ' guisp=' . s:gui_blue
+  let s:sp_cyan    = ' guisp=' . s:gui_cyan
 else
 	let s:sp_none    = ''
 	let s:sp_back    = ''
@@ -306,23 +306,37 @@ else
 	let s:sp_cyan    = ''
 endif
 
-execute 'let s:fg_dark0    = " ' . 'guifg='.s:gui_dark0    . ' ctermfg='.s:term_dark0    . '"'
-execute 'let s:fg_dark0_hl = " ' . 'guifg='.s:gui_dark0_hl . ' ctermfg='.s:term_dark0_hl . '"'
-execute 'let s:fg_dark1    = " ' . 'guifg='.s:gui_dark1    . ' ctermfg='.s:term_dark1    . '"'
-execute 'let s:fg_dark1_hl = " ' . 'guifg='.s:gui_dark1_hl . ' ctermfg='.s:term_dark1_hl . '"'
-execute 'let s:fg_dark2    = " ' . 'guifg='.s:gui_dark2    . ' ctermfg='.s:term_dark2    . '"'
-execute 'let s:fg_dark3    = " ' . 'guifg='.s:gui_dark3    . ' ctermfg='.s:term_dark3    . '"'
-execute 'let s:fg_dark4    = " ' . 'guifg='.s:gui_dark4    . ' ctermfg='.s:term_dark4    . '"'
-execute 'let s:fg_dark5    = " ' . 'guifg='.s:gui_dark5    . ' ctermfg='.s:term_dark5    . '"'
-execute 'let s:fg_dark6    = " ' . 'guifg='.s:gui_dark6    . ' ctermfg='.s:term_dark6    . '"'
-execute 'let s:fg_dark7    = " ' . 'guifg='.s:gui_dark7    . ' ctermfg='.s:term_dark7    . '"'
-execute 'let s:fg_gutter   = " ' . 'guifg='.s:gui_gutter   . ' ctermfg='.s:term_gutter   . '"'
-execute 'let s:fg_darkblue = " ' . 'guifg='.s:gui_darkblue . ' ctermfg='.s:term_darkblue . '"'
-execute 'let s:fg_indigo   = " ' . 'guifg='.s:gui_indigo   . ' ctermfg='.s:term_indigo   . '"'
-execute 'let s:fg_navyblue = " ' . 'guifg='.s:gui_navyblue . ' ctermfg='.s:term_navyblue . '"'
-execute 'let s:fg_ultramarine = " ' . 'guifg='.s:gui_ultramarine . ' ctermfg='.s:term_ultramarine . '"'
+let s:fg_dark0    = printf(' guifg=%s ctermfg=%s', s:gui_dark0, s:term_dark0)
+let s:fg_dark0_hl = printf(' guifg=%s ctermfg=%s', s:gui_dark0_hl, s:term_dark0_hl)
+let s:fg_dark1    = printf(' guifg=%s ctermfg=%s', s:gui_dark1, s:term_dark1)
+let s:fg_dark1_hl = printf(' guifg=%s ctermfg=%s', s:gui_dark1_hl, s:term_dark1_hl)
+let s:fg_dark2    = printf(' guifg=%s ctermfg=%s', s:gui_dark2, s:term_dark2)
+let s:fg_dark3    = printf(' guifg=%s ctermfg=%s', s:gui_dark3, s:term_dark3)
+let s:fg_dark4    = printf(' guifg=%s ctermfg=%s', s:gui_dark4, s:term_dark4)
+let s:fg_dark5    = printf(' guifg=%s ctermfg=%s', s:gui_dark5, s:term_dark5)
+let s:fg_dark6    = printf(' guifg=%s ctermfg=%s', s:gui_dark6, s:term_dark6)
+let s:fg_dark7    = printf(' guifg=%s ctermfg=%s', s:gui_dark7, s:term_dark7)
+let s:fg_gutter   = printf(' guifg=%s ctermfg=%s', s:gui_gutter, s:term_gutter)
+let s:fg_darkblue = printf(' guifg=%s ctermfg=%s', s:gui_darkblue, s:term_darkblue)
+let s:fg_indigo   = printf(' guifg=%s ctermfg=%s', s:gui_indigo, s:term_indigo)
+let s:fg_navyblue = printf(' guifg=%s ctermfg=%s', s:gui_navyblue, s:term_navyblue)
+let s:fg_ultramarine = printf(' guifg=%s ctermfg=%s', s:gui_ultramarine, s:term_ultramarine)
 
-execute 'let s:bg_dark0_hl = " ' . 'guibg='.s:gui_dark0_hl . ' ctermbg='.s:term_dark0_hl . '"'
+let s:bg_dark0    = printf(' guibg=%s ctermbg=%s', s:gui_dark0, s:term_dark0)
+let s:bg_dark0_hl = printf(' guibg=%s ctermbg=%s', s:gui_dark0_hl, s:term_dark0_hl)
+let s:bg_dark1    = printf(' guibg=%s ctermbg=%s', s:gui_dark1, s:term_dark1)
+let s:bg_dark1_hl = printf(' guibg=%s ctermbg=%s', s:gui_dark1_hl, s:term_dark1_hl)
+let s:bg_dark2    = printf(' guibg=%s ctermbg=%s', s:gui_dark2, s:term_dark2)
+let s:bg_dark3    = printf(' guibg=%s ctermbg=%s', s:gui_dark3, s:term_dark3)
+let s:bg_dark4    = printf(' guibg=%s ctermbg=%s', s:gui_dark4, s:term_dark4)
+let s:bg_dark5    = printf(' guibg=%s ctermbg=%s', s:gui_dark5, s:term_dark5)
+let s:bg_dark6    = printf(' guibg=%s ctermbg=%s', s:gui_dark6, s:term_dark6)
+let s:bg_dark7    = printf(' guibg=%s ctermbg=%s', s:gui_dark7, s:term_dark7)
+let s:bg_gutter   = printf(' guibg=%s ctermbg=%s', s:gui_gutter, s:term_gutter)
+let s:bg_darkblue = printf(' guibg=%s ctermbg=%s', s:gui_darkblue, s:term_darkblue)
+let s:bg_indigo   = printf(' guibg=%s ctermbg=%s', s:gui_indigo, s:term_indigo)
+let s:bg_navyblue = printf(' guibg=%s ctermbg=%s', s:gui_navyblue, s:term_navyblue)
+let s:bg_ultramarine = printf(' guibg=%s ctermbg=%s', s:gui_ultramarine, s:term_ultramarine)
 
 " Basic highlighting
 
@@ -769,7 +783,10 @@ let g:terminal_color_15 = s:gui_base3
 
 " Utility autocommand
 " -------------------
-autocmd GUIEnter * if (has('gui_running')) | execute "colorscheme " . g:colors_name | endif
+augroup user_obaland_solarized
+	autocmd!
+	autocmd GUIEnter * if (has('gui_running')) | execute 'colorscheme ' . g:colors_name | endif
+augroup END
 
 " Tabline
 " -------
@@ -1055,8 +1072,10 @@ highlight! link NavicIconsTypeParameter Normal
 highlight! link NavicText               Normal
 execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_magenta .s:bg_none
 
-" aerial
+" mason
 " ----------
+highlight! link MasonNormal Normal
+execute 'highlight! MasonHeader' .s:fmt_none .s:fg_white .s:bg_dark0
 
 " which-key
 " ---------
