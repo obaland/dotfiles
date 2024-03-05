@@ -339,6 +339,11 @@ execute 'highlight! Ignore'     .s:fmt_none .s:fg_none   .s:bg_none
 execute 'highlight! Error'      .s:fmt_none .s:fg_red    .s:bg_none
 execute 'highlight! Todo'       .s:fmt_none .s:fg_magenta.s:bg_none
 
+highlight! link Delimiter Special
+highlight! link Function Identifier
+highlight! link Operator Statement
+highlight! link String Constant
+
 "       *Constant        any constant
 "        String          a string constant: "this is a string"
 "        Character       a character constant: 'c', '\n'
