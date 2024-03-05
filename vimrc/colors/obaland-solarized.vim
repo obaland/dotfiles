@@ -155,7 +155,7 @@ function! s:alternate_light_scheme() abort
 	let s:gui_base1  = l:gui_temp01
 	let s:gui_base2  = l:gui_temp02
 	let s:gui_base3  = l:gui_temp03
-	if s:gui_back != 'NONE'
+	if s:gui_back !=# 'NONE'
 		let s:gui_back = s:gui_base03
 	endif
 
@@ -172,18 +172,18 @@ function! s:alternate_light_scheme() abort
 	let s:term_base1  = l:term_temp01
 	let s:term_base2  = l:term_temp02
 	let s:term_base3  = l:term_temp03
-	if s:term_back != 'NONE'
+	if s:term_back !=# 'NONE'
 		let s:term_back = s:term_base03
 	endif
 endfunction
 
-if &background == 'light'
+if &background ==# 'light'
 	call s:alternate_light_scheme()
 endif
 
 " Optional contrast schemes
 " -------------------------
-if g:solarized_contrast == 'high'
+if g:solarized_contrast ==# 'high'
   let s:gui_base01 = s:gui_base00
   let s:gui_base00 = s:gui_base0
   let s:gui_base0  = s:gui_base1
@@ -198,7 +198,7 @@ if g:solarized_contrast == 'high'
   let s:term_base2  = s:term_base3
   let s:term_back   = s:term_back
 endif
-if g:solarized_contrast == 'low'
+if g:solarized_contrast ==# 'low'
   let s:gui_back  = s:gui_base02
   let s:term_back = s:term_base02
   let s:ou        = ',underline'

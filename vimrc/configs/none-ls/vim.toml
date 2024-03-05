@@ -23,19 +23,36 @@ type = "function"
 [[after_each.args]]
 type = "function"
 
-[assert.is_not]
+[[assert.is_false.args]]
+type = "any"
+
+[assert.is_nil]
 any = true
 
-[[assert.equals.args]]
-type = "any"
-[[assert.equals.args]]
-type = "any"
-[[assert.equals.args]]
-type = "any"
-required = false
+[assert.is_not_nil]
+any = true
 
-[[assert.same.args]]
+[[assert.is_equal.args]]
 type = "any"
+[[assert.is_equal.args]]
+type = "any"
+
+[[assert.is_true.args]]
+type = "any"
+
+[[assert.equals.args]]
+type = "any"
+
+[[assert.equal.args]]
+type = "any"
+[[assert.equal.args]]
+type = "any"
+
+[[assert.not_equal.args]]
+type = "any"
+[[assert.not_equal.args]]
+type = "any"
+
 [[assert.same.args]]
 type = "any"
 

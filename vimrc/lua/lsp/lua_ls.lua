@@ -4,28 +4,23 @@
 local M = {}
 
 function M.make_config(options)
-  options.Lua = {
-    runtime = {
-      version = 'LuaJIT',
-      path = vim.fn.split(package.path, ';'),
-    },
-    diagnostics = {
-      enable = true,
-      globals = {
-        'vim',
-        'use',
-        'describe',
-        'it',
-        'assert',
-        'before_each',
-        'after_each',
+  options.settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
       },
-    },
-    workspace = {
-      library = {
-        [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-        [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-        [vim.fn.expand('$CONFIG_PATH/dein')] = true,
+      diagnostics = {
+        enable = true,
+        globals = {
+          'vim',
+        },
+      },
+      workspace = {
+        library = {
+          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          [vim.fn.expand('$CONFIG_PATH/dein')] = true,
+        },
       },
     },
   }
