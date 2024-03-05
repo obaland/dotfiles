@@ -92,9 +92,6 @@ depends = 'mason.nvim'
 lua_source = 'require("mason-lspconfig").setup()'
 
 [[plugins]]
-repo = 'folke/neodev.nvim'
-
-[[plugins]]
 repo = 'neovim/nvim-lspconfig'
 if = 'has("nvim-0.7")'
 on_event = 'BufRead'
@@ -102,7 +99,6 @@ depends = [
   'mason.nvim',
   'mason-lspconfig.nvim',
   'cmp-nvim-lsp',
-  'neodev.nvim'
 ]
 lua_source = 'require("plugins/lspconfig").setup()'
 
