@@ -56,11 +56,11 @@ function! s:load_local_plugins(path) abort
 
   for l:path in l:paths
     let l:name = fnamemodify(l:path, ':t')
-    if l:name == 'nvim'
+    if l:name ==# 'nvim'
       if has('nvim')
         call s:load_local_plugins(l:path)
       endif
-    elseif l:name == 'vim'
+    elseif l:name ==# 'vim'
       if !has('nvim')
         call s:load_local_plugins(l:path)
       endif
