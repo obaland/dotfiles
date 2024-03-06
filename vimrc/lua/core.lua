@@ -23,38 +23,6 @@ command(
     augroup END
   ]]
 )
--- stylua: ignore end
-
--- Color table based on "solarized dark"
--- stylua: ignore start
-local colors = {
-  base03    = '#002b36',
-  base02    = '#073642',
-  base01    = '#586e75',
-  base00    = '#657b83',
-  base0     = '#839496',
-  base1     = '#93a1a1',
-  base2     = '#eee8d5',
-  base3     = '#fdf6e3',
-  yellow    = '#b58900',
-  orange    = '#cb4b16',
-  red       = '#dc322f',
-  magenta   = '#d33682',
-  violet    = '#6c71c4',
-  blue      = '#268bd2',
-  cyan      = '#2aa198',
-  green     = '#859900',
-  olivedrab = '#6b8e23',
-  rosefenicottero = '#f0435a',
-  soft_blue = '#5faeec',
-  soft_red  = '#ec5f67',
-  grayish_yellow = '#d7d7bc',
-  indigo = '#074770',
-  dark_cyan = '#2a6776',
-  very_dark_cyan = '#00333f',
-  russian_blue = '#002832',
-}
--- stylua: ignore end
 
 local M = {}
 
@@ -133,11 +101,6 @@ function M.project_root_bufname(bufnr)
     return M.project_root(bufnr)
   end
   return project_root(bufnr, vim.fn.fnamemodify(bufname, ':p:h'))
-end
-
--- Get color table
-function M.get_colors()
-  return colors
 end
 
 -- Get icon from "vfiler-column-devicons"

@@ -123,7 +123,7 @@ extensions.vfiler = {
       )
       return num .. current.path
     end,
-    hl = { fg = 'grayish_yellow' },
+    hl = { fg = 'white' },
   },
   component.align(),
 }
@@ -158,7 +158,7 @@ extensions.mason = {
         #registry.get_all_package_specs()
       )
     end,
-    hl = { fg = 'grayish_yellow' },
+    hl = { fg = 'white' },
   },
   component.align(),
   surround({
@@ -301,9 +301,9 @@ local function statusline()
         V = 'magenta',
         ['\22'] = 'magenta',
         c = 'orange',
-        s = 'purple',
-        S = 'purple',
-        ['\19'] = 'purple',
+        s = 'violet',
+        S = 'violet',
+        ['\19'] = 'violet',
         R = 'red',
         r = 'red',
         ['!'] = 'orange',
@@ -374,7 +374,7 @@ local function statusline()
         -- if not conditions.width_percent_below(#path, 0.25) then
         return filepath(self.filename, 3, 32)
       end,
-      hl = { fg = 'grayish_yellow' },
+      hl = { fg = 'white' },
     },
     -- modifer
     {
@@ -552,7 +552,7 @@ local function winbar()
   return {
     {
       provider = ' ',
-      hl = 'WinBarLspClientName',
+      hl = { fg = 'white' },
     },
     {
       init = function(self)
@@ -569,7 +569,7 @@ local function winbar()
         end
         return '[No Active Lsp]'
       end,
-      hl = 'WinBarLspClientName',
+      hl = { fg = 'white' },
       update = { 'LspAttach', 'LspDetach' },
     },
     {
@@ -743,7 +743,29 @@ function M.setup()
     statusline = statusline(),
     tabline = tabline(),
     opts = {
-      colors = core.get_colors(),
+      --colors = core.get_colors(),
+      colors = {
+        base03    = utils.get_highlight('SolarizedColorBase03').fg,
+        base02    = utils.get_highlight('SolarizedColorBase02').fg,
+        base01    = utils.get_highlight('SolarizedColorBase01').fg,
+        base00    = utils.get_highlight('SolarizedColorBase00').fg,
+        base0     = utils.get_highlight('SolarizedColorBase0').fg,
+        base1     = utils.get_highlight('SolarizedColorBase1').fg,
+        base2     = utils.get_highlight('SolarizedColorBase2').fg,
+        base3     = utils.get_highlight('SolarizedColorBase3').fg,
+        yellow    = utils.get_highlight('SolarizedColorYellow').fg,
+        orange    = utils.get_highlight('SolarizedColorOrange').fg,
+        red       = utils.get_highlight('SolarizedColorRed').fg,
+        magenta   = utils.get_highlight('SolarizedColorMagenta').fg,
+        violet    = utils.get_highlight('SolarizedColorViolet').fg,
+        blue      = utils.get_highlight('SolarizedColorBlue').fg,
+        cyan      = utils.get_highlight('SolarizedColorCyan').fg,
+        green     = utils.get_highlight('SolarizedColorGreen').fg,
+        white     = utils.get_highlight('SolarizedColorWhite').fg,
+        soft_blue = utils.get_highlight('SolarizedColorSoftBlue').fg,
+        soft_red  = utils.get_highlight('SolarizedColorSoftRed').fg,
+        russian_blue = utils.get_highlight('SolarizedColorRussianBlue').fg,
+      },
       disable_winbar_cb = function(args)
         return conditions.buffer_matches({
           buftype = { 'nofile', 'prompt', 'help', 'quickfile' },

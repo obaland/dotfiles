@@ -59,9 +59,12 @@ let s:gui_magenta = '#d33682'
 let s:gui_violet  = '#6c71c4'
 let s:gui_blue    = '#268bd2'
 let s:gui_cyan    = '#2aa198'
-let s:gui_green   = '#719e07' " experimental
+let s:gui_green   = '#859900'
 let s:gui_white   = '#d7d7bc' " experimental
 let s:gui_rose    = '#e95464' " experimental
+let s:gui_soft_blue = '#5faeec' " experimental
+let s:gui_soft_red  = '#ec5f67' " experimental
+let s:gui_russian_blue = '#002832' " experimental
 
 let s:term_mode    = 'cterm'
 let s:term_base03  = '8'
@@ -84,38 +87,38 @@ let s:term_white   = '7'
 let s:term_rose    = '1'
 
 " Original colors
-let s:gui_dark0 ='#222436'
-let s:gui_dark0_hl ='#2f334d'
-let s:gui_dark1 ='#24283b'
-let s:gui_dark1_hl ='#292e42'
-let s:gui_dark2 ='#414868'
-let s:gui_dark3 ='#444a73'
-let s:gui_dark4 ='#545c7e'
-let s:gui_dark5 ='#737aa2'
-let s:gui_dark6 ='#828bb8'
-let s:gui_dark7 ='#a9b1d6'
-let s:gui_gutter ='#3b4261'
-let s:gui_darkblue ='#394b70'
+let s:gui_dark0  ='#222436'
+let s:gui_dark00 ='#2f334d'
+let s:gui_dark1  ='#24283b'
+let s:gui_dark01 ='#292e42'
+let s:gui_dark2  ='#414868'
+let s:gui_dark3  ='#444a73'
+let s:gui_dark4  ='#545c7e'
+let s:gui_dark5  ='#737aa2'
+let s:gui_dark6  ='#828bb8'
+let s:gui_dark7  ='#a9b1d6'
+let s:gui_gutter   ='#3b4261'
+let s:gui_darkblue ='#004c8c'
 let s:gui_navyblue ='#202f55'
-let s:gui_indigo ='#043c78'
-let s:gui_marineblue ='#006888'
+let s:gui_indigo   ='#043c78'
+let s:gui_marineblue  ='#006888'
 let s:gui_madonnablue ='#00608d'
 let s:gui_ultramarine ='#434da2'
 
-let s:term_dark0 ='0'
-let s:term_dark0_hl ='8'
-let s:term_dark1 ='0'
-let s:term_dark1_hl ='8'
-let s:term_dark2 ='0'
-let s:term_dark3 ='0'
-let s:term_dark4 ='5'
-let s:term_dark5 ='5'
-let s:term_dark6 ='5'
-let s:term_dark7 ='5'
+let s:term_dark0  ='0'
+let s:term_dark00 ='8'
+let s:term_dark1  ='0'
+let s:term_dark01 ='8'
+let s:term_dark2  ='0'
+let s:term_dark3  ='0'
+let s:term_dark4  ='5'
+let s:term_dark5  ='5'
+let s:term_dark6  ='5'
+let s:term_dark7  ='5'
 let s:term_gutter ='5'
 let s:term_darkblue = '4'
 let s:term_navyblue = '4'
-let s:term_indigo ='4'
+let s:term_indigo   ='4'
 let s:term_ultramarine ='4'
 
 " Formatting options and null values for passthrough effect
@@ -307,9 +310,9 @@ else
 endif
 
 let s:fg_dark0    = printf(' guifg=%s ctermfg=%s', s:gui_dark0, s:term_dark0)
-let s:fg_dark0_hl = printf(' guifg=%s ctermfg=%s', s:gui_dark0_hl, s:term_dark0_hl)
+let s:fg_dark00   = printf(' guifg=%s ctermfg=%s', s:gui_dark00, s:term_dark00)
 let s:fg_dark1    = printf(' guifg=%s ctermfg=%s', s:gui_dark1, s:term_dark1)
-let s:fg_dark1_hl = printf(' guifg=%s ctermfg=%s', s:gui_dark1_hl, s:term_dark1_hl)
+let s:fg_dark01   = printf(' guifg=%s ctermfg=%s', s:gui_dark01, s:term_dark01)
 let s:fg_dark2    = printf(' guifg=%s ctermfg=%s', s:gui_dark2, s:term_dark2)
 let s:fg_dark3    = printf(' guifg=%s ctermfg=%s', s:gui_dark3, s:term_dark3)
 let s:fg_dark4    = printf(' guifg=%s ctermfg=%s', s:gui_dark4, s:term_dark4)
@@ -323,9 +326,9 @@ let s:fg_navyblue = printf(' guifg=%s ctermfg=%s', s:gui_navyblue, s:term_navybl
 let s:fg_ultramarine = printf(' guifg=%s ctermfg=%s', s:gui_ultramarine, s:term_ultramarine)
 
 let s:bg_dark0    = printf(' guibg=%s ctermbg=%s', s:gui_dark0, s:term_dark0)
-let s:bg_dark0_hl = printf(' guibg=%s ctermbg=%s', s:gui_dark0_hl, s:term_dark0_hl)
+let s:bg_dark00   = printf(' guibg=%s ctermbg=%s', s:gui_dark00, s:term_dark00)
 let s:bg_dark1    = printf(' guibg=%s ctermbg=%s', s:gui_dark1, s:term_dark1)
-let s:bg_dark1_hl = printf(' guibg=%s ctermbg=%s', s:gui_dark1_hl, s:term_dark1_hl)
+let s:bg_dark01   = printf(' guibg=%s ctermbg=%s', s:gui_dark01, s:term_dark01)
 let s:bg_dark2    = printf(' guibg=%s ctermbg=%s', s:gui_dark2, s:term_dark2)
 let s:bg_dark3    = printf(' guibg=%s ctermbg=%s', s:gui_dark3, s:term_dark3)
 let s:bg_dark4    = printf(' guibg=%s ctermbg=%s', s:gui_dark4, s:term_dark4)
@@ -337,6 +340,48 @@ let s:bg_darkblue = printf(' guibg=%s ctermbg=%s', s:gui_darkblue, s:term_darkbl
 let s:bg_indigo   = printf(' guibg=%s ctermbg=%s', s:gui_indigo, s:term_indigo)
 let s:bg_navyblue = printf(' guibg=%s ctermbg=%s', s:gui_navyblue, s:term_navyblue)
 let s:bg_ultramarine = printf(' guibg=%s ctermbg=%s', s:gui_ultramarine, s:term_ultramarine)
+
+" highlight color definition
+
+execute printf('highlight! SolarizedColorBase03 gui=NONE guifg=%s guibg=%s', s:gui_base03, s:gui_base03)
+execute printf('highlight! SolarizedColorBase02 gui=NONE guifg=%s guibg=%s', s:gui_base02, s:gui_base02)
+execute printf('highlight! SolarizedColorBase01 gui=NONE guifg=%s guibg=%s', s:gui_base01, s:gui_base01)
+execute printf('highlight! SolarizedColorBase00 gui=NONE guifg=%s guibg=%s', s:gui_base00, s:gui_base00)
+execute printf('highlight! SolarizedColorBase0 gui=NONE guifg=%s guibg=%s', s:gui_base0, s:gui_base0)
+execute printf('highlight! SolarizedColorBase1 gui=NONE guifg=%s guibg=%s', s:gui_base1, s:gui_base1)
+execute printf('highlight! SolarizedColorBase2 gui=NONE guifg=%s guibg=%s', s:gui_base2, s:gui_base2)
+execute printf('highlight! SolarizedColorBase3 gui=NONE guifg=%s guibg=%s', s:gui_base3, s:gui_base3)
+execute printf('highlight! SolarizedColorYellow gui=NONE guifg=%s guibg=%s', s:gui_yellow, s:gui_yellow)
+execute printf('highlight! SolarizedColorOrange gui=NONE guifg=%s guibg=%s', s:gui_orange, s:gui_orange)
+execute printf('highlight! SolarizedColorRed gui=NONE guifg=%s guibg=%s', s:gui_red, s:gui_red)
+execute printf('highlight! SolarizedColorMagenta gui=NONE guifg=%s guibg=%s', s:gui_magenta, s:gui_magenta)
+execute printf('highlight! SolarizedColorViolet gui=NONE guifg=%s guibg=%s', s:gui_violet, s:gui_violet)
+execute printf('highlight! SolarizedColorBlue gui=NONE guifg=%s guibg=%s', s:gui_blue, s:gui_blue)
+execute printf('highlight! SolarizedColorCyan gui=NONE guifg=%s guibg=%s', s:gui_cyan, s:gui_cyan)
+execute printf('highlight! SolarizedColorGreen gui=NONE guifg=%s guibg=%s', s:gui_green, s:gui_green)
+execute printf('highlight! SolarizedColorWhite gui=NONE guifg=%s guibg=%s', s:gui_white, s:gui_white)
+execute printf('highlight! SolarizedColorRose gui=NONE guifg=%s guibg=%s', s:gui_rose, s:gui_rose)
+execute printf('highlight! SolarizedColorSoftBlue gui=NONE guifg=%s guibg=%s', s:gui_soft_blue, s:gui_soft_blue)
+execute printf('highlight! SolarizedColorSoftRed gui=NONE guifg=%s guibg=%s', s:gui_soft_red, s:gui_soft_red)
+execute printf('highlight! SolarizedColorRussianBlue gui=NONE guifg=%s guibg=%s', s:gui_russian_blue, s:gui_russian_blue)
+execute printf('highlight! SolarizedColorDark0 gui=NONE guifg=%s guibg=%s', s:gui_dark0, s:gui_dark0)
+execute printf('highlight! SolarizedColorDark00 gui=NONE guifg=%s guibg=%s', s:gui_dark00, s:gui_dark00)
+execute printf('highlight! SolarizedColorDark1 gui=NONE guifg=%s guibg=%s', s:gui_dark1, s:gui_dark1)
+execute printf('highlight! SolarizedColorDark01 gui=NONE guifg=%s guibg=%s', s:gui_dark01, s:gui_dark01)
+execute printf('highlight! SolarizedColorDark2 gui=NONE guifg=%s guibg=%s', s:gui_dark2, s:gui_dark2)
+execute printf('highlight! SolarizedColorDark3 gui=NONE guifg=%s guibg=%s', s:gui_dark3, s:gui_dark3)
+execute printf('highlight! SolarizedColorDark4 gui=NONE guifg=%s guibg=%s', s:gui_dark4, s:gui_dark4)
+execute printf('highlight! SolarizedColorDark5 gui=NONE guifg=%s guibg=%s', s:gui_dark5, s:gui_dark5)
+execute printf('highlight! SolarizedColorDark6 gui=NONE guifg=%s guibg=%s', s:gui_dark6, s:gui_dark6)
+execute printf('highlight! SolarizedColorDark7 gui=NONE guifg=%s guibg=%s', s:gui_dark7, s:gui_dark7)
+execute printf('highlight! SolarizedColorGutter gui=NONE guifg=%s guibg=%s', s:gui_gutter, s:gui_gutter)
+execute printf('highlight! SolarizedColorDarkBlue gui=NONE guifg=%s guibg=%s', s:gui_darkblue, s:gui_darkblue)
+execute printf('highlight! SolarizedColorNavyBlue gui=NONE guifg=%s guibg=%s', s:gui_navyblue, s:gui_navyblue)
+execute printf('highlight! SolarizedColorIndigo gui=NONE guifg=%s guibg=%s', s:gui_indigo, s:gui_indigo)
+execute printf('highlight! SolarizedColorMarieBlue gui=NONE guifg=%s guibg=%s', s:gui_marineblue, s:gui_marineblue)
+execute printf('highlight! SolarizedColorMadonnaBlue gui=NONE guifg=%s guibg=%s', s:gui_madonnablue, s:gui_madonnablue)
+execute printf('highlight! SolarizedColorUltramarine gui=NONE guifg=%s guibg=%s', s:gui_ultramarine, s:gui_ultramarine)
+
 
 " Basic highlighting
 
@@ -1075,20 +1120,16 @@ execute 'highlight! NavicSeparator'     .s:fmt_none .s:fg_magenta .s:bg_none
 " mason
 " ----------
 highlight! link MasonNormal Normal
-execute 'highlight! MasonHeader' .s:fmt_none .s:fg_white .s:bg_dark0
+execute 'highlight! MasonHeader' .s:fmt_none .s:fg_white .s:bg_darkblue
 
 " which-key
 " ---------
 highlight! link WhichKeyFloat Normal
 
-" Original highlights
-" -------------------
-execute 'highlight! WinBarLspClientName' .s:fmt_none .s:fg_white .s:bg_none
 
 " License
 " -------
 " Copyright (c) 2011 Ethan Schoonover
-" Copyright (c) 2016 iCyMind
 "
 " Permission is hereby granted, free of charge, to any person obtaining a copy
 " of this software and associated documentation files (the "Software"), to deal
