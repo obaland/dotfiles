@@ -18,11 +18,11 @@ command(
   [[
     augroup user_cache
       autocmd!
-      autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost *
-            \ unlet! b:core_project_dir | unlet! b:core_project_dir_last_cwd
+      autocmd BufReadPost,BufFilePost,BufNewFile,BufWritePost * unlet! b:core_project_dir | unlet! b:core_project_dir_last_cwd
     augroup END
   ]]
 )
+-- stylua: ignore end
 
 local M = {}
 
