@@ -21,11 +21,13 @@ EOF
 endfunction
 
 function! s:dein_update()
+  " Remove unused plugins
+  call map(dein#check_clean(), 'delete(v:val, "rf")')
+
   if exists('g:dein#install_github_api_token')
     call dein#check_update(v:true)
     call s:notify_updates_log()
   else
-    call core#warning('Legacy updating.', '[dein]')
     call dein#update()
     redraw
   endif
