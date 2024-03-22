@@ -4,7 +4,6 @@
 " Plugin manager
 "---------------
 command! -nargs=0 DeinUpdate call s:dein_update()
-command! -nargs=0 DeinUpdateFast call s:dein_update_fast()
 command! -nargs=0 DeinClearState call dein#clear_state()
 
 function! s:notify_updates_log()
@@ -22,16 +21,15 @@ EOF
 endfunction
 
 function! s:dein_update()
-  call dein#update()
-  redraw
-endfunction
+  " Remove unused plugins
+  call map(dein#check_clean(), 'delete(v:val, "rf")')
 
-function! s:dein_update_fast()
   if exists('g:dein#install_github_api_token')
     call dein#check_update(v:true)
     call s:notify_updates_log()
   else
-    call core#warning('Must set an `API token`')
+    call dein#update()
+    redraw
   endif
 endfunction
 
