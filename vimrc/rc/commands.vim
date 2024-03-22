@@ -8,7 +8,7 @@ command! -nargs=0 DeinUpdateFast call s:dein_update_fast()
 command! -nargs=0 DeinClearState call dein#clear_state()
 
 function! s:notify_updates_log()
-lua << EOF
+lua <<EOF
   local dein = require('dein')
   local log = dein.get_updates_log()
   if dein.tap('nvim-notify') then

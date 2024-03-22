@@ -182,9 +182,9 @@ set showtabline=2    " いつタブページのラベルを表示するかを指
 "set ambiwidth=double
 set ambiwidth=single
 
-" 目印桁を表示するかどうかを指定する (常に表示)
+" 目印桁を表示するかどうかを指定する
 if exists('&signcolumn')
-  set signcolumn=yes
+  set signcolumn=auto
 endif
 
 set shortmess=aoOTI  " イントロ表示の抑制
