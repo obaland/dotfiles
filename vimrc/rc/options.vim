@@ -45,6 +45,7 @@ endif
 " バックアップファイルを無効
 set nobackup
 set nowritebackup
+set noswapfile
 
 set backupdir=$VIM_BACKUP " バックアップファイルの保存先を設定
 set directory=$VIM_SWAP   " スワップファイルの保存先を設定
@@ -184,7 +185,7 @@ set ambiwidth=single
 
 " 目印桁を表示するかどうかを指定する
 if exists('&signcolumn')
-  set signcolumn=auto
+  set signcolumn=yes
 endif
 
 set shortmess=aoOTI  " イントロ表示の抑制
