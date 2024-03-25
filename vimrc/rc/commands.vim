@@ -25,9 +25,8 @@ function! s:dein_update()
   call map(dein#check_clean(), 'delete(v:val, "rf")')
 
   if exists('g:dein#install_github_api_token')
-    if dein#check_update(v:true)
-      call dein#update()
-    endif
+    call dein#check_update(v:true)
+    call s:notify_updates_log()
   else
     call dein#update()
   endif
