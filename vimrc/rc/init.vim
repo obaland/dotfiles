@@ -112,7 +112,7 @@ function! s:use_package_manager(data_path)
   " Setup a token for update management
   if exists('$GITHUB_API_TOKEN')
     let g:dein#install_github_api_token = $GITHUB_API_TOKEN
-    let g:dein#install_check_remote_threshold = 24 * 60 * 60
+    let g:dein#install_check_remote_threshold = 60 * 60
   endif
 
   let l:cache_path = a:data_path . '/dein'
