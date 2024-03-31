@@ -13,25 +13,6 @@ let $VIM_SESSIONS = $VIM_FILES . '/sessions'
 let $VIM_SWAP = $VIM_FILES . '/swap'
 let $VIM_UNDO = $VIM_FILES . '/swap'
 
-function! s:source(path) abort
-  let l:abspath = resolve($VIM_RC_PATH . '/'. a:path)
-  execute 'source' fnameescape(l:abspath)
-endfunction
-
-function! s:is_no_argument()
-  let byte = line2byte(line('$') + 1)
-  return (byte < 0) && (@% == '')
-endfunction
-
-function! s:on_VimEnter() abort
-  if !s:is_no_argument()
-    return
-  endif
-  if dein#tap('vfiler.vim')
-    VFiler
-  endif
-endfunction
-
 function! s:load_env(path) abort
   let l:path = expand(a:path)
   if !filereadable(l:path)
@@ -72,32 +53,25 @@ function! s:load_local_plugins(path) abort
   endfor
 endfunction
 
-" Set augroup.
-augroup MyAutoCmd
-  autocmd!
-  autocmd VimEnter * ++once ++nested call s:on_VimEnter()
-  autocmd BufNewFile,BufRead *.xaml setf xml
-augroup END
-
 if has('vim_starting')
   call s:load_env($VIM_PATH . '/.env')
-  call s:source('init.vim')
+  call core#source('init.vim')
 endif
 
 " Load local plugins
 let s:local_plugin_dir = $VIM_PATH . '/lplugins'
 call s:load_local_plugins(s:local_plugin_dir)
 
-call s:source('options.vim')
-call s:source('commands.vim')
-call s:source('mappings.vim')
+call core#source('options.vim')
+call core#source('commands.vim')
+call core#source('mappings.vim')
 
 if has('gui_running')
-  call s:source('gui.vim')
+  call core#source('gui.vim')
 endif
 
 if core#is_windows()
-  call s:source('windows.vim')
+  call core#source('windows.vim')
 endif
 
 " Required
