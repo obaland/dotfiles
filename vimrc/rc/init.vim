@@ -142,12 +142,16 @@ function! s:use_package_manager(data_path)
   if dein#load_state(l:cache_path)
     let l:base_dir = $VIM_RC_PATH . '/'
     let l:plugins = l:base_dir . 'plugins.toml'
+    let l:ftplugin = l:base_dir . 'ftplugin.toml'
 
     call dein#begin(l:cache_path, expand('<sfile>'))
 
-    " Addition of dein.vim itself
+    " Add fixed plugins
     call dein#add('Shougo/dein.vim')
+    call dein#add('mhinz/vim-startify')
+
     call dein#load_toml(l:plugins, {'lazy': 1})
+    call dein#load_toml(l:ftplugin)
 
     call dein#end()
     call dein#save_state()

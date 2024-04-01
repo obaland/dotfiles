@@ -1126,6 +1126,18 @@ execute 'highlight! MasonHeader' .s:fmt_none .s:fg_white .s:bg_darkblue
 " ---------
 highlight! link WhichKeyFloat Normal
 
+" vim-startify
+" ---------
+if has('nvim')
+	highlight! StartifyHeader gui=NONE guibg=NONE guifg=#3791D4
+else
+	highlight! StartifyHeader gui=NONE guibg=NONE guifg=#007C16
+endif
+highlight! link StartifyPath Normal
+highlight! link StartifySlash Comment
+highlight! link StartifyBracket Comment
+highlight! link StartifyFile Title
+execute 'highlight! StartifyNumber' .s:fmt_none .s:fg_white .s:bg_none
 
 " License
 " -------

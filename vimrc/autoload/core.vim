@@ -1,16 +1,5 @@
 " core.vim
 "=============================================================================
-"
-" Vim directories
-let $CONFIG_PATH = expand('~/.config')
-let $VIM_PATH = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
-let $VIM_RC_PATH = $VIM_PATH . '/rc'
-let $VIM_CONFIGS_PATH = $VIM_PATH . '/configs'
-let $VIM_FILES = expand('~/vimfiles')
-let $VIM_BACKUP = $VIM_FILES . '/backup'
-let $VIM_SESSIONS = $VIM_FILES . '/sessions'
-let $VIM_SWAP = $VIM_FILES . '/swap'
-let $VIM_UNDO = $VIM_FILES . '/swap'
 
 let s:is_windows = has('win32') || has('win64')
 let s:is_mac = !s:is_windows && !has('win32unix')
@@ -35,11 +24,6 @@ function! core#mkdir(path) abort
   if !isdirectory(l:expanded_path)
     call mkdir(l:expanded_path, 'p')
   endif
-endfunction
-
-function! core#source(path) abort
-  let l:abspath = resolve($VIM_RC_PATH . '/'. a:path)
-  execute 'source' fnameescape(l:abspath)
 endfunction
 
 function! core#info(message, ...) abort

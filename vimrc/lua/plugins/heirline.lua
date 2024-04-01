@@ -13,6 +13,7 @@ local special_filetypes = {
   spectre_panel = { icon = '', name = 'Spectre' },
   TelescopePrompt = { icon = '', name = 'Telescope' },
   undotree = { icon = '', name = 'undotree' },
+  startify = { icon = '󰙴', name = 'Welcome' },
 }
 
 local function line_count_format()
@@ -225,6 +226,25 @@ extensions.trouble = {
     end,
     hl = { fg = 'green', bold = true },
   },
+  component.align(),
+}
+
+-- Startify
+extensions.startify = {
+  condition = function()
+    return conditions.buffer_matches({ filetype = { 'startify' } })
+  end,
+  surround({
+    provider = function()
+      local version = vim.version()
+      return ('Welcome Neovim - %d.%d.%d'):format(
+        version.major,
+        version.minor,
+        version.patch
+      )
+    end,
+    hl = { fg = 'neovim_blue' },
+  }),
   component.align(),
 }
 
@@ -543,6 +563,7 @@ local function statusline()
     extensions.mason,
     extensions.quickfix,
     extensions.trouble,
+    extensions.startify,
     extensions.line_count,
     components,
   }
@@ -765,11 +786,12 @@ function M.setup()
         soft_blue = utils.get_highlight('SolarizedColorSoftBlue').fg,
         soft_red  = utils.get_highlight('SolarizedColorSoftRed').fg,
         russian_blue = utils.get_highlight('SolarizedColorRussianBlue').fg,
+        neovim_blue = '#3791D4',
       },
       disable_winbar_cb = function(args)
         return conditions.buffer_matches({
           buftype = { 'nofile', 'prompt', 'help', 'quickfile' },
-          filetype = { 'vfiler' },
+          filetype = { 'vfiler', 'startify' },
         }, args.buf)
       end,
     },
