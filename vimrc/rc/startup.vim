@@ -2,9 +2,9 @@
 "=============================================================================
 
 let s:vim_logo = [
-      \ '⠀⠀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡠⢞⠢⡀⠀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠀',
-      \ '⠀⠰⡏⡎⠁⠀⠀⠀⠀⠀⠀⠀⠀⣿⢡⠒⡌⢻⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢾⡇',
-      \ '⠀⠈⠳⢷ ⠀⠀⠀⠀⠀⢰⢲⡶⠟⣂⠱⡈⢜⣷⡶⠂⠀⠀⠀⠀⠀⢀⣴⡾⠃',
+      \ '⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡠⢞⠢⡀⠀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠀',
+      \ '⠀ ⡏⡎⠁⠀⠀⠀⠀⠀⠀⠀⠀⣿⢡⠒⡌⢻⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢾⡇',
+      \ '⠀ ⠳⢷ ⠀⠀⠀⠀⠀⢰⢲⡶⠟⣂⠱⡈⢜⣷⡶⠂⠀⠀⠀⠀⠀⢀⣴⡾⠃',
       \ '⠀⠀⠀⢸ ⠀⠀⠀⠀⠀⢘⣸⡇⡘⢄⠢⣱⡾⠋⠀ ⠀⠀⠀⡠⣶⡿⠋⠀⠀',
       \ '⠀⠀⠀⢸ ⠀⠀⠀⠀⠀⢨⢸⡇⡘⣤⡿⠋⠀⠀⠀⠀⠀⣀⣾⣷⠋⠀⠀⠀⠀',
       \ '⠀⠀⠀⢸ ⠀⠀⠀⠀⠀⢠⢻⣧⡾⠋⠀⠀⠀⠀⠀⠀⣰⣾⠟⢪⡳⣄⠀⠀⠀',
@@ -14,7 +14,7 @@ let s:vim_logo = [
       \ '⠀⠀⠀⢹⠀⠀⠀⠀⠀⠀⠀⠀⢀⣔⣿⡛⠛⣻⣶⡓⠒⢷⡼⠛⠒⢿⠗⠒⢢⡄',
       \ '⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⢀⣷⠟⣻⠀⢠⡟⡿⠁⢠⣶⡦⠀⢰⡶⡆⠀⣸⠃',
       \ '⠀⠀⠀⢸⠀⠀⠀⠀⠀⢀⣴⡿⠃⣼⠇⢀⡾⣼⠃⠀⣿⣿⠃⢠⡟⣸⠀⢠⡏⠀',
-      \ '⠀⠀⠀⢸  ⠀⢀⣴⠟⢿⣦⣥⣿⣤⣬⡿⣿⣤⣬⠿⡯⣤⠬⢿⢯⢤⡬⠇⠀',
+      \ '⠀⠀⠀⢸  ⠀⢀⣴⠟⢿⣦⣤⣿⣤⣬⡿⣿⣤⣬⠿⡯⣤⠬⢿⢯⢤⡬⠇⠀',
       \ '⠀⠀⠀⠘⠛⠛⠛⠛⠁⠀⠀⠙⢿⣦⡐⣄⣶⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
       \ '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
       \ ]
@@ -35,9 +35,17 @@ function! s:pad(strings) abort
   return map(a:strings, 'repeat(" ", g:startify_padding_left) . v:val')
 endfunction
 
+" Variables
+"-----------------------------------------------------------------------------
 let g:startify_padding_left = 4
 let g:startify_files_number = 8
 
+" Header
+"-----------------------------------------------------------------------------
+let g:startify_custom_header = s:pad(has('nvim') ? s:neovim_logo : s:vim_logo)
+
+" List
+"-----------------------------------------------------------------------------
 let g:startify_lists = [
       \ { 'type': 'commands',  'header': s:pad(['Commands']) },
       \ { 'type': 'files',     'header': s:pad(['MRU']) },
@@ -45,17 +53,25 @@ let g:startify_lists = [
       \ { 'type': 'bookmarks', 'header': s:pad(['Bookmarks']) },
       \ ]
 
-let g:startify_commands = [
-      \ { 'F': ['Filer', 'VFiler'] },
-      \ { 'E': ['Exprolorer', 'lua require("plugins/vfiler").start_exprolorer()'] },
-      \ { 'U': ['Update Plugins', 'DeinUpdate'] },
-      \ ]
+" Commands
+"-----------------------------------------------------------------------------
+let g:startify_commands = []
+
+if dein#tap('vfiler.vim')
+  call add(g:startify_commands, { 'F': ['Filer', 'VFiler'] })
+  call add(g:startify_commands, {
+        \ 'E': ['Exprolorer', 'lua require("plugins/vfiler").start_exprolorer()']
+        \ })
+endif
+if dein#tap('mason.nvim')
+  call add(g:startify_commands, { 'M': ['Mason', 'Mason'] })
+endif
+call add(g:startify_commands, { 'U': ['Update Plugins', 'DeinUpdate'] })
+
 if has('nvim')
   call add(g:startify_commands, {
         \ 'H': ['Check Health', 'checkhealth'],
         \ })
 endif
-
-let g:startify_custom_header = s:pad(has('nvim') ? s:neovim_logo : s:vim_logo)
 
 " vim:set ft=vim sw=2 sts=2 et:
