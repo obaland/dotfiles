@@ -50,14 +50,15 @@
         {
           "background": "p:bg",
           "foreground": "p:fg",
-          "style": "plain",
-          "template": "{{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
+          "style": "diamond",
+          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
+          "trailing_diamond": "\ue0b0",
           "type": "os"
         },
         {
           "background": "p:blue7",
           "foreground": "p:fg",
-          "leading_diamond": "<transparent,p:blue0>\ue0b0</>",
+          "leading_diamond": "<transparent,p:blue7>\ue0b0</>",
           "properties": {
             "folder_icon": "...",
             "folder_separator_icon": "/",
