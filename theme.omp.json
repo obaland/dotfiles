@@ -70,7 +70,7 @@
           "type": "path"
         },
         {
-          "background": "p:teal",
+          "background": "p:green1",
           "background_templates": [
             "{{ if or (.Working.Changed) (.Staging.Changed) }}p:yellow{{ end }}",
             "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:orange{{ end }}",
