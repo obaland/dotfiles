@@ -1136,7 +1136,7 @@ endif
 highlight! link StartifyPath Normal
 highlight! link StartifySlash Comment
 highlight! link StartifyBracket Comment
-highlight! link StartifyFile Title
+highlight! link StartifyFile Constant
 execute 'highlight! StartifyNumber' .s:fmt_none .s:fg_white .s:bg_none
 
 " License
