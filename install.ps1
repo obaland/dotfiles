@@ -1,4 +1,16 @@
 # Install environment for windows
+#=============================================================================
+
+# Confirmation of administrative privileges.
+#-----------------------------------------------------------------------------
+$wid = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+$prp = New-Object System.Security.Principal.WindowsPrincipal($wid)
+$admin = [System.Security.Principal.WindowsBuiltInRole]::Administrator
+if (!$prp.IsInRole($admin)) {
+  "This program must be run with administrative privileges."
+  pause
+  exit 1
+}
 
 Write-Output "***** Start installation. *****"
 
@@ -19,10 +31,9 @@ Write-Output "Start - install environment for windows ..."
 $homeDir = Convert-Path "~/"
 Write-Output ("[Home directory path] - " + $homeDir)
 
-###########################################################
 # Set environment values
-###########################################################
-Write-Output "Set environment values ..."
+#-----------------------------------------------------------------------------
+"Set environment values ..."
 
 # Get Neovim path
 $nvimCommand = "nvim"
@@ -45,25 +56,25 @@ if (-not (Test-Path $nvimRuntimePath)) {
 
 $envName = "VIMRUNTIME"
 Set-SystemEnvironmentVariable $envName $runtimePath
-Write-Output ("[Set system environment] - " + $envName + " : " + $nvimRuntimePath)
+"[Set system environment] - " + $envName + " : " + $nvimRuntimePath
 
 # Set XDG_CONFIG_HOME path
 $envName = "XDG_CONFIG_HOME"
 Set-SystemEnvironmentVariable $envName $runtimePath
 Set-UserEnvironmentVariable $envName $homeDir
-Write-Output ("[Set user environment] - " + $envName + " : " + $homeDir)
+"[Set user environment] - " + $envName + " : " + $homeDir
 
-###########################################################
 # Create symbolic links
-###########################################################
-Write-Output ""
-Write-Output "Create link files ..."
+#-----------------------------------------------------------------------------
+""
+"Create link files ..."
 
 $linkFiles = @(
   @{"target" = "vimrc"; "link" = @(".vim"; "nvim")}
   @{"target" = "vimrc/vimrc"; "link" = @(".vimrc")}
   @{"target" = "zshrc"; "link" = @(".zshrc")}
   @{"target" = "tmux.conf"; "link" = @(".tmux.conf")}
+  @{"target" = "theme.omp.json"; "link" = @(".theme.omp.json")}
   @{"target" = ".\windows-terminal-settings.json"; "link" = @("AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json")}
 )
 
@@ -80,9 +91,23 @@ foreach ($linkFile in $linkFiles) {
       exit 1
     }
 
+    $dirPath = [System.IO.Path]::GetDirectoryName($linkPath)
+    if (-not (Test-Path -Path $dirPath)) {
+      New-Item -Path $dirPath -ItemType Directory -Force | Out-Null
+    }
+
     New-Item -ItemType SymbolicLink -Path $linkPath -Value $targetPath | Out-Null
-    Write-Output ("[Create link] - " + $linkPath + " => " + $targetPath)
+    "[Create link] - " + $linkPath + " => " + $targetPath
   }
 }
-Write-Output ""
-Write-Output "Done."
+
+# Create profile and theme.
+#-----------------------------------------------------------------------------
+""
+"Copy profile ..."
+$profilePath = Join-Path $currentDir "Profile.ps1"
+Copy-Item -Path $profilePath -Destination $PROFILE -Force
+"[Copied] - " + $profilePath + " -> " + $PROFILE
+
+""
+"Done."
