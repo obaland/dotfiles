@@ -91,9 +91,9 @@ foreach ($linkFile in $linkFiles) {
       exit 1
     }
 
-    $dirPath = [System.IO.Path]::GetDirectoryName($linkPath)
-    if (-not (Test-Path -Path $dirPath)) {
-      New-Item -Path $dirPath -ItemType Directory -Force | Out-Null
+    $destDir = [System.IO.Path]::GetDirectoryName($linkPath)
+    if (-not (Test-Path -Path $destDir)) {
+      New-Item -Path $destDir -ItemType Directory -Force | Out-Null
     }
 
     New-Item -ItemType SymbolicLink -Path $linkPath -Value $targetPath | Out-Null
@@ -106,7 +106,11 @@ foreach ($linkFile in $linkFiles) {
 ""
 "Copy profile ..."
 $profilePath = Join-Path $currentDir "Profile.ps1"
-Copy-Item -Path $profilePath -Destination $PROFILE -Force
+$destDir = [System.IO.Path]::GetDirectoryName($PROFILE)
+if (-not (Test-Path -Path $destDir)) {
+  New-Item -Path $destDir -ItemType Directory -Force | Out-Null
+}
+Copy-Item -Path $profilePath -Destination $PROFILE -Force | Out-Null
 "[Copied] - " + $profilePath + " -> " + $PROFILE
 
 ""

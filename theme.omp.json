@@ -1,5 +1,41 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "palette": {
+    "bg_dark": "#1f2335",
+    "bg": "#292e42",
+    "terminal_black": "#414868",
+    "fg": "#c0caf5",
+    "fg_dark": "#a9b1d6",
+    "fg_gutter": "#3b4261",
+    "dark3": "#545c7e",
+    "comment": "#565f89",
+    "dark5": "#737aa2",
+    "blue0": "#3d59a1",
+    "blue": "#7aa2f7",
+    "cyan": "#7dcfff",
+    "blue1": "#2ac3de",
+    "blue2": "#0db9d7",
+    "blue5": "#89ddff",
+    "blue6": "#b4f9f8",
+    "blue7": "#394b70",
+    "blue8": "#6183bb",
+    "blue9": "#536c9e",
+    "magenta": "#bb9af7",
+    "magenta2": "#ff007c",
+    "purple": "#9d7cd8",
+    "orange": "#ff9e64",
+    "yellow": "#e0af68",
+    "green": "#9ece6a",
+    "green1": "#73daca",
+    "green2": "#41a6b5",
+    "green3": "#449dab",
+    "green4": "#266d6a",
+    "teal": "#1abc9c",
+    "red": "#f7768e",
+    "red1": "#db4b4b",
+    "git-change": "#914c54",
+    "gitSigns-change": "#b2555b"
+  },
   "blocks": [
     {
       "alignment": "left",
@@ -12,21 +48,21 @@
           "type": "root"
         },
         {
-          "background": "transparent",
-          "foreground": "#ffffff",
+          "background": "p:bg",
+          "foreground": "p:fg",
           "style": "plain",
           "template": "{{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
           "type": "os"
         },
         {
-          "background": "#01579B",
-          "foreground": "#ffffff",
-          "leading_diamond": "<transparent,#01579B>\ue0b0</>",
+          "background": "p:blue7",
+          "foreground": "p:fg",
+          "leading_diamond": "<transparent,p:blue0>\ue0b0</>",
           "properties": {
             "folder_icon": "...",
-            "folder_separator_icon": "<transparent> \ue0bd </>",
-            "home_icon": "\ueb06",
-            "style": "agnoster_short"
+            "folder_separator_icon": "/",
+            "home_icon": "\ueb06 ",
+            "style": "agnoster_full"
           },
           "style": "diamond",
           "template": " {{ .Path }} ",
@@ -34,27 +70,27 @@
           "type": "path"
         },
         {
-          "background": "#00C853",
+          "background": "p:teal",
           "background_templates": [
-            "{{ if or (.Working.Changed) (.Staging.Changed) }}#FFEB3B{{ end }}",
-            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#FFCC80{{ end }}",
-            "{{ if gt .Ahead 0 }}#B388FF{{ end }}",
-            "{{ if gt .Behind 0 }}#B388FF{{ end }}"
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:yellow{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:orange{{ end }}",
+            "{{ if gt .Ahead 0 }}p:magenta{{ end }}",
+            "{{ if gt .Behind 0 }}p:magenta{{ end }}"
           ],
-          "foreground": "#000000",
+          "foreground": "p:bg_dark",
           "powerline_symbol": "\ue0b0",
           "properties": {
             "fetch_stash_count": true,
             "fetch_status": true
           },
           "style": "powerline",
-          "template": " {{ .HEAD }}{{ if .Staging.Changed }}<#FF6F00> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
+          "template": " {{ .HEAD }}{{ if .Staging.Changed }}<p:git-change> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
           "type": "git"
         },
         {
-          "background": "#49404f",
-          "foreground": "#ffffff",
-          "leading_diamond": "<transparent,#49404f>\ue0b0</>",
+          "background": "p:bg",
+          "foreground": "p:fg",
+          "leading_diamond": "<transparent,p:bg>\ue0b0</>",
           "properties": {
             "style": "dallas",
             "threshold": 0
@@ -65,8 +101,8 @@
           "type": "executiontime"
         },
         {
-          "background": "#910000",
-          "foreground": "#ffffff",
+          "background": "p:red",
+          "foreground": "p:bg_dark",
           "powerline_symbol": "\ue0b0",
           "style": "powerline",
           "template": "<transparent> \uf12a</> {{ reason .Code }} ",
@@ -79,20 +115,21 @@
       "alignment": "right",
       "segments": [
         {
-          "background": "#29315A",
-          "foreground": "#43CCEA",
+          "background": "p:bg",
+          "foreground": "p:blue",
           "leading_diamond": "\ue0b2",
           "style": "diamond",
-          "template": " {{ .UserName }} <#24283B>\u258c</> {{ .HostName }}",
+          "template": " {{ .UserName }} <p:bg_dark>\u258c</> {{ .HostName }}",
           "type": "session"
         },
         {
-          "background": "#29315A",
-          "foreground": "#859900",
+          "background": "p:bg",
+          "foreground": "p:green",
+          "style": "plain",
           "properties": {
             "time_format": "15:04:05"
           },
-          "template": " <#24283B>\u258c</> {{ .CurrentDate | date .Format }} ",
+          "template": " <p:bg_dark>\u258c</> {{ .CurrentDate | date .Format }} ",
           "type": "time"
         }
       ],
@@ -103,7 +140,7 @@
       "newline": true,
       "segments": [
         {
-          "foreground": "#ffffff",
+          "foreground": "p:fg",
           "foreground_templates": [
             "{{ if gt .Code 0 }}#ff0000{{ end }}"
           ],
