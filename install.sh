@@ -56,6 +56,17 @@ fi
 # Shell
 ###########################################################
 if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
+  readonly OMZDIR="$HOMEDIR/.oh-my-zsh"
+  readonly OMZTHEMEDIR="$OMZDIR/themes"
+  if [ ! -d $OMZTHEMEDIR ]; then
+    echo "Installation of `oh-my-zsh` is required." 1>&2
+    exit
+  fi
+
+  readonly OMZTHEME="$ROOTDIR/configs/obaland.zsh-theme"
+  readonly LINKOMZTHEME="$OMZTHEMEDIR/obaland.zsh-theme"
+  create_link $OMZTHEME $LINKOMZTHEME
+
   readonly ZSHRC="$ROOTDIR/configs/zshrc"
   readonly LINKZSHRC="$HOMEDIR/.zshrc"
   create_link $ZSHRC $LINKZSHRC
