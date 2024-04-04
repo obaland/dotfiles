@@ -72,10 +72,10 @@ Set-UserEnvironmentVariable $envName $homeDir
 $linkFiles = @(
   @{"target" = "vimrc"; "link" = @(".vim"; "nvim")}
   @{"target" = "vimrc/vimrc"; "link" = @(".vimrc")}
-  @{"target" = "zshrc"; "link" = @(".zshrc")}
-  @{"target" = "tmux.conf"; "link" = @(".tmux.conf")}
-  @{"target" = "theme.omp.json"; "link" = @(".theme.omp.json")}
-  @{"target" = ".\windows-terminal-settings.json"; "link" = @("AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json")}
+  @{"target" = "configs/zshrc"; "link" = @(".zshrc")}
+  @{"target" = "configs/tmux.conf"; "link" = @(".tmux.conf")}
+  @{"target" = "configs/theme.omp.json"; "link" = @(".theme.omp.json")}
+  @{"target" = "configs/windows-terminal-settings.json"; "link" = @("AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json")}
 )
 
 foreach ($linkFile in $linkFiles) {
@@ -105,7 +105,7 @@ foreach ($linkFile in $linkFiles) {
 #-----------------------------------------------------------------------------
 ""
 "Copy profile ..."
-$profilePath = Join-Path $currentDir "Profile.ps1"
+$profilePath = Join-Path $currentDir "configs/Profile.ps1"
 $destDir = [System.IO.Path]::GetDirectoryName($PROFILE)
 if (-not (Test-Path -Path $destDir)) {
   New-Item -Path $destDir -ItemType Directory -Force | Out-Null

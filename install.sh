@@ -56,11 +56,11 @@ fi
 # Shell
 ###########################################################
 if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
-  readonly ZSHRC="$ROOTDIR/zshrc"
+  readonly ZSHRC="$ROOTDIR/configs/zshrc"
   readonly LINKZSHRC="$HOMEDIR/.zshrc"
   create_link $ZSHRC $LINKZSHRC
 
-  readonly TMUXCONF="$ROOTDIR/tmux.conf"
+  readonly TMUXCONF="$ROOTDIR/configs/tmux.conf"
   readonly LINKTMUXCONF="$HOMEDIR/.tmux.conf"
   create_link $TMUXCONF $LINKTMUXCONF
 fi
@@ -72,7 +72,7 @@ if [ $TYPE = "all" ] || [ $TYPE = "app" ]; then
   # Karabiner for macOS
   if [ "$(uname)" = "Darwin" ]; then
     readonly KARABINER="karabiner-for-vim.json"
-    readonly KARABINER_SRCPATH="${ROOTDIR}/${KARABINER}"
+    readonly KARABINER_SRCPATH="${ROOTDIR}/configs/${KARABINER}"
     readonly KARABINER_DESTDIR="${HOMEDIR}/.config/karabiner/assets/complex_modifications"
     readonly KARABINER_LINKPATH="${KARABINER_DESTDIR}/${KARABINER}"
 
