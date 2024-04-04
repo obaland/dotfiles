@@ -9,7 +9,7 @@
 
 create_link() {
   if [ -e $2 ]; then
-    unlink $2
+    rm -f $2
   fi
   ln -s $1 $2
   echo "create link: $1 -> $2"
