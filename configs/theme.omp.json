@@ -72,24 +72,6 @@
           "type": "path"
         },
         {
-          "background": "p:blue",
-          "background_templates": [
-            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:yellow{{ end }}",
-            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:orange{{ end }}",
-            "{{ if gt .Ahead 0 }}p:magenta{{ end }}",
-            "{{ if gt .Behind 0 }}p:magenta{{ end }}"
-          ],
-          "foreground": "p:bg_dark",
-          "powerline_symbol": "\ue0b0",
-          "properties": {
-            "fetch_stash_count": true,
-            "fetch_status": true
-          },
-          "style": "powerline",
-          "template": " {{ .HEAD }}{{ if .Staging.Changed }}<p:git-change> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
-          "type": "git"
-        },
-        {
           "background": "p:terminal_black",
           "foreground": "p:fg",
           "leading_diamond": "<transparent,p:terminal_black>\ue0b0</>",
@@ -116,6 +98,24 @@
     {
       "alignment": "right",
       "segments": [
+        {
+          "background": "p:blue",
+          "background_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:yellow{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:orange{{ end }}",
+            "{{ if gt .Ahead 0 }}p:magenta{{ end }}",
+            "{{ if gt .Behind 0 }}p:magenta{{ end }}"
+          ],
+          "foreground": "p:bg_dark",
+          "leading_diamond": "\ue0b2",
+          "properties": {
+            "fetch_stash_count": true,
+            "fetch_status": true
+          },
+          "style": "diamond",
+          "template": " {{ .HEAD }}{{ if .Staging.Changed }}<p:git-change> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
+          "type": "git"
+        },
         {
           "background": "p:bg",
           "foreground": "p:blue",
