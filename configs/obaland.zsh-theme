@@ -1,5 +1,5 @@
-CURRENT_BG='none'
-CURRENT_FG='none'
+# Identification vriables
+OS=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
 
 # Color palette
 color_bg='236'
@@ -8,7 +8,7 @@ color_fg='189'
 color_fg_dark='149'
 color_fg_gutter='60'
 color_dark3='102'
-color_blue0='59'
+color_blue0='16'
 color_blue='111'
 color_cyan='117'
 color_blue1='80'
@@ -33,55 +33,69 @@ color_green4='66'
 color_teal='79'
 color_red='160'
 color_red1='167'
-color_git='236'
-color_git_dirty='52'
+color_git='75'
+color_git_dirty='204'
 
-left_sep='\ue0b0'
-right_sep='\ue0b2'
+COLOR_VI_MODE_INSERT='150'
 
-# Identification OS
-OS=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
+# Special characters
+LSEP_CHAR='\ue0b0'
+RSEP_CHAR='\ue0b2'
+SEPSUB_CHAR='\u258c'
+
+CURRENT_BG='none'
+CURRENT_FG='none'
+
+# For git plugin
+ZSH_THEME_GIT_PROMPT_CLEAN=''
+ZSH_THEME_GIT_PROMPT_DIRTY='\uf069'
+
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+VI_MODE_SET_CURSOR=true
 
 # git utilities
-in_git() {
+#-----------------------------------------------------------------------------
+function in_git() {
   git rev-parse --is-inside-work-tree > /dev/null 2>&1
   return $?
 }
 
-get_git_branch() {
-  echo $(git branch --show-current 2>/dev/null)
+function git_staging_changed() {
+  local staged_changes=$(git diff --cached --numstat | wc -l)
+  echo $staged_changes
 }
 
-is_git_dirty() {
-  ! git diff --quiet 2>/dev/null
+function git_working_changed() {
+  local working_changes=$(git diff --numstat | wc -l)
+  echo $working_changes
 }
 
-is_git_untracked() {
-  [[ -n $(git ls-files --others --exclude-standard 2>/dev/null) ]]
+function git_stash_count() {
+  local stash_count=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
+  echo $stash_count
 }
 
-is_git_added() {
-  ! git diff --cached --quiet 2>/dev/null
+function git_ahead() {
+  local branch=$(git rev-parse --abbrev-ref HEAD)
+  local upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
+  if [[ -n "$upstream" ]]; then
+    local ahead_count=$(git rev-list --count ${branch}..${upstream})
+    echo $ahead_count
+  fi
 }
 
-is_git_modified() {
-  [[ -n $(git ls-files --modified 2>/dev/null) ]]
-}
-
-is_git_deleted() {
-  [[ -n $(git ls-files --deleted 2>/dev/null) ]]
-}
-
-is_git_renamed() {
-  [[ -n $(git ls-files --others --exclude-standard 2>/dev/null | git diff --name-only --diff-filter=R 2>/dev/null) ]]
-}
-
-is_git_unmerged() {
-  ! git ls-files --unmerged --error-unmatch . 2>/dev/null >/dev/null
+function git_behind() {
+  local branch=$(git rev-parse --abbrev-ref HEAD)
+  local upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
+  if [[ -n "$upstream" ]]; then
+    local behind_count=$(git rev-list --count ${upstream}..${branch})
+    echo $behind_count
+  fi
 }
 
 # Segment utilities
-segment_begin() {
+#-----------------------------------------------------------------------------
+function segment_begin() {
   local bg=$( [[ -n $1 ]] && echo $1 || echo $CURRENT_BG )
   local fg=$( [[ -n $2 ]] && echo $2 || echo $CURRENT_FG )
   CURRENT_BG=$bg
@@ -89,11 +103,11 @@ segment_begin() {
   echo -n "%K{$bg}%F{$fg}"
 }
 
-segment_end() {
+function segment_end() {
   echo -n "%f%k"
 }
 
-block() {
+function block() {
   local bg_begin bg_end
   local fg_begin fg_end
 
@@ -111,30 +125,33 @@ block() {
   [[ -n $1 ]] && echo -n "$bg_begin$fg_begin$1$fg_end$bg_end"
 }
 
-left_separator_begin() {
-  echo -n "%S%K{reset}%F{$1}$left_sep %f%k%s"
+function lseparator_begin() {
+  echo -n "%S%K{reset}%F{$1}$LSEP_CHAR %f%k%s"
 }
 
-left_separator_end() {
+function lseparator_end() {
   local fg=$( [[ -n $1 ]] && echo $1 || echo $CURRENT_BG)
-  block $left_sep reset $fg
+  block $LSEP_CHAR reset $fg
 }
 
-right_separator_begin() {
-  echo -n "%S%K{reset}%F{$1}$left_sep %f%k%s"
-}
-
-right_separator_end() {
+function rseparator_begin() {
   local fg=$( [[ -n $1 ]] && echo $1 || echo $CURRENT_BG)
-  block $right_sep reset $fg
+  block $RSEP_CHAR reset $fg
 }
 
-right_separator() {
-  echo -n "%S%K{reset}%F{$1} \u258c%f%k%s"
+function rseparator_end() {
+  local bg=$( [[ -n $1 ]] && echo $1 || echo $CURRENT_FG)
+  local fg=$( [[ -n $2 ]] && echo $2 || echo $CURRENT_BG)
+  echo -n "%K{$bg}%F{$fg}$RSEP_CHAR%f%k"
+}
+
+function separator_sub() {
+  echo -n "%S%K{reset}%F{$1} $SEPSUB_CHAR%f%k%s"
 }
 
 # Segments
-segment_os() {
+#-----------------------------------------------------------------------------
+function segment_os() {
   local bg icon
   if [[ $OS == 'ubuntu' ]]; then
     icon='\uf31b'
@@ -149,7 +166,7 @@ segment_os() {
   segment_end
 }
 
-segment_path() {
+function segment_path() {
   segment_begin $1 $2
 
   local dir="${(%):-%~}"
@@ -159,97 +176,116 @@ segment_path() {
   segment_end
 }
 
-segment_error() {
+function segment_error() {
   segment_begin $1 $2
   block '\uf12a ERROR '
   segment_end
 }
 
-segment_time() {
+function segment_time() {
   segment_begin $1 $2
   block " %* "
   segment_end
 }
 
-segment_host() {
+function segment_host() {
   segment_begin $1 $2
   block " %M"
   segment_end
 }
 
-segment_user() {
+function segment_user() {
   segment_begin $1 $2
   block " %n"
   segment_end
 }
 
-segment_git() {
-  segment_begin $1 $2
-  local bg=$1
-  if is_git_dirty; then
+function segment_git() {
+  local dirty="$(parse_git_dirty)"
+  local bg=$color_git
+  if [[ -n $dirty ]]; then
     bg=$color_git_dirty
   fi
-  block " \ue725 $(get_git_branch) " $bg
-  if is_git_untracked; then
-    block "\uf128 " $bg
+  rseparator_begin $bg
+  segment_begin $bg $color_black
+  block " \ue725 $(git_current_branch) "
+
+  local working="$(git_working_changed)"
+  local staging="$(git_staging_changed)"
+  local stash="$(git_stash_count)"
+  if [[ -n "$staging" && "$staging" != 0 ]]; then
+    block "\ue621"
+    block "\uf046 $staging "
   fi
-  if is_git_added; then
-    block "\uf067 " $bg
+  if [[ -n "$working" && "$working" != 0 ]]; then
+    block "\ue621"
+    block "\uf044 $working "
   fi
-  if is_git_modified; then
-    block "\ueade " $bg
+  if [[ -n "$stash" && "$stash" != 0 ]]; then
+    block "\ue621"
+    block "\ueb4b $stash "
   fi
-  if is_git_renamed; then
-    block "\ueae0 " $bg
+
+  segment_end
+  rseparator_end $bg $color_bg
+}
+
+function segment_prompt() {
+  local icon fg
+  if [[ $UID -eq 0 ]]; then
+    #icon='\uf0423 '
+    icon='\uf0633 '
+    fg=$color_orange
+  else
+    icon='\u276f '
+    fg=$color_fg
   fi
-  if is_git_deleted; then
-    block "\uf00d " $bg
-  fi
-  if is_git_unmerged; then
-    block "\ue727 " $bg
-  fi
+  segment_begin reset $fg
+  block $icon
   segment_end
 }
 
-segment_prompt() {
-  echo -n "%#"
+# NOTE: Depends on `zsh-vim-mode` plugin.
+function segment_vimmode() {
+  local fg mode
+  case $VI_KEYMAP in
+    main|viins)
+      mode='I'
+      fg=$COLOR_VI_MODE_INSERT
+      ;;
+    vicmd)
+      mode='N'
+      fg=$color_orange
+      ;;
+    command)
+      mode='C'
+      fg=$color_orange
+      ;;
+    isearch)
+      mode='S'
+      fg=$color_violet
+      ;;
+    visual)
+      mode='V'
+      fg=$color_magenta
+      ;;
+    viopp)
+      mode='P'
+      fg=$color_gray
+      ;;
+    *)
+      mode=''
+      fg=$color_fg
+      ;;
+  esac
+
+  segment_begin reset $fg
+  block "\uf069 $mode "
+  segment_end
 }
 
-prompt_left() {
-  RESULT=$?
-  segment_os $color_fg
-  left_separator_end
-  left_separator_begin $color_blue0
-  segment_path $color_blue0 $color_fg
-  left_separator_end
-
-  if [[ $RESULT -ne 0 ]]; then
-    left_separator_begin $color_red1
-    segment_error $color_red1 $color_black
-    left_separator_end
-  fi
-}
-
-prompt_right() {
-  if in_git; then
-    segment_git $color_git $color_fg
-    block ' ' reset, reset
-  fi
-  segment_user $color_bg $color_blue
-  right_separator $color_bg
-  segment_host $color_bg $color_blue
-  right_separator $color_bg
-  segment_time $color_bg $color_green
-}
-
-# preexec function: An implicitly invoked builtin function in Zsh,
-# executed just before a command is executed.
-preexec() {
-  START_TIME=$(date +%s%3N) # Record the current time in milliseconds
-}
-
-#RPROMPT=`prompt_right`
-
+# Events
+#-----------------------------------------------------------------------------
 #function zle-keymap-select zle-line-init zle-line-finish {
 #  reset="%{$reset_color%}"
 #  case $KEYMAP in
@@ -276,11 +312,46 @@ preexec() {
 #zle -N zle-line-finish
 #zle -N zle-keymap-select
 
-echo "$(prompt_right)"
-RPROMPT='$(prompt_right)'
 
-echo "$(prompt_left)"
+# Prompt
+#-----------------------------------------------------------------------------
+function prompt() {
+  segment_vimmode
+  segment_prompt
+}
+
+function prompt_left() {
+  RESULT=$?
+  segment_os $color_fg
+  lseparator_end
+  lseparator_begin $color_bg
+  segment_path $color_bg $color_fg
+  lseparator_end
+
+  if [[ $RESULT -ne 0 ]]; then
+    lseparator_begin $color_red1
+    segment_error $color_red1 $color_black
+    lseparator_end
+  fi
+}
+
+function prompt_right() {
+  if in_git; then
+    segment_git $color_bg $color_fg
+  else
+    rseparator_begin $color_bg
+  fi
+  segment_user $color_bg $color_blue
+  separator_sub $color_bg
+  segment_host $color_bg $color_blue
+  separator_sub $color_bg
+  segment_time $color_bg $color_green
+}
+
+setopt PROMPT_SUBST
+
+RPROMPT='$(prompt_right)'
 PROMPT='$(prompt_left)
-$(segment_prompt) '
+$(prompt)'
 
 # vim:ft=zsh ts=2 sw=2 sts=2

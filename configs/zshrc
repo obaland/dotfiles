@@ -72,7 +72,7 @@ ZSH_THEME="obaland"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  zsh-vi-mode
+  vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh

@@ -43,8 +43,13 @@ on_source = 'nvim-treesitter'
 repo = 'JoosepAlviste/nvim-ts-context-commentstring'
 on_source = 'nvim-treesitter'
 lua_add = 'vim.g.skip_ts_context_commentstring_module = true'
-lua_source = 'require("ts_context_commentstring").setup({})'
-
+lua_source = '''
+  vim.g.skip_ts_context_commentstring_module = true
+  require('ts_context_commentstring').setup({
+    enable = true,
+    enable_autocmd = false,
+  })
+'''
 [[plugins]]
 repo = 'windwp/nvim-ts-autotag'
 on_source = 'nvim-treesitter'
