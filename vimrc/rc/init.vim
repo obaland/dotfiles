@@ -146,10 +146,7 @@ function! s:use_package_manager(data_path)
 
     call dein#begin(l:cache_path, expand('<sfile>'))
 
-    " Add fixed plugins
     call dein#add('Shougo/dein.vim')
-    call dein#add('mhinz/vim-startify')
-
     call dein#load_toml(l:plugins, {'lazy': 1})
     call dein#load_toml(l:ftplugin)
 

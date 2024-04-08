@@ -22,6 +22,11 @@ if = 'has("nvim-0.8")'
 on_event = 'BufEnter'
 lua_source = 'require("gitsigns").setup()'
 
+[[plugins]]
+repo = 'mhinz/vim-startify'
+on_event = 'VimEnter'
+hook_source = 'source ~/.vim/rc/startup.vim'
+
 # Syntax
 #=============================================================================
 [[plugins]]

@@ -61,7 +61,6 @@ endfunction
 if has('vim_starting')
   call s:load_env($VIM_PATH . '/.env')
   call s:source('init.vim')
-  call s:source('startup.vim')
 endif
 
 " Load local plugins
