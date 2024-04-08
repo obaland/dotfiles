@@ -154,7 +154,7 @@ function segment_path() {
   if [[ "$dir" == "/"* ]]; then
     dir="/${dir:1}"
     dir="${dir//\// \u276f }"
-    dir="/ "${dir:1}
+    dir="\ue216 "${dir:1}
   else
     dir="${dir//\// \u276f }"
   fi
