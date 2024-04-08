@@ -30,9 +30,8 @@ readonly HOMEDIR=$(cd ~ && pwd)
 
 echo "Start [Install environment] ..."
 
-###########################################################
 # Vim or Neovim
-###########################################################
+#-----------------------------------------------------------------------------
 if [ $TYPE = "all" ] || [ $TYPE = "vim" ]; then
   readonly VIMDIR="$ROOTDIR/vimrc"
   readonly VIMRC="$VIMDIR/vimrc"
@@ -52,9 +51,8 @@ if [ $TYPE = "all" ] || [ $TYPE = "vim" ]; then
   create_link $VIMDIR $LINKVIM
 fi
 
-###########################################################
 # Shell
-###########################################################
+#-----------------------------------------------------------------------------
 if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
   readonly OMZDIR="$HOMEDIR/.oh-my-zsh"
   readonly OMZTHEMEDIR="$OMZDIR/themes"
@@ -74,11 +72,12 @@ if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
   readonly TMUXCONF="$ROOTDIR/configs/tmux.conf"
   readonly LINKTMUXCONF="$HOMEDIR/.tmux.conf"
   create_link $TMUXCONF $LINKTMUXCONF
+
+  # zsh plugins
 fi
 
-###########################################################
 # Application
-###########################################################
+#-----------------------------------------------------------------------------
 if [ $TYPE = "all" ] || [ $TYPE = "app" ]; then
   # Karabiner for macOS
   if [ "$(uname)" = "Darwin" ]; then

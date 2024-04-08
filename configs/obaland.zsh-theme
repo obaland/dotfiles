@@ -4,13 +4,16 @@ OS=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
 # Color palette
 COLOR_BG='236'
 COLOR_BLACK='232'
+COLOR_GRAY='242'
 COLOR_FG='189'
-COLOR_BLUE=111
+COLOR_BLUE='111'
+COLOR_YELLOW='229'
 COLOR_ORANGE='166'
 COLOR_GREEN='150'
 COLOR_RED='160'
+COLOR_RED1='204'
+COLOR_PURPLE='183'
 COLOR_GIT='75'
-COLOR_GIT_DIRTY='204'
 
 COLOR_VI_MODE_INSERT='150' # green
 COLOR_VI_MODE_VISUAL='183' # magenta
@@ -151,12 +154,15 @@ function segment_path() {
 
   local dir="${(%):-%~}"
   dir="${dir/#\~/\ueb06}"
-  if [[ "$dir" == "/"* ]]; then
+
+  if [[ $dir == "/" ]]; then
+    dir="\ueb46 "
+  elif [[ $dir == "/"* ]]; then
     dir="/${dir:1}"
-    dir="${dir//\// \u276f }"
-    dir="\ue216 "${dir:1}
+    dir="${dir//\//" %F{$COLOR_GRAY}\ue216%f "}"
+    dir="\ueb46 "${dir:1}
   else
-    dir="${dir//\// \u276f }"
+    dir="${dir//\//" %F{$COLOR_GRAY}\ue216%f "}"
   fi
   block "${dir} "
   segment_end
@@ -193,10 +199,14 @@ function segment_git() {
   local staging="$(git_staging_changed)"
   local stash="$(git_stash_count)"
   local bg=$COLOR_GIT
-  if [[ -n $working && $working != 0 || -n $staging && $staging != 0 ]]; then
-    bg=$COLOR_GIT_DIRTY
-  elif [[ -n $ahead && $ahead != 0 || -n $behind && $behind != 0 ]]; then
-    bg=$COLOR_GIT_DIRTY
+  if [[ -n $working && $working != 0 ]]; then
+    bg=$COLOR_YELLOW
+  elif [[ -n $staging && $staging != 0 ]]; then
+    bg=$COLOR_ORANGE
+  elif [[ -n $ahead && $ahead != 0 ]]; then
+    bg=$COLOR_PURPLE
+  elif [[ -n $behind && $behind != 0 ]]; then
+    bg=$COLOR_RED1
   fi
   rseparator_begin $bg
   segment_begin $bg $COLOR_BLACK
