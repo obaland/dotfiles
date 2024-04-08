@@ -2,41 +2,21 @@
 OS=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
 
 # Color palette
-color_bg='236'
-color_black='232'
-color_fg='189'
-color_fg_dark='149'
-color_fg_gutter='60'
-color_dark3='102'
-color_blue0='16'
-color_blue='111'
-color_cyan='117'
-color_blue1='80'
-color_blue2='44'
-color_blue5='153'
-color_blue6='195'
-color_blue7='60'
-color_blue8='110'
-color_blue9='103'
-color_blue10='103'
-color_magenta='183'
-color_magenta2='198'
-color_purple='140'
-color_orange='216'
-color_orange1='166'
-color_yellow='180'
-color_green='150'
-color_green1='116'
-color_green2='74'
-color_green3='73'
-color_green4='66'
-color_teal='79'
-color_red='160'
-color_red1='167'
-color_git='75'
-color_git_dirty='204'
+COLOR_BG='236'
+COLOR_BLACK='232'
+COLOR_FG='189'
+COLOR_BLUE=111
+COLOR_ORANGE='166'
+COLOR_GREEN='150'
+COLOR_RED='160'
+COLOR_GIT='75'
+COLOR_GIT_DIRTY='204'
 
-COLOR_VI_MODE_INSERT='150'
+COLOR_VI_MODE_INSERT='150' # green
+COLOR_VI_MODE_VISUAL='183' # magenta
+COLOR_VI_MODE_ISEARCH='140' # purple
+COLOR_VI_MODE_NORMAL='216' # orange
+COLOR_VI_MODE_COMMAND='180' # yellow
 
 # Special characters
 LSEP_CHAR='\ue0b0'
@@ -155,10 +135,10 @@ function segment_os() {
   local bg icon
   if [[ $OS == 'ubuntu' ]]; then
     icon='\uf31b'
-    bg=$color_orange1
+    bg=$COLOR_ORANGE
   else
     icon='\ue712'
-    bg=$color_black
+    bg=$COLOR_BLACK
   fi
 
   segment_begin $bg $1
@@ -202,12 +182,12 @@ function segment_user() {
 
 function segment_git() {
   local dirty="$(parse_git_dirty)"
-  local bg=$color_git
+  local bg=$COLOR_GIT
   if [[ -n $dirty ]]; then
-    bg=$color_git_dirty
+    bg=$COLOR_GIT_DIRTY
   fi
   rseparator_begin $bg
-  segment_begin $bg $color_black
+  segment_begin $bg $COLOR_BLACK
   block " \ue725 $(git_current_branch) "
 
   local working="$(git_working_changed)"
@@ -227,7 +207,7 @@ function segment_git() {
   fi
 
   segment_end
-  rseparator_end $bg $color_bg
+  rseparator_end $bg $COLOR_BG
 }
 
 function segment_prompt() {
@@ -235,10 +215,10 @@ function segment_prompt() {
   if [[ $UID -eq 0 ]]; then
     #icon='\uf0423 '
     icon='\uf0633 '
-    fg=$color_orange
+    fg=$COLOR_ORANGE
   else
     icon='\u276f '
-    fg=$color_fg
+    fg=$COLOR_FG
   fi
   segment_begin reset $fg
   block $icon
@@ -255,27 +235,27 @@ function segment_vimmode() {
       ;;
     vicmd)
       mode='N'
-      fg=$color_orange
+      fg=$COLOR_VI_MODE_NORMAL
       ;;
     command)
       mode='C'
-      fg=$color_orange
+      fg=$COLOR_VI_MODE_COMMAND
       ;;
     isearch)
       mode='S'
-      fg=$color_violet
+      fg=$COLOR_VI_MODE_ISEARCH
       ;;
     visual)
       mode='V'
-      fg=$color_magenta
+      fg=$COLOR_VI_MODE_VISUAL
       ;;
     viopp)
       mode='P'
-      fg=$color_gray
+      fg=$COLOR_FG
       ;;
     *)
       mode=''
-      fg=$color_fg
+      fg=$COLOR_FG
       ;;
   esac
 
@@ -322,30 +302,30 @@ function prompt() {
 
 function prompt_left() {
   RESULT=$?
-  segment_os $color_fg
+  segment_os $COLOR_FG
   lseparator_end
-  lseparator_begin $color_bg
-  segment_path $color_bg $color_fg
+  lseparator_begin $COLOR_BG
+  segment_path $COLOR_BG $COLOR_FG
   lseparator_end
 
   if [[ $RESULT -ne 0 ]]; then
-    lseparator_begin $color_red1
-    segment_error $color_red1 $color_black
+    lseparator_begin $COLOR_RED
+    segment_error $COLOR_RED $COLOR_BLACK
     lseparator_end
   fi
 }
 
 function prompt_right() {
   if in_git; then
-    segment_git $color_bg $color_fg
+    segment_git $COLOR_BG $COLOR_FG
   else
-    rseparator_begin $color_bg
+    rseparator_begin $COLOR_BG
   fi
-  segment_user $color_bg $color_blue
-  separator_sub $color_bg
-  segment_host $color_bg $color_blue
-  separator_sub $color_bg
-  segment_time $color_bg $color_green
+  segment_user $COLOR_BG $COLOR_BLUE
+  separator_sub $COLOR_BG
+  segment_host $COLOR_BG $COLOR_BLUE
+  separator_sub $COLOR_BG
+  segment_time $COLOR_BG $COLOR_GREEN
 }
 
 setopt PROMPT_SUBST

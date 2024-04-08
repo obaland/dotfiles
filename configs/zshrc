@@ -73,6 +73,7 @@ ZSH_THEME="obaland"
 plugins=(
   git
   vi-mode
+  zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
