@@ -7,11 +7,10 @@ COLOR_BLACK='232'
 COLOR_GRAY='242'
 COLOR_FG='189'
 COLOR_BLUE='111'
-COLOR_YELLOW='229'
+COLOR_YELLOW='3'
 COLOR_ORANGE='166'
 COLOR_GREEN='150'
 COLOR_RED='160'
-COLOR_RED1='204'
 COLOR_PURPLE='183'
 COLOR_GIT='75'
 
@@ -206,7 +205,7 @@ function segment_git() {
   elif [[ -n $ahead && $ahead != 0 ]]; then
     bg=$COLOR_PURPLE
   elif [[ -n $behind && $behind != 0 ]]; then
-    bg=$COLOR_RED1
+    bg=$COLOR_GREEN
   fi
   rseparator_begin $bg
   segment_begin $bg $COLOR_BLACK
