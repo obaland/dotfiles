@@ -151,7 +151,13 @@ function segment_path() {
 
   local dir="${(%):-%~}"
   dir="${dir/#\~/\ueb06}"
-  dir="${dir//\// \u276f }"
+  if [[ "$dir" == "/"* ]]; then
+    dir="/${dir:1}"
+    dir="${dir//\// \u276f }"
+    dir="/ "${dir:1}
+  else
+    dir="${dir//\// \u276f }"
+  fi
   block "${dir} "
   segment_end
 }
