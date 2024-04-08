@@ -181,27 +181,30 @@ function segment_user() {
 }
 
 function segment_git() {
-  local dirty="$(parse_git_dirty)"
+  local ahead="$(git_ahead)"
+  local behind="$(git_behind)"
+  local working="$(git_working_changed)"
+  local staging="$(git_staging_changed)"
+  local stash="$(git_stash_count)"
   local bg=$COLOR_GIT
-  if [[ -n $dirty ]]; then
+  if [[ -n $working && $working != 0 || -n $staging && $staging != 0 ]]; then
+    bg=$COLOR_GIT_DIRTY
+  elif [[ -n $ahead && $ahead != 0 || -n $behind && $behind != 0 ]]; then
     bg=$COLOR_GIT_DIRTY
   fi
   rseparator_begin $bg
   segment_begin $bg $COLOR_BLACK
   block " \ue725 $(git_current_branch) "
 
-  local working="$(git_working_changed)"
-  local staging="$(git_staging_changed)"
-  local stash="$(git_stash_count)"
-  if [[ -n "$staging" && "$staging" != 0 ]]; then
+  if [[ -n $staging && $staging != 0 ]]; then
     block "\ue621"
     block "\uf046 $staging "
   fi
-  if [[ -n "$working" && "$working" != 0 ]]; then
+  if [[ -n $working && $working != 0 ]]; then
     block "\ue621"
     block "\uf044 $working "
   fi
-  if [[ -n "$stash" && "$stash" != 0 ]]; then
+  if [[ -n $stash && $stash != 0 ]]; then
     block "\ue621"
     block "\ueb4b $stash "
   fi
