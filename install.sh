@@ -70,7 +70,7 @@ if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
   create_link $ZSHRC $LINKZSHRC
 
   readonly TMUXCONF="$ROOTDIR/configs/tmux.conf"
-  readonly LINKTMUXCONF="$HOMEDIR/.tmux.conf"
+  readonly LINKTMUXCONF="$HOMEDIR/.tmux.conf.local"
   create_link $TMUXCONF $LINKTMUXCONF
 
   # zsh plugins
