@@ -228,7 +228,7 @@ function segment_prompt() {
   local icon fg
   if [[ $UID -eq 0 ]]; then
     #icon='\uf0423 '
-    icon='󰘳  '
+    icon='󰘳 '
     fg=$COLOR_ORANGE
   else
     icon='\u276f '
