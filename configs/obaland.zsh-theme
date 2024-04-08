@@ -28,10 +28,6 @@ SEPSUB_CHAR='\u258c'
 CURRENT_BG='none'
 CURRENT_FG='none'
 
-# For git plugin
-ZSH_THEME_GIT_PROMPT_CLEAN=''
-ZSH_THEME_GIT_PROMPT_DIRTY='\uf069'
-
 VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 VI_MODE_SET_CURSOR=true
 
@@ -232,7 +228,7 @@ function segment_prompt() {
   local icon fg
   if [[ $UID -eq 0 ]]; then
     #icon='\uf0423 '
-    icon='󰘳 '
+    icon='󰘳  '
     fg=$COLOR_ORANGE
   else
     icon='\u276f '
@@ -281,35 +277,6 @@ function segment_vimmode() {
   block "\uf069 $mode "
   segment_end
 }
-
-# Events
-#-----------------------------------------------------------------------------
-#function zle-keymap-select zle-line-init zle-line-finish {
-#  reset="%{$reset_color%}"
-#  case $KEYMAP in
-#    main|viins)
-#      mode="[%{$fg[green]%}INSERT$reset]"
-#      ;;
-#    vicmd)
-#      mode="[%{$fg[blue]%}NORMAL$reset]"
-#      ;;
-#    vivis|vivli)
-#      mode="[%{$fg[yellow]%}VISUAL$reset]"
-#      ;;
-#    *)
-#      mode=''
-#      ;;
-#  esac
-#
-##  PROMPT="%F{cyan}❯❯ %n@%m:%F{green}%~$reset
-##$mode$reset%# "
-#  zle reset-prompt
-#}
-
-#zle -N zle-line-init
-#zle -N zle-line-finish
-#zle -N zle-keymap-select
-
 
 # Prompt
 #-----------------------------------------------------------------------------
