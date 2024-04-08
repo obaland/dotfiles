@@ -158,7 +158,7 @@ function! s:use_package_manager(data_path)
 
     " Update or install plugins if a change detected
     if dein#check_install()
-      if exists('g:dein#install_github_api_token')
+      if exists('$GITHUB_API_TOKEN')
         call dein#check_update(v:true)
       else
         call dein#install()
