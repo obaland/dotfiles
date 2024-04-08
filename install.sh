@@ -74,6 +74,15 @@ if [ $TYPE = "all" ] || [ $TYPE = "shell" ]; then
   create_link $TMUXCONF $LINKTMUXCONF
 
   # zsh plugins
+  readonly ZSHPLUGINS="$HOMEDIR/.oh-my-zsh/custom/plugins"
+
+  readonly ZSH_PLUGIN_AUTOSUGGESTIONS_NAME="zsh-autosuggestions"
+  readonly ZSH_PLUGIN_AUTOSUGGESTIONS_PATH="$ZSHPLUGINS/zsh-autosuggestions"
+  if [ ! -d $ZSH_PLUGIN_AUTOSUGGESTIONS_PATH ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_PLUGIN_AUTOSUGGESTIONS_PATH"
+  else
+    echo "'$ZSH_PLUGIN_AUTOSUGGESTIONS_NAME' alreay exists." 1>&2
+  fi
 fi
 
 # Application
