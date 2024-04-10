@@ -29,9 +29,11 @@ ZSH_THEME="obaland"
 # zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+zstyle ':omz:update' mode auto
 
 # Uncomment the following line to change how often to auto-update (in days).
 # zstyle ':omz:update' frequency 13
+zstyle ':omz:update' frequency 7
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -105,3 +107,23 @@ export LANG=ja_JP.UTF-8
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Update tmux
+function update_tmux() {
+  if [[ ! -d "$1" ]]; then
+    return
+  fi
+
+  local srcdir=$(pwd)
+  cd "$1"
+
+  local update=$(git remote show origin | grep 'local out of date')
+  if [[ -n "$update" ]]; then
+    echo '--- Update `.tmux` ... ---'
+    git pull
+  fi
+
+  cd "$srcdir"
+}
+
+update_tmux ~/.tmux
