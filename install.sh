@@ -1,8 +1,8 @@
 #!/bin/sh
 
 link() {
-  if [ -e "$2" ]; then
-    rm -f "$2"
+  if [ -L "$2" ]; then
+    unlink "$2"
   fi
   ln -s "$1" "$2"
   echo "link: $1 -> $2"
