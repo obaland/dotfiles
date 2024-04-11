@@ -1,0 +1,78 @@
+XTERM=xterm-256color
+ZSH_CONFIG_DIR="$HOME/.zsh"
+
+export LANG=ja_JP.UTF-8
+
+# Building the Environment
+#-----------------------------------------------------------------------------
+function link() {
+  if [[ -e "$2" ]]; then
+    rm -f "$2"
+  fi
+  ln -s "$1" "$2"
+  echo "link: $1 -> $2"
+}
+
+# Update git
+function update_git() {
+  local srcdir=$(pwd)
+  cd "$1"
+  local update=$(git remote show origin | grep 'local out of date')
+  if [[ -n "$update" ]]; then
+    echo '--- Update `${1:t}` ... ---'
+    git pull
+  fi
+  cd "$srcdir"
+}
+
+# Install tmux
+function install_tmux() {
+  if [[ ! -d "$1" ]]; then
+    # Install .tmux
+    git clone https://github.com/gpakosz/.tmux.git "$1"
+    # Install tpm
+    git clone https://github.com/tmux-plugins/tpm "$1/plugins/tpm"
+    link "$1/tmux.conf" "$HOME/.tmux.conf"
+  else
+    update_git "$1"
+  fi
+}
+
+# tmux setup
+#-----------------------------------------------------------------------------
+TMUX_PATH="$HOME/.tmux"
+install_tmux "$TMUX_PATH"
+
+# Added by Zinit's installer
+#-----------------------------------------------------------------------------
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+      print -P "%F{33} %F{34}Installation successful.%f%b" || \
+      print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+#-----------------------------------------------------------------------------
+# End of Zinit's installer chunk
+
+# Plugins
+#-----------------------------------------------------------------------------
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-syntax-highlighting
+
+zinit wait lucid as"completion" atload"zicompinit; zicdreplay" mv"git-completion.zsh -> _git" for \
+  "https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh"
+
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
+
+# Load theme
+#-----------------------------------------------------------------------------
+source "$HOME/.zsh/theme.zsh"
+
+# vim:ft=zsh ts=2 sw=2 sts=2

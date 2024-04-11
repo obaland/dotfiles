@@ -14,11 +14,11 @@ COLOR_RED='160'
 COLOR_PURPLE='183'
 COLOR_GIT='75'
 
+
+COLOR_VI_MODE_NORMAL='216' # orange
 COLOR_VI_MODE_INSERT='150' # green
 COLOR_VI_MODE_VISUAL='183' # magenta
-COLOR_VI_MODE_ISEARCH='140' # purple
-COLOR_VI_MODE_NORMAL='216' # orange
-COLOR_VI_MODE_COMMAND='180' # yellow
+COLOR_VI_MODE_REPLACE='140' # purple
 
 # Special characters
 LSEP_CHAR='\ue0b0'
@@ -28,14 +28,22 @@ SEPSUB_CHAR='\u258c'
 CURRENT_BG='none'
 CURRENT_FG='none'
 
-VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
-VI_MODE_SET_CURSOR=true
-
 # git utilities
 #-----------------------------------------------------------------------------
 function in_git() {
   git rev-parse --is-inside-work-tree > /dev/null 2>&1
   return $?
+}
+
+function git_current_branch() {
+  local ref
+  ref=$(git symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return  # no git repo.
+    ref=$(git rev-parse --short HEAD 2> /dev/null) || return
+  fi
+  echo ${ref#refs/heads/}
 }
 
 function git_staging_changed() {
@@ -239,33 +247,29 @@ function segment_prompt() {
   segment_end
 }
 
-# NOTE: Depends on `zsh-vim-mode` plugin.
+# NOTE: Depends on `zsh-vi-mode` plugin.
 function segment_vimmode() {
   local fg mode
-  case $VI_KEYMAP in
-    main|viins)
-      mode='I'
-      fg=$COLOR_VI_MODE_INSERT
-      ;;
-    vicmd)
+  case $ZVM_MODE in
+    $ZVM_MODE_NORMAL)
       mode='N'
       fg=$COLOR_VI_MODE_NORMAL
       ;;
-    command)
-      mode='C'
-      fg=$COLOR_VI_MODE_COMMAND
+    $ZVM_MODE_INSERT)
+      mode='I'
+      fg=$COLOR_VI_MODE_INSERT
       ;;
-    isearch)
-      mode='S'
-      fg=$COLOR_VI_MODE_ISEARCH
-      ;;
-    visual)
+    $ZVM_MODE_VISUAL)
       mode='V'
       fg=$COLOR_VI_MODE_VISUAL
       ;;
-    viopp)
-      mode='P'
-      fg=$COLOR_FG
+    $ZVM_MODE_VISUAL_LINE)
+      mode='V_'
+      fg=$COLOR_VI_MODE_VISUAL
+      ;;
+    $ZVM_MODE_REPLACE)
+      mode='C'
+      fg=$COLOR_VI_MODE_REPLACE
       ;;
     *)
       mode=''
@@ -318,5 +322,3 @@ setopt PROMPT_SUBST
 RPROMPT='$(prompt_right)'
 PROMPT='$(prompt_left)
 $(prompt)'
-
-# vim:ft=zsh ts=2 sw=2 sts=2

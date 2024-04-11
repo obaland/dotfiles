@@ -34,36 +34,18 @@ link "$VIMDIR" "$LINKVIM"
 
 # Shell
 #-----------------------------------------------------------------------------
-readonly OMZDIR="$HOMEDIR/.oh-my-zsh"
-readonly OMZTHEMEDIR="$OMZDIR/themes"
-if [ ! -d "$OMZTHEMEDIR" ]; then
-  echo "Installation of `oh-my-zsh` is required." 1>&2
-  exit
+readonly ZINIT="$HOMEDIR/.local/share/zinit"
+if [ ! -d "$ZINIT" ]; then
+  sh -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 fi
 
-readonly OMZTHEME="$ROOTDIR/configs/obaland.zsh-theme"
-readonly LINKOMZTHEME="$OMZTHEMEDIR/obaland.zsh-theme"
-link "$OMZTHEME" "$LINKOMZTHEME"
-
-readonly ZSHRC="$ROOTDIR/configs/zshrc"
+readonly ZSHRC="$ROOTDIR/zsh/zshrc"
 readonly LINKZSHRC="$HOMEDIR/.zshrc"
 link "$ZSHRC" "$LINKZSHRC"
 
-# zsh plugin manager
-readonly ZPLUG="$HOMEDIR/.zplug"
-if [ ! -d "$ZPLUG" ]; then
-  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-fi
-
-#readonly ZSHPLUGINS="$HOMEDIR/.oh-my-zsh/custom/plugins"
-#
-#readonly ZSH_PLUGIN_AUTOSUGGESTIONS_NAME="zsh-autosuggestions"
-#readonly ZSH_PLUGIN_AUTOSUGGESTIONS_PATH="$ZSHPLUGINS/zsh-autosuggestions"
-#if [ ! -d "$ZSH_PLUGIN_AUTOSUGGESTIONS_PATH" ]; then
-#  git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_PLUGIN_AUTOSUGGESTIONS_PATH"
-#else
-#  echo "'$ZSH_PLUGIN_AUTOSUGGESTIONS_NAME' alreay exists." 1>&2
-#fi
+readonly ZSHCONFIG="$ROOTDIR/zsh/zsh"
+readonly LINKZSHCONFIG="$HOMEDIR/.zsh"
+link "$ZSHCONFIG" "$LINKZSHCONFIG"
 
 # tmux
 #-----------------------------------------------------------------------------
