@@ -25,6 +25,15 @@ function Set-SystemEnvironmentVariable($name, $value) {
   [Environment]::SetEnvironmentVariable($name, $value, [EnvironmentVariableTarget]::Machine)
 }
 
+# create link file
+function Link($targetPath, $linkPath) {
+  if (Test-Path -Path $linkPath) {
+    Remove-Item -Path $linkPath
+  }
+  New-Item -ItemType SymbolicLink -Path $linkPath -Value $targetPath | Out-Null
+  "[Link] - " + $linkPath + " => " + $targetPath
+}
+
 Write-Output "Start - install environment for windows ..."
 
 # Setting parameters
@@ -64,6 +73,18 @@ Set-SystemEnvironmentVariable $envName $runtimePath
 Set-UserEnvironmentVariable $envName $homeDir
 "[Set user environment] - " + $envName + " : " + $homeDir
 
+# tmux
+#-----------------------------------------------------------------------------
+$tmuxDir = Join-Path $homeDir ".tmux"
+$tpmDir = Join-Path $tmuxDir "plugins/tpm"
+if (-not (Test-Path -Path $tmuxDir)) {
+  # Install .tmux and tpm
+  git clone https://github.com/gpakosz/.tmux.git $tmuxDir
+  git clone https://github.com/tmux-plugins/tpm $tpmDir
+}
+Link (Join-Path $tmuxDir ".tmux.conf") (Join-Path $homeDir ".tmux.conf")
+Link (Join-Path $currentDir "tmux/.tmux.conf") (Join-Path $homeDir ".tmux.conf.local")
+
 # Create symbolic links
 #-----------------------------------------------------------------------------
 ""
@@ -79,23 +100,18 @@ $linkFiles = @(
 foreach ($linkFile in $linkFiles) {
   $targetPath = Join-Path $currentDir $linkFile.target
   foreach ($link in $linkFile.link) {
-    $linkPath = Join-Path $homeDir $link
-    if (Test-Path $linkPath) {
-      Remove-Item -Path $linkPath
-    }
-
     if (-not (Test-Path $targetPath)) {
       Write-Error ($targetPath + " is not exists")
       exit 1
     }
 
+    $linkPath = Join-Path $homeDir $link
     $destDir = [System.IO.Path]::GetDirectoryName($linkPath)
     if (-not (Test-Path -Path $destDir)) {
       New-Item -Path $destDir -ItemType Directory -Force | Out-Null
     }
 
-    New-Item -ItemType SymbolicLink -Path $linkPath -Value $targetPath | Out-Null
-    "[Create link] - " + $linkPath + " => " + $targetPath
+    Link $targetPath $linkPath
   }
 }
 
