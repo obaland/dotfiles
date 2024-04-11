@@ -49,7 +49,7 @@ link "$ZSHCONFIG" "$LINKZSHCONFIG"
 
 # tmux
 #-----------------------------------------------------------------------------
-readonly TMUXCONF="$ROOTDIR/configs/tmux.conf"
+readonly TMUXCONF="$ROOTDIR/tmux/tmux.conf"
 readonly LINKTMUXCONF="$HOMEDIR/.tmux.conf.local"
 link "$TMUXCONF" "$LINKTMUXCONF"
 
@@ -58,7 +58,7 @@ link "$TMUXCONF" "$LINKTMUXCONF"
 # Karabiner for macOS
 if [ "$(uname)" = "Darwin" ]; then
   readonly KARABINER="karabiner-for-vim.json"
-  readonly KARABINER_SRCPATH="${ROOTDIR}/configs/${KARABINER}"
+  readonly KARABINER_SRCPATH="${ROOTDIR}/karabiner/${KARABINER}"
   readonly KARABINER_DESTDIR="${HOMEDIR}/.config/karabiner/assets/complex_modifications"
   readonly KARABINER_LINKPATH="${KARABINER_DESTDIR}/${KARABINER}"
 
