@@ -28,9 +28,8 @@ function update_git() {
 # Install tmux
 function install_tmux() {
   if [[ ! -d "$1" ]]; then
-    # Install .tmux
+    # Install .tmux and tpm
     git clone https://github.com/gpakosz/.tmux.git "$1"
-    # Install tpm
     git clone https://github.com/tmux-plugins/tpm "$1/plugins/tpm"
     link "$1/tmux.conf" "$HOME/.tmux.conf"
   else
