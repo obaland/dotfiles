@@ -25,22 +25,10 @@ function update_git() {
   cd "$srcdir"
 }
 
-# Install tmux
-function install_tmux() {
-  if [[ ! -d "$1" ]]; then
-    # Install .tmux and tpm
-    git clone https://github.com/gpakosz/.tmux.git "$1"
-    git clone https://github.com/tmux-plugins/tpm "$1/plugins/tpm"
-    link "$1/tmux.conf" "$HOME/.tmux.conf"
-  else
-    update_git "$1"
-  fi
-}
-
 # tmux setup
 #-----------------------------------------------------------------------------
 TMUX_PATH="$HOME/.tmux"
-install_tmux "$TMUX_PATH"
+update_git "$TMUX_PATH"
 
 # Added by Zinit's installer
 #-----------------------------------------------------------------------------

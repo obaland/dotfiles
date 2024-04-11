@@ -49,6 +49,14 @@ link "$ZSHCONFIG" "$LINKZSHCONFIG"
 
 # tmux
 #-----------------------------------------------------------------------------
+readonly TMUX="$HOMEDIR/.tmux"
+if [ ! -d "$TMUX" ]; then
+  # Install .tmux and tpm
+  git clone https://github.com/gpakosz/.tmux.git "$TMUX"
+  git clone https://github.com/tmux-plugins/tpm "$TMUX/plugins/tpm"
+fi
+link "$TMUX/.tmux.conf" "$HOMEDIR/.tmux.conf"
+
 readonly TMUXCONF="$ROOTDIR/tmux/tmux.conf"
 readonly LINKTMUXCONF="$HOMEDIR/.tmux.conf.local"
 link "$TMUXCONF" "$LINKTMUXCONF"
