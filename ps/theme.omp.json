@@ -144,7 +144,7 @@
         {
           "foreground": "p:fg",
           "foreground_templates": [
-            "{{ if gt .Code 0 }}#ff0000{{ end }}"
+            "{{ if gt .Code 0 }}p:red{{ end }}"
           ],
           "properties": {
             "always_enabled": true
