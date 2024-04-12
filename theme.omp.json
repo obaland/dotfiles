@@ -34,7 +34,10 @@
     "red": "#f7768e",
     "red1": "#db4b4b",
     "git-change": "#914c54",
-    "gitSigns-change": "#b2555b"
+    "white": "#e6e6e6",
+    "black": "#181818",
+    "ubuntu": "#e64a19",
+    "windows": "#00acee"
   },
   "blocks": [
     {
@@ -49,7 +52,15 @@
         },
         {
           "background": "p:terminal_black",
+          "background_templates": [
+            "{{ if eq .OS \"ubuntu\" }}p:ubuntu{{ end }}",
+            "{{ if eq .OS \"windows\" }}p:windows{{ end }}"
+          ],
           "foreground": "p:fg",
+          "foreground_templates": [
+            "{{ if eq .OS \"ubuntu\" }}p:white{{ end }}",
+            "{{ if eq .OS \"windows\" }}p:bg_dark{{ end }}"
+          ],
           "style": "diamond",
           "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
           "trailing_diamond": "\ue0b0",

@@ -2,23 +2,24 @@
 OS=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
 
 # Color palette
-COLOR_BG='236'
-COLOR_BLACK='232'
-COLOR_GRAY='242'
-COLOR_FG='189'
-COLOR_BLUE='111'
-COLOR_YELLOW='3'
-COLOR_ORANGE='166'
-COLOR_GREEN='150'
-COLOR_RED='160'
-COLOR_PURPLE='183'
-COLOR_GIT='75'
+COLOR_BG_DARK='#1f2335'
+COLOR_BG='#292e41'
+COLOR_BG_BLUE='#3d59a1'
+COLOR_BLACK='#414868'
+COLOR_FG='#c0caf5'
+COLOR_BLUE='#7aa2f7'
+COLOR_YELLOW='#e0af68'
+COLOR_ORANGE='#ff9e64'
+COLOR_GREEN='#9ece6a'
+COLOR_RED='#f7768e'
+COLOR_PURPLE='#9d7cd8'
+COLOR_WHITE='#e6e6e6'
+COLOR_UBUNTU='#e64a19'
 
-
-COLOR_VI_MODE_NORMAL='216' # orange
-COLOR_VI_MODE_INSERT='150' # green
-COLOR_VI_MODE_VISUAL='183' # magenta
-COLOR_VI_MODE_REPLACE='140' # purple
+COLOR_VI_MODE_NORMAL="$COLOR_BLUE"
+COLOR_VI_MODE_INSERT="$COLOR_GREEN"
+COLOR_VI_MODE_VISUAL="$COLOR_PURPLE"
+COLOR_VI_MODE_REPLACE="$COLOR_RED"
 
 # Special characters
 LSEP_CHAR='\ue0b0'
@@ -141,7 +142,7 @@ function segment_os() {
   local bg icon
   if [[ $OS == 'ubuntu' ]]; then
     icon='\uf31b'
-    bg=$COLOR_ORANGE
+    bg=$COLOR_UBUNTU
   else
     icon='\ue712'
     bg=$COLOR_BLACK
@@ -162,10 +163,10 @@ function segment_path() {
     dir="\ueb46 "
   elif [[ $dir == "/"* ]]; then
     dir="/${dir:1}"
-    dir="${dir//\//" %F{$COLOR_GRAY}\ue216%f "}"
+    dir="${dir//\//" %F{$COLOR_BG_DARK}\ue216%f "}"
     dir="\ueb46 "${dir:1}
   else
-    dir="${dir//\//" %F{$COLOR_GRAY}\ue216%f "}"
+    dir="${dir//\//" %F{$COLOR_BG_DARK}\ue216%f "}"
   fi
   block "${dir} "
   segment_end
@@ -201,7 +202,7 @@ function segment_git() {
   local working="$(git_working_changed)"
   local staging="$(git_staging_changed)"
   local stash="$(git_stash_count)"
-  local bg=$COLOR_GIT
+  local bg=$COLOR_BLUE
   if [[ -n $working && $working != 0 ]]; then
     bg=$COLOR_YELLOW
   elif [[ -n $staging && $staging != 0 ]]; then
@@ -293,8 +294,8 @@ function prompt_left() {
   RESULT=$?
   segment_os $COLOR_FG
   lseparator_end
-  lseparator_begin $COLOR_BG
-  segment_path $COLOR_BG $COLOR_FG
+  lseparator_begin $COLOR_BG_BLUE
+  segment_path $COLOR_BG_BLUE $COLOR_FG
   lseparator_end
 
   if [[ $RESULT -ne 0 ]]; then

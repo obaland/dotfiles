@@ -1,3 +1,4 @@
+TMUX_PATH="$HOME/.tmux"
 XTERM=xterm-256color
 ZSH_CONFIG_DIR="$HOME/.zsh"
 
@@ -5,14 +6,6 @@ export LANG=ja_JP.UTF-8
 
 # Building the Environment
 #-----------------------------------------------------------------------------
-function link() {
-  if [[ -L "$2" ]]; then
-    rm -f "$2"
-  fi
-  ln -s "$1" "$2"
-  echo "link: $1 -> $2"
-}
-
 # Update git
 function update_git() {
   local srcdir=$(pwd)
@@ -24,11 +17,7 @@ function update_git() {
   fi
   cd "$srcdir"
 }
-
-# tmux setup
-#-----------------------------------------------------------------------------
-TMUX_PATH="$HOME/.tmux"
-update_git "$TMUX_PATH"
+update_git "$TMUX_PATH" # Update .tmux
 
 # Added by Zinit's installer
 #-----------------------------------------------------------------------------
@@ -54,12 +43,56 @@ zinit light zsh-users/zsh-syntax-highlighting
 
 zinit wait lucid as"completion" atload"zicompinit; zicdreplay" mv"git-completion.zsh -> _git" for \
   "https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh"
+zinit wait lucid as"completion" atload"zicompinit; zicdreplay" for \
+  "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker"
 
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
+# History
+#-----------------------------------------------------------------------------
+HISTFILE="$HOME/.zsh_history"
+
+# Options
+#-----------------------------------------------------------------------------
+# Basic
+setopt no_beep
+setopt print_eight_bit
+
+# History
+setopt inc_append_history
+setopt share_history
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt extended_history
+setopt hist_expire_dups_first
+
+# Completion
+setopt auto_param_slash
+setopt auto_param_keys
+setopt mark_dirs
+setopt auto_menu
+setopt magic_equal_subst
+setopt complete_in_word
+
+# Autoloads
+#-----------------------------------------------------------------------------
+autoload -Uz compinit; compinit
+autoload -Uz colors; colors
+
+# Styles
+#-----------------------------------------------------------------------------
+zstyle ':completion:*:default' menu select=2
+
+# Aliases
+#-----------------------------------------------------------------------------
+alias ls='ls --color=auto -G'
+alias la='ls -lAG'
+alias ll='ls -lG'
+
 # Load theme
 #-----------------------------------------------------------------------------
-source "$HOME/.zsh/theme.zsh"
+source "$ZSH_CONFIG_DIR/theme.zsh"
+#eval "$(oh-my-posh init zsh --config ~/.theme.omp.json)"
 
 # vim:ft=zsh ts=2 sw=2 sts=2

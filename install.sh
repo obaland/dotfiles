@@ -34,6 +34,13 @@ link "$VIMDIR" "$LINKVIM"
 
 # Shell
 #-----------------------------------------------------------------------------
+
+# Need `oh-my-posh`
+# Install: curl -s https://ohmyposh.dev/install.sh | bash -s
+readonly OMPTHEME="$ROOTDIR/theme.omp.json"
+readonly LINKOMPTHEME="$HOMEDIR/.theme.omp.json"
+link "$OMPTHEME" "$LINKOMPTHEME"
+
 readonly ZINIT="$HOMEDIR/.local/share/zinit"
 if [ ! -d "$ZINIT" ]; then
   sh -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"

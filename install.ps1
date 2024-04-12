@@ -93,8 +93,8 @@ Link (Join-Path $currentDir "tmux/.tmux.conf") (Join-Path $homeDir ".tmux.conf.l
 $linkFiles = @(
   @{"target" = "vimrc"; "link" = @(".vim"; "nvim")}
   @{"target" = "vimrc/vimrc"; "link" = @(".vimrc")}
-  @{"target" = "ps/theme.omp.json"; "link" = @(".theme.omp.json")}
-  @{"target" = "ps/windows-terminal-settings.json"; "link" = @("AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json")}
+  @{"target" = "theme.omp.json"; "link" = @(".theme.omp.json")}
+  @{"target" = "ps/terminal-settings.json"; "link" = @("AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json")}
 )
 
 foreach ($linkFile in $linkFiles) {
