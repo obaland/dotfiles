@@ -18,6 +18,7 @@ function M.setup()
       auto_cd = true,
       columns = 'indent,devicons,name,mode,size,time',
       session = 'share',
+      show_hidden_files = true,
     },
   })
 end
@@ -33,6 +34,7 @@ function M.start_exprolorer()
       keep = true,
       name = 'exp',
       layout = 'left',
+      show_hidden_files = true,
       width = 36,
       columns = 'indent,devicons,name,git',
       git = {
