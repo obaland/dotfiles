@@ -13,12 +13,18 @@ function M.setup()
     icon = '',
   })
 
+  local action = require('vfiler/actions/yanktree')
+
   require('vfiler/config').setup({
     options = {
       auto_cd = true,
       columns = 'indent,devicons,name,mode,size,time',
       session = 'share',
       show_hidden_files = true,
+    },
+
+    mappings = {
+      ['<M-y>'] = action.yank_tree
     },
   })
 end

@@ -390,13 +390,16 @@ lua_source = 'require("plugins/heirline").setup()'
 [[plugins]]
 repo = 'obaland/vfiler.vim'
 if = 'has("nvim-0.5") || (v:version >= 802 && has("lua"))'
-depends = 'vfiler-column-devicons'
+depends = ['vfiler-column-devicons', 'vfiler-action-yanktree']
 on_cmd = 'VFiler'
 on_lua = 'vfiler'
 lua_source = 'require("plugins/vfiler").setup()'
 
 [[plugins]]
 repo = 'obaland/vfiler-column-devicons'
+
+[[plugins]]
+repo = 'obaland/vfiler-action-yanktree'
 
 # Operators and text objects
 #=============================================================================
