@@ -12,12 +12,12 @@ function update_git() {
   cd "$1"
   local update=$(git remote show origin | grep 'local out of date')
   if [[ -n "$update" ]]; then
-    echo '--- Update .tmux ... ---'
+    echo "--- Update `$1` ... ---"
     git pull
   fi
   cd "$srcdir"
 }
-update_git "$TMUX_PATH" # Update .tmux
+update_git "$TMUX_PATH"
 
 # Added by Zinit's installer
 #-----------------------------------------------------------------------------

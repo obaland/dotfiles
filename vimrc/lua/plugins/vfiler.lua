@@ -15,6 +15,8 @@ function M.setup()
     icon = '',
   })
 
+  local action = require('vfiler/actions/yanktree')
+
   require('vfiler/config').setup({
     options = {
       auto_cd = true,
