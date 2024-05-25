@@ -8,6 +8,8 @@ local M = {}
 local exprolorer_bufnrs = {}
 
 function M.setup()
+  local action = require('vfiler/actions/yanktree')
+
   -- column settings
   require('vfiler/columns/indent').setup({
     icon = '',
@@ -20,6 +22,10 @@ function M.setup()
       session = 'share',
       show_hidden_files = true,
     },
+
+    mappings = {
+      ['<M-y>'] = action.yank_tree,
+    }
   })
 end
 

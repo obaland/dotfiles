@@ -78,7 +78,7 @@ local function on_attach(client, bufnr)
 
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
-    -- client.config.flags.debounce_text_changes  = vim.opt.updatetime:get()
+    client.config.flags.debounce_text_changes  = vim.opt.updatetime:get()
   end
 
   -- Set autocommands conditional on server capabilities
