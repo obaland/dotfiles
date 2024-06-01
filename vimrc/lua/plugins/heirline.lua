@@ -580,7 +580,7 @@ local function winbar()
         self.bufnr = vim.api.nvim_get_current_buf()
       end,
       provider = function(self)
-        local clients = vim.lsp.get_active_clients({ bufnr = self.bufnr })
+        local clients = vim.lsp.get_clients({ bufnr = self.bufnr })
         if #clients > 0 then
           for _, client in ipairs(clients) do
             if client.name ~= 'null-ls' then

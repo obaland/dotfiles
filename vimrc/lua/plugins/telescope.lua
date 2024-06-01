@@ -9,12 +9,12 @@ local grep_arguments
 if vim.fn.executable('rg') == 1 then
   grep_arguments = {
     'rg',
-    '--column',
     '--color=never',
-    '--smart-case',
-    '--line-number',
     '--no-heading',
     '--with-filename',
+    '--line-number',
+    '--column',
+    '--smart-case',
   }
 else
   grep_arguments = {
@@ -58,11 +58,13 @@ end
 -- Custom pickers
 
 function M.grep()
-  grep(core.project_root(0))
+  local cwd = core.project_root(0)
+  grep(#cwd > 0 and cwd or nil)
 end
 
 function M.grep_string()
-  grep(core.project_root(0), vim.fn.expand('<cword>'))
+  local cwd = core.project_root(0)
+  grep(#cwd > 0 and cwd or nil, vim.fn.expand('<cword>'))
 end
 
 function M.grep_buffer()
@@ -70,7 +72,8 @@ function M.grep_buffer()
 end
 
 function M.find_files()
-  find_files(core.project_root(0))
+  local cwd = core.project_root(0)
+  find_files(#cwd > 0 and cwd or nil)
 end
 
 function M.find_files_buffer()

@@ -35,6 +35,9 @@ local function find(name, dir, comp)
   local names = vim.fn.split(M.normalize_path(dir), '/')
   while #names > 0 do
     local current = table.concat(names, '/')
+    if not M.is_win() then
+      current = '/' .. current
+    end
     if comp(current .. '/' .. name) == 1 then
       return current
     end
