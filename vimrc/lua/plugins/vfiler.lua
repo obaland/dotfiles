@@ -8,14 +8,20 @@ local M = {}
 local exprolorer_bufnrs = {}
 
 function M.setup()
-  local action = require('vfiler/actions/yanktree')
+  local yanktree = require('vfiler/actions/yanktree')
+  yanktree.setup({
+    ignore_directories = {
+      'node_modules',
+      'venv',
+      '.git',
+      '__pycache__',
+    }
+  })
 
   -- column settings
   require('vfiler/columns/indent').setup({
     icon = '',
   })
-
-  local action = require('vfiler/actions/yanktree')
 
   require('vfiler/config').setup({
     options = {
@@ -26,7 +32,8 @@ function M.setup()
     },
 
     mappings = {
-      ['<M-y>'] = action.yank_tree,
+      ['<M-y>'] = yanktree.yank_tree,
+      ['<M-Y>'] = yanktree.yank_directory_tree,
     }
   })
 end
