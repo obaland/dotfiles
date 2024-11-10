@@ -9,10 +9,10 @@ export LANG=ja_JP.UTF-8
 # Update .tmux
 function update_git() {
   local srcdir=$(pwd)
-  cd "$1"
-  local update=$(git remote show origin | grep 'local out of date')
+  cd "$1" || { echo "Error: Unable to access directory $1"; return 1; }
+  local update=$(git remote show origin 2>/dev/null | grep 'local out of date')
   if [[ -n "$update" ]]; then
-    echo "--- Update `$1` ... ---"
+    echo "--- Update '$1' ... ---"
     git pull
   fi
   cd "$srcdir"
