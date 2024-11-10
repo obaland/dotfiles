@@ -696,7 +696,7 @@ local function tabline()
         special_filetypes = special_filetypes,
       },
       provider = function(self)
-        local ft = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
+        local ft = core.api.get_buffer_option(self.bufnr, 'filetype')
         local spft = self.special_filetypes[ft]
         local name
         if spft then
@@ -712,8 +712,8 @@ local function tabline()
     {
       -- modifier
       condition = function(self)
-        local buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
-        local modified = vim.api.nvim_buf_get_option(self.bufnr, 'modified')
+        local buftype = core.api.get_buffer_option(self.bufnr, 'buftype')
+        local modified = core.api.get_buffer_option(self.bufnr, 'modified')
         return modified and (#buftype == 0)
       end,
       provider = ' ●',

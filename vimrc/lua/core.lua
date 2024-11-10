@@ -131,4 +131,13 @@ function M.api.on_lsp_attach(callback, group)
   })
 end
 
+-- Get buffer option value
+if vim.fn.has('nvim-0.10') == 1 then
+  function M.api.get_buffer_option(bufnr, name)
+    return vim.api.nvim_get_option_value(name, { buf = bufnr })
+  end
+else
+  M.api.get_buffer_option = vim.api.nvim_buf_get_option
+end
+
 return M
