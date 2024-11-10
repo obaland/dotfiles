@@ -456,8 +456,8 @@ execute 'highlight! NonText'      .s:fmt_none .s:fg_base00 .s:bg_none
 execute 'highlight! Question'     .s:fmt_none .s:fg_cyan   .s:bg_none
 execute 'highlight! Search'       .s:fmt_revr .s:fg_yellow .s:bg_none
 execute 'highlight! SpecialKey'   .s:fmt_none .s:fg_base00 .s:bg_base02
-execute 'highlight! StatusLine'   .s:fmt_none .s:fg_base1  .s:bg_base02 .s:fmt_revb
-execute 'highlight! StatusLineNC' .s:fmt_none .s:fg_base00 .s:bg_base02 .s:fmt_revb
+execute 'highlight! StatusLine'   .s:fmt_none .s:fg_base1  .s:bg_base02
+execute 'highlight! StatusLineNC' .s:fmt_none .s:fg_base00 .s:bg_base02
 execute 'highlight! Title'        .s:fmt_none .s:fg_orange .s:bg_none
 execute 'highlight! VertSplit'    .s:fmt_none .s:fg_base00 .s:bg_none
 execute 'highlight! Variable'     .s:fmt_none .s:fg_base1  .s:bg_none
