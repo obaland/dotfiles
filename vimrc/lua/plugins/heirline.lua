@@ -582,11 +582,7 @@ local function winbar()
       provider = function(self)
         local clients = vim.lsp.get_clients({ bufnr = self.bufnr })
         if #clients > 0 then
-          for _, client in ipairs(clients) do
-            if client.name ~= 'null-ls' then
-              return client.name
-            end
-          end
+          return clients[1].name
         end
         return '[No Active Lsp]'
       end,
