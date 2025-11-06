@@ -97,4 +97,9 @@ alias ll='ls -lG'
 source "$ZSH_CONFIG_DIR/theme.zsh"
 #eval "$(oh-my-posh init zsh --config ~/.theme.omp.json)"
 
+# Local overrides (optional)
+if [[ -f "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
+fi
+
 # vim:ft=zsh ts=2 sw=2 sts=2

@@ -136,10 +136,9 @@ function M.setup()
 
   -- Setup language servers using nvim-lspconfig
   local servers = require('mason-lspconfig').get_installed_servers()
-  local lspconfig = require('lspconfig')
   for _, server in pairs(servers) do
     local options = make_config(server)
-    lspconfig[server].setup(options)
+    vim.lsp.config(server, options)
   end
 
   -- Reload if files were supplied in command-line arguments
