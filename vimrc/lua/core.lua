@@ -84,6 +84,11 @@ function M.is_win()
   return is_win() == 1
 end
 
+function M.is_wsl()
+  return vim.env.WSL_INTEROP ~= nil
+    or vim.env.WSL_DISTRO_NAME ~= nil
+end
+
 function M.normalize_path(path)
   if M.is_win() then
     return path:gsub('\\', '/')
