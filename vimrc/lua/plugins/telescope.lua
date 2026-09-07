@@ -172,7 +172,7 @@ function M.setup()
       mappings = {
         i = {
           ['<Tab>'] = actions.move_selection_next,
-          ['<S-Tab'] = actions.move_selection_previous,
+          ['<S-Tab>'] = actions.move_selection_previous,
           ['<C-j>'] = actions.move_selection_next,
           ['<C-k>'] = actions.move_selection_previous,
 
@@ -192,7 +192,7 @@ function M.setup()
           ['<Esc>'] = actions.close,
 
           ['<Tab>'] = actions.move_selection_next,
-          ['<S-Tab'] = actions.move_selection_previous,
+          ['<S-Tab>'] = actions.move_selection_previous,
 
           ['<C-b>'] = custom_actions.page_up,
           ['<C-f>'] = custom_actions.page_down,
@@ -223,7 +223,7 @@ function M.setup()
     pickers = {
       buffers = {
         theme = 'dropdown',
-        previewr = false,
+        previewer = false,
         sort_lastused = true,
         sort_mru = true,
         show_all_buffers = true,
@@ -261,9 +261,9 @@ function M.setup()
       },
       colorscheme = {
         enable_preview = true,
-        leyout_config = { width = 0.45, height = 0.8 },
+        layout_config = { width = 0.45, height = 0.8 },
       },
-      hightlights = {
+      highlights = {
         layout_strategy = 'horizontal',
         layout_config = { preview_width = 0.8 },
       },
@@ -280,6 +280,10 @@ function M.setup()
           ['_'] = false,
         },
       },
+    },
+    -- TODO:
+    preview = {
+      treesitter = false,
     },
   })
 end

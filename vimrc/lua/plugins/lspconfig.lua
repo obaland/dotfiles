@@ -38,7 +38,7 @@ local function on_attach(client, bufnr)
     or filetype == 'helm'
     or filetype == 'vfiler'
   then
-    vim.diagnostic.disable(bufnr)
+    vim.diagnostic.enable(false, { bufnr = bufnr })
     vim.defer_fn(function()
       vim.diagnostic.reset(nil, bufnr)
     end, 1000)
@@ -47,19 +47,19 @@ local function on_attach(client, bufnr)
 
   -- Disable diagnostics if buffer/global indicator is on
   if vim.b[bufnr].diagnostic_disabled or vim.g.diagnostic_disabled then
-    vim.diagnostic_disable(bufnr)
+    vim.diagnostic.enable(false, { bufnr = bufnr })
   end
 
   -- Keyboard mappings
   -- stylua: ignore start
   local opts = { noremap = true, silent = true }
-  map_buf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  map_buf('n', 'K', '<cmd>lua vim.lsp.buf.hover({ border = "rounded" })<CR>', opts)
   map_buf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   map_buf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   map_buf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   map_buf('n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   map_buf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  map_buf('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  map_buf('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help({ border = "rounded" })<CR>', opts)
   map_buf('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   map_buf('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   map_buf('n', '<leader>wl', '<cmd>lua =vim.lsp.buf.list_workspace_folders()<CR>', opts)
@@ -74,7 +74,8 @@ local function on_attach(client, bufnr)
   -- stylua: ignore end
 
   -- Disable formatting
-  client.server_capabilities.document_formatting = false
+  client.server_capabilities.documentFormattingProvider = false
+  client.server_capabilities.documentRangeFormattingProvider = false
 
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
@@ -82,7 +83,7 @@ local function on_attach(client, bufnr)
   end
 
   -- Set autocommands conditional on server capabilities
-  if client.supports_method('textDocument/documentHighlight') then
+  if client:supports_method('textDocument/documentHighlight') then
     vim.api.nvim_create_autocmd('CursorHold', {
       group = augroup,
       callback = function(_)
@@ -103,7 +104,14 @@ end
 function M.setup()
   -- Config
   vim.diagnostic.config({
-    signs = true,
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = '✘',
+        [vim.diagnostic.severity.WARN] = '',
+        [vim.diagnostic.severity.HINT] = '',
+        [vim.diagnostic.severity.INFO] = 'ⁱ',
+      },
+    },
     underline = true,
     update_in_insert = false,
     severity_sort = true,
@@ -116,24 +124,6 @@ function M.setup()
     },
   })
 
-  -- Diagnostics signs and hightlights
-  local signs = { Error = '✘', Warn = '', Hint = '', Info = 'ⁱ' }
-  for type, icon in pairs(signs) do
-    local hl = 'DiagnosticSign' .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
-  end
-
-  -- Configure LSP Handlers
-  -- Configure help hover handler
-  vim.lsp.handlers['textDocument/hover'] =
-    vim.lsp.with(vim.lsp.handlers.hover, {
-      border = 'rounded',
-    })
-
-  -- Configure signature help handler
-  vim.lsp.handlers['textDocument/signatureHelp'] =
-    vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
-
   -- Setup language servers using nvim-lspconfig
   local servers = require('mason-lspconfig').get_installed_servers()
   for _, server in pairs(servers) do
@@ -144,7 +134,7 @@ function M.setup()
   -- Reload if files were supplied in command-line arguments
   if
     vim.fn.argc() > 0
-    and vim.fn.has('vim_starting')
+    and vim.fn.has('vim_starting') == 1
     and not vim.o.modified
   then
     -- triggers the FileType autocmd that starts the servers
@@ -157,8 +147,8 @@ function M.setup()
     vim.api.nvim_set_keymap('n', lhs, rhs, args)
   end
 
-  nmap('<C-k>', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
-  nmap('<C-j>', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+  nmap('<C-k>', '<cmd>lua vim.diagnostic.jump({ count = -1 })<CR>')
+  nmap('<C-j>', '<cmd>lua vim.diagnostic.jump({ count = 1 })<CR>')
 
   vim.api.nvim_create_autocmd('DiagnosticChanged', {
     group = augroup,

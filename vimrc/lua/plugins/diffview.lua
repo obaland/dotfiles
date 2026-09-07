@@ -23,7 +23,7 @@ function M.setup()
   local actions = require('diffview/actions')
   require('diffview').setup({
     enhanced_diff_hl = true,
-    key_bindings = {
+    keymaps = {
       view = {
         { 'n', 'q', '<cmd>DiffviewClose<CR>' },
         { 'n', '<Tab>', actions.select_next_entry },

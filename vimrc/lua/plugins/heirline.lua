@@ -205,7 +205,7 @@ extensions.quickfix = {
 -- Trouble
 extensions.trouble = {
   condition = function()
-    return conditions.buffer_matches({ filetype = { 'Trouble' } })
+    return conditions.buffer_matches({ filetype = { 'trouble' } })
   end,
   {
     surround({ provider = ' Trouble' }),
@@ -786,7 +786,7 @@ function M.setup()
       },
       disable_winbar_cb = function(args)
         return conditions.buffer_matches({
-          buftype = { 'nofile', 'prompt', 'help', 'quickfile' },
+          buftype = { 'nofile', 'prompt', 'help', 'quickfix' },
           filetype = { 'vfiler', 'startify' },
         }, args.buf)
       end,

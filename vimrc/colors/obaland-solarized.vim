@@ -1139,6 +1139,44 @@ highlight! link StartifyBracket Comment
 highlight! link StartifyFile Constant
 execute 'highlight! StartifyNumber' .s:fmt_none .s:fg_white .s:bg_none
 
+" Tree-sitter (new captures)
+" ---------
+highlight! link @string String
+highlight! link @string.documentation String
+highlight! link @string.escape Special
+highlight! link @string.regex Special
+
+highlight! link @keyword Keyword
+highlight! link @keyword.function Keyword
+highlight! link @keyword.return Keyword
+highlight! link @keyword.operator Operator
+
+highlight! link @function Function
+highlight! link @function.builtin Function
+highlight! link @function.method Function
+highlight! link @method Function
+
+highlight! link @variable Identifier
+highlight! link @variable.builtin Identifier
+highlight! link @parameter Identifier
+highlight! link @field Identifier
+highlight! link @property Identifier
+
+highlight! link @type Type
+highlight! link @type.builtin Type
+highlight! link @constructor Function
+
+highlight! link @number Number
+highlight! link @float Float
+highlight! link @boolean Boolean
+highlight! link @constant Constant
+highlight! link @constant.builtin Constant
+
+highlight! link @comment Comment
+highlight! link @punctuation.delimiter Delimiter
+highlight! link @punctuation.bracket Delimiter
+highlight! link @operator Operator
+
 " License
 " -------
 " Copyright (c) 2011 Ethan Schoonover
