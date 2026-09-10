@@ -65,7 +65,7 @@ let g:skip_loading_mswin = 1
 " Set vimfiles directory
 
 " Setting of terminal encoding.
-if !has('gui_running') && core#is_windows()
+if !has('gui_running') && core#is_windows() && exists('+termencoding')
   " For system.
   set termencoding=cp932
 endif
