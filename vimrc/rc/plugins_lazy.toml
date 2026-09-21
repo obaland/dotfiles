@@ -32,7 +32,7 @@ hook_source = 'source ~/.vim/rc/startup.vim'
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter-textobjects'
 rev = 'main'
-if = 'has("nvim-0.11")'
+if = 'has("nvim-0.12")'
 on_source = 'nvim-treesitter'
 lua_source = '''
   require('nvim-treesitter-textobjects').setup({
@@ -137,17 +137,7 @@ lua_source = '''
 [[plugins]]
 repo = 'ray-x/lsp_signature.nvim'
 on_lua = 'lspconfig'
-lua_source = '''
-  lsp_signature = require('lsp_signature')
-  lsp_signature.setup({})
-
-  local group = vim.api.nvim_create_augroup('user_lsp_signature', {})
-  require('core').api.on_lsp_attach(function(client, bufnr)
-    lsp_signature.on_attach({
-      hint_prefix = '󰛩 '
-    }, bufnr)
-  end, group)
-'''
+lua_source = 'require("plugins/lsp_signature").setup()'
 
 [[plugins]]
 repo = 'SmiteshP/nvim-navic'
