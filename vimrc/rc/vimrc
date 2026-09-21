@@ -82,7 +82,6 @@ endif
 " Required
 filetype plugin indent on
 syntax enable
-filetype detect
 
 set background=dark
 colorscheme obaland-solarized
