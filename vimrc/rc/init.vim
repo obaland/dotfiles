@@ -110,7 +110,7 @@ endfunction
 "---------------------------------------------------------------------------
 function! s:use_package_manager(data_path)
   " Setup a token for update management
-  if exists('$GITHUB_API_TOKEN')
+  if !empty($GITHUB_API_TOKEN)
     let g:dein#install_github_api_token = $GITHUB_API_TOKEN
   endif
 
@@ -157,7 +157,7 @@ function! s:use_package_manager(data_path)
 
     " Update or install plugins if a change detected
     if dein#check_install()
-      if exists('$GITHUB_API_TOKEN')
+      if !empty($GITHUB_API_TOKEN)
         call dein#check_update(v:true)
       else
         call dein#install()
